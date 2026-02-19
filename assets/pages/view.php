@@ -1645,6 +1645,89 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
 
 <!-- Oikea palsta -->
         <div class="view-right">
+
+            <?php
+            // Hae kaikki kieliversiot oikean palstan tilakorttia varten
+            $stmtAllLangVers = $pdo->prepare("
+                SELECT id, lang, state, title, published_at FROM sf_flashes
+                WHERE id = :gid OR translation_group_id = :gid2
+                ORDER BY FIELD(lang, 'fi', 'sv', 'en', 'it', 'el')
+            ");
+            $stmtAllLangVers->execute([':gid' => $translationGroupId, ':gid2' => $translationGroupId]);
+            $allLangVersions = $stmtAllLangVers->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
+            <?php if (count($allLangVersions) > 1): ?>
+            <div class="sf-card sf-lang-versions-card">
+                <h4><?= htmlspecialchars(sf_term('language_versions', $currentUiLang) ?? 'Kieliversiot', ENT_QUOTES, 'UTF-8') ?></h4>
+                <?php foreach ($allLangVersions as $ver): ?>
+                    <div class="sf-lang-version-row">
+                        <span>
+                            <?= sf_lang_flag($ver['lang']) ?>
+                            <?= htmlspecialchars(strtoupper($ver['lang']), ENT_QUOTES, 'UTF-8') ?>
+                        </span>
+                        <span>
+                            <?php if ($ver['state'] === 'published'): ?>
+                                <span class="sf-badge sf-badge-success">✅ <?= htmlspecialchars(sf_term('state_published', $currentUiLang) ?? 'Julkaistu', ENT_QUOTES, 'UTF-8') ?></span>
+                            <?php elseif ($ver['state'] === 'draft'): ?>
+                                <span class="sf-badge sf-badge-draft">📝 <?= htmlspecialchars(sf_term('state_draft', $currentUiLang) ?? 'Luonnos', ENT_QUOTES, 'UTF-8') ?></span>
+                            <?php else: ?>
+                                <span class="sf-badge sf-badge-info"><?= htmlspecialchars($ver['state'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <?php endif; ?>
+                        </span>
+                        <?php if ((int)$ver['id'] !== (int)$flash['id']): ?>
+                            <a href="<?= htmlspecialchars($base) ?>/index.php?page=view&id=<?= (int)$ver['id'] ?>" class="sf-link-small">
+                                <?= htmlspecialchars(sf_term('btn_view', $currentUiLang) ?? 'Näytä', ENT_QUOTES, 'UTF-8') ?> →
+                            </a>
+                        <?php endif; ?>
+                        <?php
+                            $stmtDisplayCount = $pdo->prepare("SELECT COUNT(*) FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1");
+                            $stmtDisplayCount->execute([(int)$ver['id']]);
+                            $displayCount = (int)$stmtDisplayCount->fetchColumn();
+                        ?>
+                        <?php if ($displayCount > 0): ?>
+                            <span class="sf-display-count-badge">🖥️ <?= $displayCount ?></span>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php
+            // Tarkista onko tämä julkaisematon kieliversio jonka ryhmässä on jo julkaistuja
+            $isUnpublishedTranslation = false;
+            if ($flash['state'] === 'draft' && !empty($flash['translation_group_id'])) {
+                $stmtGroupPublished = $pdo->prepare("
+                    SELECT COUNT(*) FROM sf_flashes
+                    WHERE (id = ? OR translation_group_id = ?)
+                      AND state = 'published' AND id != ?
+                ");
+                $gidCheck = (int)$flash['translation_group_id'];
+                $stmtGroupPublished->execute([$gidCheck, $gidCheck, $flash['id']]);
+                $isUnpublishedTranslation = (int)$stmtGroupPublished->fetchColumn() > 0;
+            }
+            ?>
+
+            <?php if ($isUnpublishedTranslation && ($isAdmin || $isSafety || $isComms)): ?>
+            <div class="sf-card sf-publish-single-card">
+                <h4>
+                    <?= sf_lang_flag($flash['lang']) ?>
+                    <?= htmlspecialchars(sf_term('publish_language_version', $currentUiLang) ?? 'Julkaise kieliversio', ENT_QUOTES, 'UTF-8') ?>
+                </h4>
+                <p class="sf-help-text">
+                    <?= htmlspecialchars(sf_term('publish_single_description', $currentUiLang) ?? 'Tämä kieliversio on luonnos. Julkaise se erikseen omille infonäytöilleen.', ENT_QUOTES, 'UTF-8') ?>
+                </p>
+                <button type="button"
+                        class="sf-btn sf-btn-primary"
+                        id="btnPublishSingleLang"
+                        data-flash-id="<?= (int)$flash['id'] ?>"
+                        data-flash-lang="<?= htmlspecialchars($flash['lang'], ENT_QUOTES, 'UTF-8') ?>"
+                        onclick="openPublishSingleModal()">
+                    <?= htmlspecialchars(sf_term('btn_publish_language_version', $currentUiLang) ?? 'Julkaise tämä kieliversio →', ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
+            <?php endif; ?>
+
             <div class="view-meta-include">
                 <?php require __DIR__ . '/../partials/view_meta_box.php'; ?>
             </div>
@@ -2161,6 +2244,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
 
             <!-- Infonäyttövalinnat per kieliversio -->
             <?php
+            $originalFlash = $flash;
             $stmtLangVersions = $pdo->prepare("
                 SELECT id, lang, title FROM sf_flashes
                 WHERE id = :gid OR translation_group_id = :gid2
@@ -2193,6 +2277,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                             ?>
                         </div>
                     <?php endforeach; ?>
+                    <?php $flash = $originalFlash; ?>
                 </div>
             <?php endif; ?>
             
@@ -2206,6 +2291,66 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 </button>
                 <button type="submit" class="sf-btn sf-btn-primary">
                   <?= htmlspecialchars(sf_term('btn_publish', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Publish Single Language Version Modal -->
+<div id="publishSingleModal" class="sf-modal hidden" role="dialog" aria-modal="true" aria-labelledby="publishSingleModalTitle">
+    <div class="sf-modal-content">
+        <div class="sf-modal-header">
+            <h3 id="publishSingleModalTitle">
+                <?= sf_lang_flag($flash['lang']) ?>
+                <?= htmlspecialchars(sf_term('publish_language_version', $currentUiLang) ?? 'Julkaise kieliversio', ENT_QUOTES, 'UTF-8') ?>
+                — <?= htmlspecialchars(strtoupper($flash['lang']), ENT_QUOTES, 'UTF-8') ?>
+            </h3>
+            <button type="button" class="sf-modal-close-btn" onclick="closePublishSingleModal()">&times;</button>
+        </div>
+
+        <form method="post" action="<?= htmlspecialchars($base) ?>/app/actions/publish.php?id=<?= (int)$flash['id'] ?>">
+            <?= sf_csrf_field() ?>
+            <input type="hidden" name="publish_mode" value="single">
+
+            <div class="sf-modal-body">
+                <!-- TTL valitsin -->
+                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
+
+                <!-- Kesto valitsin -->
+                <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
+
+                <!-- Näyttövalitsin — VAIN tämän kielen näytöt -->
+                <div class="sf-lang-display-section">
+                    <h4>
+                        <?= sf_lang_flag($flash['lang']) ?>
+                        <?= htmlspecialchars(sf_term('display_targets_label', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?>
+                    </h4>
+                    <?php
+                        $context = 'publish';
+                        require __DIR__ . '/../partials/display_target_selector.php';
+                    ?>
+                </div>
+
+                <!-- Henkilövahinko -->
+                <?php if (($flash['type'] ?? '') === 'red'): ?>
+                <div class="sf-checkbox-option sf-checkbox-warning" style="margin-top:1rem;">
+                    <label>
+                        <input type="checkbox" name="has_personal_injury" value="1"
+                            <?= !empty($flash['has_personal_injury']) ? 'checked' : '' ?>>
+                        ⚠️ <?= htmlspecialchars(sf_term('publish_personal_injury', $currentUiLang) ?? 'Henkilövahinko', ENT_QUOTES, 'UTF-8') ?>
+                    </label>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="sf-modal-footer">
+                <button type="button" class="sf-btn sf-btn-secondary" onclick="closePublishSingleModal()">
+                    <?= htmlspecialchars(sf_term('btn_cancel', $currentUiLang) ?? 'Peruuta', ENT_QUOTES, 'UTF-8') ?>
+                </button>
+                <button type="submit" class="sf-btn sf-btn-primary">
+                    <?= sf_lang_flag($flash['lang']) ?>
+                    <?= htmlspecialchars(sf_term('btn_publish_language_version', $currentUiLang) ?? 'Julkaise kieliversio', ENT_QUOTES, 'UTF-8') ?>
                 </button>
             </div>
         </form>
@@ -3638,6 +3783,26 @@ document.addEventListener('keydown', function(e) {
         });
     }
 })();
+
+// ===== PUBLISH SINGLE LANGUAGE VERSION MODAL =====
+function openPublishSingleModal() {
+    const modal = document.getElementById('publishSingleModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('sf-modal-open');
+    }
+}
+
+function closePublishSingleModal() {
+    const modal = document.getElementById('publishSingleModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        const openModals = document.querySelectorAll('.sf-modal:not(.hidden)');
+        if (openModals.length === 0) {
+            document.body.classList.remove('sf-modal-open');
+        }
+    }
+}
 </script>
 
 <!-- Image Captions Module -->

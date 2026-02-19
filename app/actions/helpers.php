@@ -114,6 +114,26 @@ function sf_time_ago(string $datetime, string $lang = 'fi'): string
     return date('d.m.Y H:i', $timestamp);
 }
 
+
+/**
+ * Get flag emoji for language code
+ *
+ * @param string $lang Language code
+ * @return string Flag emoji
+ */
+if (!function_exists('sf_lang_flag')) {
+    function sf_lang_flag(string $lang): string {
+        return match($lang) {
+            'fi' => '🇫🇮',
+            'sv' => '🇸🇪',
+            'en' => '🇬🇧',
+            'it' => '🇮🇹',
+            'el' => '🇬🇷',
+            default => '🏳️',
+        };
+    }
+}
+
 /**
  * Get flash language with default fallback
  * 

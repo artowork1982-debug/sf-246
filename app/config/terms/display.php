@@ -206,6 +206,50 @@ return [
         'el' => 'Επαναφέρθηκε στη λίστα',
     ],
     
+    // Single language version publish
+    'publish_language_version' => [
+        'fi' => 'Julkaise kieliversio',
+        'sv' => 'Publicera språkversion',
+        'en' => 'Publish language version',
+        'it' => 'Pubblica versione linguistica',
+        'el' => 'Δημοσίευση γλωσσικής έκδοσης',
+    ],
+    'publish_single_description' => [
+        'fi' => 'Tämä kieliversio on luonnos. Julkaise se erikseen omille infonäytöilleen.',
+        'sv' => 'Denna språkversion är ett utkast. Publicera den separat till sina egna informationsskärmar.',
+        'en' => 'This language version is a draft. Publish it separately to its own info displays.',
+        'it' => 'Questa versione linguistica è una bozza. Pubblicala separatamente sui propri schermi informativi.',
+        'el' => 'Αυτή η γλωσσική έκδοση είναι πρόχειρη. Δημοσιεύστε την ξεχωριστά στις δικές της οθόνες πληροφοριών.',
+    ],
+    'btn_publish_language_version' => [
+        'fi' => 'Julkaise tämä kieliversio →',
+        'sv' => 'Publicera denna språkversion →',
+        'en' => 'Publish this language version →',
+        'it' => 'Pubblica questa versione linguistica →',
+        'el' => 'Δημοσίευση αυτής της γλωσσικής έκδοσης →',
+    ],
+    'language_versions' => [
+        'fi' => 'Kieliversiot',
+        'sv' => 'Språkversioner',
+        'en' => 'Language versions',
+        'it' => 'Versioni linguistiche',
+        'el' => 'Γλωσσικές εκδόσεις',
+    ],
+    'state_published' => [
+        'fi' => 'Julkaistu',
+        'sv' => 'Publicerad',
+        'en' => 'Published',
+        'it' => 'Pubblicato',
+        'el' => 'Δημοσιεύτηκε',
+    ],
+    'state_draft' => [
+        'fi' => 'Luonnos',
+        'sv' => 'Utkast',
+        'en' => 'Draft',
+        'it' => 'Bozza',
+        'el' => 'Πρόχειρο',
+    ],
+
     // Log Messages
     'log_display_removed' => [
         'fi' => 'Poistettu infonäyttö-playlistasta',
