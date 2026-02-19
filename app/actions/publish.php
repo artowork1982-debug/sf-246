@@ -222,7 +222,28 @@ sf_audit_log(
 );
 // ================================
 
-
+// --- Infonäyttöjen näkyvyysaika ---
+$ttlDays = (int)($_POST['display_ttl_days'] ?? 30);
+if ($ttlDays > 0) {
+    $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
+    $stmtTtl = $pdo->prepare("
+        UPDATE sf_flashes 
+        SET display_expires_at = :expires_at,
+            display_removed_at = NULL,
+            display_removed_by = NULL
+        WHERE id = :id OR translation_group_id = :id2
+    ");
+    $stmtTtl->execute([':expires_at' => $expiresAt, ':id' => $groupId, ':id2' => $groupId]);
+} else {
+    $stmtTtl = $pdo->prepare("
+        UPDATE sf_flashes 
+        SET display_expires_at = NULL,
+            display_removed_at = NULL,
+            display_removed_by = NULL
+        WHERE id = :id OR translation_group_id = :id2
+    ");
+    $stmtTtl->execute([':id' => $groupId, ':id2' => $groupId]);
+}
 
 // Lähetetään julkaisu-sähköposti
 if (function_exists('sf_mail_published')) {
