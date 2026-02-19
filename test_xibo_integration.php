@@ -14,12 +14,17 @@ $files = [
     'app/actions/publish.php',
     'app/api/display_playlist.php',
     'app/api/display_playlist_manage.php',
+    'app/api/display_api_keys_manage.php',
     'assets/partials/publish_display_ttl.php',
+    'assets/partials/publish_display_duration.php',
     'assets/partials/view_playlist_status.php',
     'assets/css/display-ttl.css',
     'assets/js/display-playlist.js',
     'app/config/terms/display.php',
     'migrations/add_display_ttl.sql',
+    'migrations/add_display_duration.sql',
+    'migrations/add_display_api_keys.sql',
+    'docs/XIBO_EMBEDDED_WIDGET.md',
 ];
 
 $allExist = true;
@@ -46,7 +51,9 @@ $phpFiles = [
     'app/actions/publish.php',
     'app/api/display_playlist.php',
     'app/api/display_playlist_manage.php',
+    'app/api/display_api_keys_manage.php',
     'assets/partials/publish_display_ttl.php',
+    'assets/partials/publish_display_duration.php',
     'assets/partials/view_playlist_status.php',
     'app/config/terms/display.php',
 ];
