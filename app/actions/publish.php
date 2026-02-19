@@ -224,25 +224,41 @@ sf_audit_log(
 
 // --- Infonäyttöjen näkyvyysaika ---
 $ttlDays = (int)($_POST['display_ttl_days'] ?? 30);
+
+// --- Infonäyttöjen näyttökesto (sekunteina) ---
+$displayDuration = (int)($_POST['display_duration_seconds'] ?? 30);
+$displayDuration = max(5, min(120, $displayDuration)); // Rajoita 5-120 sekuntiin
+
 if ($ttlDays > 0) {
     $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
     $stmtTtl = $pdo->prepare("
         UPDATE sf_flashes 
         SET display_expires_at = :expires_at,
             display_removed_at = NULL,
-            display_removed_by = NULL
+            display_removed_by = NULL,
+            display_duration_seconds = :duration
         WHERE id = :id OR translation_group_id = :id2
     ");
-    $stmtTtl->execute([':expires_at' => $expiresAt, ':id' => $groupId, ':id2' => $groupId]);
+    $stmtTtl->execute([
+        ':expires_at' => $expiresAt, 
+        ':duration' => $displayDuration,
+        ':id' => $groupId, 
+        ':id2' => $groupId
+    ]);
 } else {
     $stmtTtl = $pdo->prepare("
         UPDATE sf_flashes 
         SET display_expires_at = NULL,
             display_removed_at = NULL,
-            display_removed_by = NULL
+            display_removed_by = NULL,
+            display_duration_seconds = :duration
         WHERE id = :id OR translation_group_id = :id2
     ");
-    $stmtTtl->execute([':id' => $groupId, ':id2' => $groupId]);
+    $stmtTtl->execute([
+        ':duration' => $displayDuration,
+        ':id' => $groupId, 
+        ':id2' => $groupId
+    ]);
 }
 
 // Lähetetään julkaisu-sähköposti

@@ -1,29 +1,40 @@
 # Xibo Information Display Integration
 
-This feature adds Xibo information display playlist integration to SafetyFlash, allowing published flashes to be displayed on information screens with TTL (Time To Live) management and manual removal capabilities.
+This feature adds Xibo information display playlist integration to SafetyFlash, allowing published flashes to be displayed on information screens with TTL (Time To Live) management, per-image display duration, API key authentication, and manual removal capabilities.
 
 ## Features
 
+- **API Key Authentication**: Secure authentication for display endpoints using unique API keys
+- **Per-Image Duration**: Set individual display duration for each flash (10s to 60s)
 - **TTL Selection**: Set display expiry time when publishing (1 week, 2 weeks, 1 month, 2 months, 3 months, or no limit)
 - **Playlist Status**: View flash display status on view page (active, expired, removed)
 - **Manual Management**: Admin, safety team, and communications can remove/restore flashes from playlist
 - **Public API**: Xibo can fetch active flashes via JSON/HTML/slideshow format
 - **Rate Limiting**: 60 requests per minute per IP
 - **CORS Support**: Cross-origin requests allowed for Xibo integration
+- **Embedded Widget Templates**: Ready-to-use HTML/CSS/JavaScript templates (see [docs/XIBO_EMBEDDED_WIDGET.md](docs/XIBO_EMBEDDED_WIDGET.md))
 
 ## Installation
 
-### 1. Database Migration
+### 1. Database Migrations
 
-Run the migration to add new columns to `sf_flashes` table:
+Run all migrations to add new tables and columns:
 
 ```bash
+# Display TTL columns
 mysql -u your_user -p your_database < migrations/add_display_ttl.sql
+
+# Display duration column
+mysql -u your_user -p your_database < migrations/add_display_duration.sql
+
+# API keys table
+mysql -u your_user -p your_database < migrations/add_display_api_keys.sql
 ```
 
 Or manually execute:
 
 ```sql
+-- Display TTL (already exists)
 ALTER TABLE sf_flashes
     ADD COLUMN display_expires_at DATETIME DEFAULT NULL 
         COMMENT 'Milloin flash poistuu automaattisesti infonäyttö-playlistasta. NULL = ei vanhenemista',
@@ -34,6 +45,28 @@ ALTER TABLE sf_flashes
 
 ALTER TABLE sf_flashes
     ADD INDEX idx_display_active (state, display_expires_at, display_removed_at);
+
+-- Display duration (NEW)
+ALTER TABLE sf_flashes
+    ADD COLUMN display_duration_seconds INT DEFAULT 30
+        COMMENT 'Kuinka monta sekuntia tämä flash näkyy infonäytöllä (oletus 30s)';
+
+-- API keys table (NEW)
+CREATE TABLE sf_display_api_keys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    api_key VARCHAR(64) NOT NULL UNIQUE,
+    site VARCHAR(100) NOT NULL COMMENT 'Työmaan tunniste',
+    label VARCHAR(255) DEFAULT NULL COMMENT 'Näytön nimi, esim. Helsinki toimisto 2.krs',
+    lang VARCHAR(5) DEFAULT 'fi',
+    is_active TINYINT(1) DEFAULT 1,
+    created_by INT DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_used_at DATETIME DEFAULT NULL COMMENT 'Milloin viimeksi käytetty',
+    last_used_ip VARCHAR(45) DEFAULT NULL,
+    expires_at DATETIME DEFAULT NULL COMMENT 'NULL = ei vanhene',
+    INDEX idx_api_key (api_key),
+    INDEX idx_site (site)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 ### 2. Include Assets
@@ -42,6 +75,7 @@ Add to your publish modal page:
 
 ```php
 <?php require_once __DIR__ . '/assets/partials/publish_display_ttl.php'; ?>
+<?php require_once __DIR__ . '/assets/partials/publish_display_duration.php'; ?>
 ```
 
 Add to your view page (right column):
@@ -71,35 +105,106 @@ Include JavaScript before closing body tag:
 
 ## API Endpoints
 
-### 1. Display Playlist (Public)
+### 1. API Key Management (Admin Only)
+
+**Endpoint**: `/app/api/display_api_keys_manage.php`
+
+**Authentication**: Session-based, role_id = 1 (admin)
+
+**Create New API Key**:
+
+```bash
+POST /app/api/display_api_keys_manage.php
+Content-Type: application/x-www-form-urlencoded
+
+csrf_token=xxx&site=SITE_ID&label=Helsinki+Office&lang=fi
+```
+
+Response:
+```json
+{
+  "ok": true,
+  "api_key": "sf_dk_abc123...",
+  "xibo_url": "https://your-domain.com/app/api/display_playlist.php?key=sf_dk_abc123...",
+  "site": "SITE_ID",
+  "label": "Helsinki Office",
+  "lang": "fi"
+}
+```
+
+**List API Keys**:
+
+```bash
+GET /app/api/display_api_keys_manage.php
+```
+
+Response:
+```json
+{
+  "ok": true,
+  "keys": [
+    {
+      "id": 1,
+      "api_key_preview": "sf_dk_abc1...",
+      "site": "SITE_ID",
+      "label": "Helsinki Office",
+      "lang": "fi",
+      "is_active": true,
+      "created_at": "2026-02-19 12:00:00",
+      "last_used_at": "2026-02-19 13:30:00",
+      "last_used_ip": "192.168.1.100",
+      "expires_at": null
+    }
+  ]
+}
+```
+
+**Deactivate API Key**:
+
+```bash
+POST /app/api/display_api_keys_manage.php?action=delete
+Content-Type: application/x-www-form-urlencoded
+
+csrf_token=xxx&api_key_id=1
+```
+
+Response:
+```json
+{
+  "ok": true
+}
+```
+
+### 2. Display Playlist (Public, API Key Required)
 
 **Endpoint**: `/app/api/display_playlist.php`
 
 **Method**: GET
 
+**Authentication**: API key (query parameter)
+
 **Parameters**:
-- `site` (required): Worksite identifier
-- `lang` (optional): Language code (fi, sv, en, it, el), default: fi
+- `key` (required): API key that determines site and language automatically
 - `format` (optional): json|html|slideshow, default: json
-- `duration` (optional): Seconds per image in slideshow (3-60), default: 10
 
 **Examples**:
 
 ```bash
-# JSON format
-curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&lang=fi"
+# JSON format (for Embedded widget)
+curl "https://your-domain.com/app/api/display_playlist.php?key=sf_dk_abc123..."
 
-# HTML slideshow
-curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=html&duration=10"
+# HTML slideshow (for Webpage widget)
+curl "https://your-domain.com/app/api/display_playlist.php?key=sf_dk_abc123...&format=html"
 
 # Slideshow content only (for iframe)
-curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=slideshow&duration=10"
+curl "https://your-domain.com/app/api/display_playlist.php?key=sf_dk_abc123...&format=slideshow"
 ```
 
 **JSON Response**:
 
 ```json
 {
+  "ok": true,
   "site": "SITE_ID",
   "lang": "fi",
   "count": 5,
@@ -108,7 +213,7 @@ curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=s
       "id": 123,
       "title": "Flash Title",
       "image_url": "https://your-domain.com/uploads/previews/preview_123.jpg",
-      "duration_seconds": 10,
+      "duration_seconds": 30,
       "type": "yellow",
       "published_at": "2026-02-19 10:00:00",
       "sort_order": 0
@@ -118,7 +223,31 @@ curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=s
 }
 ```
 
-### 2. Playlist Management (Authenticated)
+**Error Responses**:
+
+```json
+// Missing API key (401)
+{
+  "error": "Missing required parameter: key"
+}
+
+// Invalid API key (403)
+{
+  "error": "Invalid API key"
+}
+
+// Deactivated API key (403)
+{
+  "error": "API key is deactivated"
+}
+
+// Expired API key (403)
+{
+  "error": "API key has expired"
+}
+```
+
+### 3. Playlist Management (Authenticated)
 
 **Endpoint**: `/app/api/display_playlist_manage.php`
 
@@ -154,20 +283,97 @@ curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=s
 
 ## Xibo Integration
 
-### Option 1: Webpage Widget
+### Quick Setup Guide
 
-1. In Xibo CMS, create a new **Webpage** widget
-2. Set URL to:
+**📖 For complete setup instructions with ready-to-use templates, see:**
+- **[docs/XIBO_EMBEDDED_WIDGET.md](docs/XIBO_EMBEDDED_WIDGET.md)** - Copy-paste templates for HTML, CSS, and JavaScript
+
+### Option 1: Webpage Widget (Simplest)
+
+1. Get your API key from SafetyFlash admin panel
+2. In Xibo CMS, create a new **Webpage** widget
+3. Set URL to:
    ```
-   https://your-domain.com/app/api/display_playlist.php?site=YOUR_SITE&format=html&duration=10
+   https://your-domain.com/app/api/display_playlist.php?key=sf_dk_YOUR_API_KEY&format=html
    ```
-3. Set duration to cover all slides
-4. Enable auto-refresh (5 minutes)
+4. Set widget duration to `0` (runs indefinitely)
+5. The widget auto-refreshes every 5 minutes
 
-### Option 2: Embedded Content with JavaScript
+**Pros:**
+- Simple one-line configuration
+- No HTML/JavaScript editing needed
+- Server-side rendering
 
-1. Create an **Embedded** widget
-2. Add HTML/JavaScript:
+**Cons:**
+- Less customizable than Embedded widget
+
+### Option 2: Embedded Widget (Recommended)
+
+For full control and customization, use the **Embedded** widget with our ready-to-use templates:
+
+1. Get your API key from SafetyFlash admin panel
+2. Create a new **Embedded** widget in Xibo Layout Designer
+3. Follow the instructions in **[docs/XIBO_EMBEDDED_WIDGET.md](docs/XIBO_EMBEDDED_WIDGET.md)**
+4. Copy-paste the HTML, CSS, and JavaScript templates
+5. Update `API_URL` and `API_KEY` in the JavaScript
+6. Save and publish
+
+**Features:**
+- Per-image display duration from database
+- Progress bar animation
+- 0.8s fade transitions
+- Auto playlist refresh (5 minutes)
+- Black background, object-fit: contain
+- Handles empty playlists gracefully
+
+**Pros:**
+- Full customization
+- Per-image timing
+- Progress bar
+- Better fade transitions
+
+**Cons:**
+- Requires copying three code blocks (but we provide ready templates!)
+
+### Migration from Site Parameter
+
+If you're upgrading from the old site-based authentication:
+
+**Old URL:**
+```
+https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&lang=fi
+```
+
+**New URL (API key):**
+```
+https://your-domain.com/app/api/display_playlist.php?key=sf_dk_abc123...
+```
+
+The API key automatically determines the site and language, so you don't need those parameters anymore.
+
+### API Key Management
+
+**Creating API Keys** (Admin only):
+
+```bash
+POST /app/api/display_api_keys_manage.php
+Content-Type: application/x-www-form-urlencoded
+
+csrf_token=xxx&site=SITE_ID&label=Helsinki+Office&lang=fi
+```
+
+**Best Practices:**
+- Create one API key per display or location
+- Use descriptive labels (e.g., "Helsinki Office 2nd Floor")
+- Monitor `last_used_at` to track key usage
+- Deactivate unused keys for security
+- Set expiry dates for temporary displays
+
+### Legacy Embedded Content Example (Not Recommended)
+
+⚠️ **Use the templates in [docs/XIBO_EMBEDDED_WIDGET.md](docs/XIBO_EMBEDDED_WIDGET.md) instead.**
+
+This is kept for reference only:
 
 ```html
 <!DOCTYPE html>
@@ -183,15 +389,17 @@ curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=s
 <body>
     <div id="slideshow"></div>
     <script>
-        const API_URL = 'https://your-domain.com/app/api/display_playlist.php?site=YOUR_SITE&lang=fi';
+        const API_URL = 'https://your-domain.com/app/api/display_playlist.php?key=sf_dk_YOUR_KEY&format=json';
         let slides = [];
         let currentIndex = 0;
 
         async function fetchPlaylist() {
             const response = await fetch(API_URL);
             const data = await response.json();
-            slides = data.items;
-            renderSlides();
+            if (data.ok && data.items) {
+                slides = data.items;
+                renderSlides();
+            }
         }
 
         function renderSlides() {
@@ -216,7 +424,7 @@ curl "https://your-domain.com/app/api/display_playlist.php?site=SITE_ID&format=s
                 slideElements[currentIndex].classList.remove('active');
                 currentIndex = (currentIndex + 1) % slides.length;
                 slideElements[currentIndex].classList.add('active');
-            }, slides[currentIndex]?.duration_seconds * 1000 || 10000);
+            }, slides[currentIndex]?.duration_seconds * 1000 || 30000);
         }
 
         fetchPlaylist();
