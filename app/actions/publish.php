@@ -261,6 +261,63 @@ if ($ttlDays > 0) {
     ]);
 }
 
+// ========== INFONÄYTTÖJEN AKTIVOINTI (per kieliversio) ==========
+$allDisplayTargets = $_POST['display_targets'] ?? [];
+
+if (!empty($allDisplayTargets)) {
+    // Hae kaikki kieliversiot tästä ryhmästä
+    $stmtVersions = $pdo->prepare("
+        SELECT id, lang FROM sf_flashes
+        WHERE id = :gid OR translation_group_id = :gid2
+    ");
+    $stmtVersions->execute([':gid' => $groupId, ':gid2' => $groupId]);
+    $versions = $stmtVersions->fetchAll(PDO::FETCH_ASSOC);
+
+    $totalDisplayCount = 0;
+
+    foreach ($versions as $version) {
+        $versionFlashId  = (int)$version['id'];
+        $targetsForThis  = $allDisplayTargets[$versionFlashId] ?? [];
+
+        // Poista vanhat valinnat TÄLLE kieliversiolle
+        $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ?")
+            ->execute([$versionFlashId]);
+
+        // Lisää uudet — per kieliversio, is_active = 1 (julkaistu)
+        if (!empty($targetsForThis)) {
+            $stmtInsert = $pdo->prepare("
+                INSERT INTO sf_flash_display_targets
+                    (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
+                VALUES (?, ?, 1, ?, NOW(), NOW())
+            ");
+            foreach ($targetsForThis as $displayId) {
+                $displayId = (int)$displayId;
+                if ($displayId > 0) {
+                    $stmtInsert->execute([$versionFlashId, $displayId, $userId]);
+                    $totalDisplayCount++;
+                }
+            }
+        }
+
+        sf_app_log("publish.php: Flash {$versionFlashId} ({$version['lang']}) activated on " . count($targetsForThis) . " displays");
+    }
+
+    // Lokimerkintä
+    if ($totalDisplayCount > 0) {
+        $logDisplay = $pdo->prepare("
+            INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+            VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+        ");
+        $logDisplay->execute([
+            ':flash_id'    => $logFlashId,
+            ':user_id'     => $userId,
+            ':event_type'  => 'display_targets_set',
+            ':description' => "log_display_targets_set|total_displays:{$totalDisplayCount}|versions:" . count($versions),
+        ]);
+    }
+}
+// ===============================================
+
 // Lähetetään julkaisu-sähköposti
 if (function_exists('sf_mail_published')) {
     try {

@@ -191,6 +191,20 @@ $supportedLangs = [
     'el' => ['label' => 'EL', 'icon' => 'greece-flag.png'], // 'el' on Kreikan kielikoodi
 ];
 
+// Lippu-apufunktio kieliversioiden visuaaliseen tunnistamiseen
+if (!function_exists('sf_lang_flag')) {
+    function sf_lang_flag(string $lang): string {
+        return match($lang) {
+            'fi' => '🇫🇮',
+            'sv' => '🇸🇪',
+            'en' => '🇬🇧',
+            'it' => '🇮🇹',
+            'el' => '🇬🇷',
+            default => '🏳️',
+        };
+    }
+}
+
 // --- Kieliversiot & preview ---
 require_once __DIR__ .'/../services/render_services.php';
 
@@ -2138,6 +2152,49 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                     <code id="emailSubjectText"></code>
                 </div>
             </div>
+
+            <!-- Näkyvyysaika infonäytöillä -->
+            <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
+
+            <!-- Näyttökesto per kuva -->
+            <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
+
+            <!-- Infonäyttövalinnat per kieliversio -->
+            <?php
+            $stmtLangVersions = $pdo->prepare("
+                SELECT id, lang, title FROM sf_flashes
+                WHERE id = :gid OR translation_group_id = :gid2
+                ORDER BY FIELD(lang, 'fi', 'sv', 'en', 'it', 'el')
+            ");
+            $stmtLangVersions->execute([':gid' => $translationGroupId, ':gid2' => $translationGroupId]);
+            $langVersions = $stmtLangVersions->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <?php if (!empty($langVersions)): ?>
+                <div class="sf-display-targets-section">
+                    <p class="sf-help-text sf-display-per-lang-info">
+                        ℹ️ <?= htmlspecialchars(
+                            sf_term('display_per_language_info', $currentUiLang)
+                                ?: 'Jokaisella kieliversiolla on omat näyttövalintansa',
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>
+                    </p>
+                    <?php foreach ($langVersions as $ver): ?>
+                        <div class="sf-lang-display-section">
+                            <h4>
+                                <?= sf_lang_flag($ver['lang']) ?>
+                                <?= htmlspecialchars(strtoupper($ver['lang']), ENT_QUOTES, 'UTF-8') ?> —
+                                <?= htmlspecialchars($ver['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                            </h4>
+                            <?php
+                                $flash = $ver;
+                                $context = 'publish';
+                                require __DIR__ . '/../partials/display_target_selector.php';
+                            ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             
             <div class="sf-modal-actions">
                 <button
@@ -2750,6 +2807,7 @@ function updateDeleteModalContent() {
 <script src="<?= sf_asset_url('assets/js/vendor/html2canvas.min.js', $base) ?>"></script>
 
 <!-- Safetyflash CSS & JS -->
+<link rel="stylesheet" href="<?= sf_asset_url('assets/css/display-ttl.css', $base) ?>">
 <link rel="stylesheet" href="<?= sf_asset_url('assets/css/preview.css', $base) ?>">
 <link rel="stylesheet" href="<?= sf_asset_url('assets/css/copy-to-clipboard.css', $base) ?>">
 <link rel="stylesheet" href="<?= sf_asset_url('assets/css/image_captions.css', $base) ?>">

@@ -257,6 +257,68 @@
 }
 
 /* ============================================================================
+   Lang-specific Display Sections (Publish Modal)
+   ========================================================================= */
+
+.sf-display-targets-section {
+    margin: 1.5rem 0 0 0;
+}
+
+.sf-display-per-lang-info {
+    margin-bottom: 0.75rem;
+}
+
+.sf-lang-display-section {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--sf-border, #e0e0e0);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.sf-lang-display-section h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.sf-display-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.sf-display-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.sf-display-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.sf-display-group {
+    color: var(--sf-text-secondary, #6c757d);
+}
+
+.sf-help-text {
+    font-size: 0.8125rem;
+    color: var(--sf-text-secondary, #6c757d);
+    margin: 0 0 0.5rem 0;
+}
+
+.sf-help-text-muted {
+    font-style: italic;
+}
+
+/* ============================================================================
    Responsive (Mobile)
    ========================================================================= */
 
