@@ -168,6 +168,78 @@ return [
         'el' => 'Επαναφέρθηκε στη λίστα',
     ],
     
+    // Display Target Selector
+    'display_targets_label' => [
+        'fi' => 'Infonäytöt',
+        'sv' => 'Informationsskärmar',
+        'en' => 'Information displays',
+        'it' => 'Display informativi',
+        'el' => 'Οθόνες πληροφοριών',
+    ],
+    'display_preselected_by_safety' => [
+        'fi' => 'Turvatiimi on esivalinnut merkityt näytöt',
+        'sv' => 'Säkerhetsteamet har förvalt markerade skärmar',
+        'en' => 'Safety team has preselected marked displays',
+        'it' => 'Il team di sicurezza ha preselezionato i display contrassegnati',
+        'el' => 'Η ομάδα ασφαλείας έχει προεπιλέξει τις σημειωμένες οθόνες',
+    ],
+    'preselected_by_safety_short' => [
+        'fi' => 'turvatiimi ✓',
+        'sv' => 'säkerhet ✓',
+        'en' => 'safety ✓',
+        'it' => 'sicurezza ✓',
+        'el' => 'ασφάλεια ✓',
+    ],
+    'select_all' => [
+        'fi' => 'Valitse kaikki',
+        'sv' => 'Välj alla',
+        'en' => 'Select all',
+        'it' => 'Seleziona tutti',
+        'el' => 'Επιλογή όλων',
+    ],
+    'deselect_all' => [
+        'fi' => 'Tyhjennä',
+        'sv' => 'Rensa alla',
+        'en' => 'Clear all',
+        'it' => 'Deseleziona tutti',
+        'el' => 'Εκκαθάριση όλων',
+    ],
+    'display_targets_count' => [
+        'fi' => 'näytöllä',
+        'sv' => 'skärmar',
+        'en' => 'displays',
+        'it' => 'display',
+        'el' => 'οθόνες',
+    ],
+    'display_targets_none' => [
+        'fi' => 'Ei aktiivisia infonäyttöjä.',
+        'sv' => 'Inga aktiva informationsskärmar.',
+        'en' => 'No active information displays.',
+        'it' => 'Nessun display informativo attivo.',
+        'el' => 'Δεν υπάρχουν ενεργές οθόνες πληροφοριών.',
+    ],
+    'log_display_targets_set' => [
+        'fi' => 'Infonäyttövalinnat asetettu',
+        'sv' => 'Skärmval inställda',
+        'en' => 'Display targets set',
+        'it' => 'Target display impostati',
+        'el' => 'Ορισμός στόχων οθόνης',
+    ],
+    'display_target_active' => [
+        'fi' => 'Aktiivinen',
+        'sv' => 'Aktiv',
+        'en' => 'Active',
+        'it' => 'Attivo',
+        'el' => 'Ενεργό',
+    ],
+    'display_target_pending' => [
+        'fi' => 'Odottaa julkaisua',
+        'sv' => 'Väntar på publicering',
+        'en' => 'Pending publish',
+        'it' => 'In attesa di pubblicazione',
+        'el' => 'Σε αναμονή δημοσίευσης',
+    ],
+
     // Log Messages
     'log_display_removed' => [
         'fi' => 'Poistettu infonäyttö-playlistasta',

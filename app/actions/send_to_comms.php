@@ -277,6 +277,39 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
         }
     }
 
+    // ========== NÄYTTÖVALINTOJEN ESITALLENNUS (turvatiimi) ==========
+    $selectedDisplays = $_POST['display_targets'] ?? [];
+
+    if (!empty($selectedDisplays)) {
+        try {
+            // Poista vanhat valinnat
+            $stmtClearDt = $pdo->prepare("
+                DELETE FROM sf_flash_display_targets WHERE flash_id = ?
+            ");
+            $stmtClearDt->execute([$logFlashId]);
+
+            // Lisää uudet (is_active = 0, ei vielä julkaistu)
+            $stmtInsertDt = $pdo->prepare("
+                INSERT INTO sf_flash_display_targets
+                (flash_id, display_key_id, is_active, selected_by, selected_at)
+                VALUES (?, ?, 0, ?, NOW())
+            ");
+
+            foreach ($selectedDisplays as $displayId) {
+                $displayId = (int)$displayId;
+                if ($displayId > 0) {
+                    $stmtInsertDt->execute([$logFlashId, $displayId, $userId]);
+                }
+            }
+
+            sf_app_log("send_to_comms.php: Saved " . count($selectedDisplays) . " display targets for flash {$id}");
+        } catch (Throwable $e) {
+            // Taulua ei välttämättä ole vielä — lokataan mutta ei kaadeta
+            sf_app_log("send_to_comms.php: display_targets error: " . $e->getMessage(), LOG_LEVEL_ERROR);
+        }
+    }
+    // ================================================================
+
     // Email sending (don't fail whole request if email fails)
     try {
         if (function_exists('sf_mail_to_comms')) {

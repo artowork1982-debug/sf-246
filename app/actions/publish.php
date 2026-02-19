@@ -261,6 +261,56 @@ if ($ttlDays > 0) {
     ]);
 }
 
+// ========== INFONÄYTTÖJEN AKTIVOINTI ==========
+$selectedDisplays = $_POST['display_targets'] ?? [];
+
+// Poista vanhat valinnat
+$stmtClearTargets = $pdo->prepare("
+    DELETE FROM sf_flash_display_targets WHERE flash_id = :group_id
+");
+try {
+    $stmtClearTargets->execute([':group_id' => $groupId]);
+
+    // Lisää uudet valinnat ja AKTIVOI ne (is_active = 1)
+    if (!empty($selectedDisplays)) {
+        $stmtInsertTarget = $pdo->prepare("
+            INSERT INTO sf_flash_display_targets
+            (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
+            VALUES (:flash_id, :display_id, 1, :user_id, NOW(), NOW())
+        ");
+
+        foreach ($selectedDisplays as $displayId) {
+            $displayId = (int)$displayId;
+            if ($displayId > 0) {
+                $stmtInsertTarget->execute([
+                    ':flash_id'   => $groupId,
+                    ':display_id' => $displayId,
+                    ':user_id'    => $userId,
+                ]);
+            }
+        }
+
+        sf_app_log("publish.php: Flash {$groupId} activated on " . count($selectedDisplays) . " displays");
+
+        // Lokimerkintä
+        $displayCount = count($selectedDisplays);
+        $logDisplay = $pdo->prepare("
+            INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+            VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+        ");
+        $logDisplay->execute([
+            ':flash_id'    => $logFlashId,
+            ':user_id'     => $userId,
+            ':event_type'  => 'display_targets_set',
+            ':description' => "log_display_targets_set|count:{$displayCount}",
+        ]);
+    }
+} catch (Throwable $e) {
+    // Taulua ei välttämättä ole vielä — lokataan mutta ei kaadeta julkaisua
+    sf_app_log("publish.php: display_targets error: " . $e->getMessage(), LOG_LEVEL_ERROR);
+}
+// ===============================================
+
 // Lähetetään julkaisu-sähköposti
 if (function_exists('sf_mail_published')) {
     try {

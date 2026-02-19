@@ -314,3 +314,98 @@
         justify-content: center;
     }
 }
+
+/* ============================================================================
+   Näyttövalitsin (Display Target Selector)
+   ========================================================================= */
+
+.sf-display-targets {
+    margin-top: 0.75rem;
+}
+
+.sf-display-group {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--sf-border, #e0e0e0);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    background: var(--sf-bg-secondary, #f8f9fa);
+}
+
+.sf-display-group-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--sf-border, #e0e0e0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sf-display-group-count {
+    font-size: 0.8em;
+    color: var(--sf-text-secondary, #666);
+}
+
+.sf-display-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.sf-display-option:hover {
+    background: rgba(0,0,0,0.04);
+}
+
+.sf-display-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--sf-primary, #0066cc);
+    cursor: pointer;
+}
+
+.sf-display-option.preselected {
+    background: rgba(0, 102, 204, 0.06);
+    border-left: 3px solid var(--sf-primary, #0066cc);
+    padding-left: calc(0.5rem - 3px);
+}
+
+.sf-preselected-badge {
+    font-size: 0.75em;
+    color: var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.1);
+    padding: 1px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.sf-display-actions {
+    margin: 0.5rem 0;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.sf-btn-link {
+    background: none;
+    border: none;
+    color: var(--sf-primary, #0066cc);
+    cursor: pointer;
+    font-size: 0.85em;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.sf-btn-link:hover {
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .sf-display-group {
+        padding: 0.35rem 0.5rem;
+    }
+    .sf-display-option {
+        padding: 0.25rem 0.35rem;
+    }
+}

@@ -172,9 +172,9 @@ try {
         $lang = 'fi';
     }
     
-    // Fetch active flashes for the site
+    // Fetch active flashes targeted at this specific display
     $stmt = $pdo->prepare("
-        SELECT 
+        SELECT
             f.id,
             f.title,
             f.preview_filename,
@@ -185,15 +185,22 @@ try {
             f.created_at,
             f.display_duration_seconds
         FROM sf_flashes f
-        WHERE f.state = 'published'
-            AND f.lang = :lang
-            AND (f.display_expires_at IS NULL OR f.display_expires_at > NOW())
-            AND f.display_removed_at IS NULL
+        INNER JOIN sf_flash_display_targets t
+            ON (t.flash_id = f.id OR t.flash_id = f.translation_group_id)
+        WHERE t.display_key_id = :display_key_id
+          AND t.is_active = 1
+          AND f.state = 'published'
+          AND f.lang = :lang
+          AND (f.display_expires_at IS NULL OR f.display_expires_at > NOW())
+          AND f.display_removed_at IS NULL
         ORDER BY f.is_pinned DESC, f.sort_order ASC, f.published_at DESC
         LIMIT 100
     ");
-    
-    $stmt->execute([':lang' => $lang]);
+
+    $stmt->execute([
+        ':display_key_id' => (int)$keyData['id'],
+        ':lang'           => $lang,
+    ]);
     $flashes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Build image URLs

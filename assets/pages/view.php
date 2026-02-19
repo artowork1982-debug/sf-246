@@ -1634,6 +1634,8 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             <div class="view-meta-include">
                 <?php require __DIR__ . '/../partials/view_meta_box.php'; ?>
             </div>
+            <?php require __DIR__ . '/../partials/view_display_targets.php'; ?>
+            <?php require __DIR__ . '/../partials/view_playlist_status.php'; ?>
         </div>
     </div> <!-- .view-layout -->
 
@@ -1915,6 +1917,12 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 </div>
             </div>
 
+            <!-- Infonäyttöjen kohdistus (create-konteksti, turvatiimi) -->
+            <?php
+            $context = 'create';
+            require __DIR__ . '/../partials/display_target_selector.php';
+            ?>
+
             <div class="sf-modal-actions">
                 <button type="button" class="sf-btn sf-btn-secondary" id="btnCommsStep2Back">← Takaisin</button>
                 <button type="button" class="sf-btn sf-btn-primary" id="btnCommsStep2Next">Seuraava →</button>
@@ -2137,6 +2145,12 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                     <strong><?= htmlspecialchars(sf_term('publish_subject_preview', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>:</strong>
                     <code id="emailSubjectText"></code>
                 </div>
+
+                <!-- Infonäyttöjen kohdistus (publish-konteksti) -->
+                <?php
+                $context = 'publish';
+                require __DIR__ . '/../partials/display_target_selector.php';
+                ?>
             </div>
             
             <div class="sf-modal-actions">
