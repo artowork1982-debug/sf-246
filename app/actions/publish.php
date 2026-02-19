@@ -57,22 +57,151 @@ $hasPersonalInjury = isset($_POST['has_personal_injury']) && $_POST['has_persona
 // Lue valitut maat (POST)
 $selectedCountries = $_POST['distribution_countries'] ?? ['fi']; // Default: Suomi
 
-// Publish ALL language versions in the translation group
-$updateStmt = $pdo->prepare("
-    UPDATE sf_flashes 
-    SET state = 'published', 
-        status = 'JULKAISTU', 
-        has_personal_injury = :injury,
-        sent_to_distribution = :distribution,
-        updated_at = NOW()
-    WHERE id = :groupId OR translation_group_id = :groupId2
-");
-$updateStmt->execute([
-    ':groupId' => $groupId,
-    ':groupId2' => $groupId,
-    ':injury' => $hasPersonalInjury ? 1 : 0,
-    ':distribution' => $sendToDistribution ? 1 : 0,
-]);
+// ========== JULKAISULOGIIKKA ==========
+$publishMode = $_POST['publish_mode'] ?? 'all';
+
+if ($publishMode === 'single') {
+    // ===== TAPAUS B: Yksittäisen kieliversion julkaisu =====
+    $updateStmt = $pdo->prepare("
+        UPDATE sf_flashes 
+        SET state = 'published', 
+            status = 'JULKAISTU',
+            published_at = COALESCE(published_at, NOW()),
+            has_personal_injury = :injury,
+            sent_to_distribution = :distribution,
+            updated_at = NOW()
+        WHERE id = :id
+    ");
+    $updateStmt->execute([
+        ':id' => $id,
+        ':injury' => $hasPersonalInjury ? 1 : 0,
+        ':distribution' => $sendToDistribution ? 1 : 0,
+    ]);
+
+    sf_app_log("publish.php: Single language version published: flash_id={$id}");
+
+    // Display targets — vain tälle kieliversiolle
+    $singleTargets = $_POST['display_targets'][$id] ?? [];
+    $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ?")->execute([$id]);
+
+    if (!empty($singleTargets)) {
+        $stmtInsert = $pdo->prepare("
+            INSERT INTO sf_flash_display_targets
+            (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
+            VALUES (?, ?, 1, ?, NOW(), NOW())
+        ");
+        foreach ($singleTargets as $displayId) {
+            $displayId = (int)$displayId;
+            if ($displayId > 0) {
+                $stmtInsert->execute([$id, $displayId, $userId]);
+            }
+        }
+    }
+
+    // TTL tälle versiolle
+    $ttlDays = (int)($_POST['display_ttl_days'] ?? 30);
+    if ($ttlDays > 0) {
+        $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
+        $pdo->prepare("UPDATE sf_flashes SET display_expires_at = ?, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+            ->execute([$expiresAt, $id]);
+    } else {
+        $pdo->prepare("UPDATE sf_flashes SET display_expires_at = NULL, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+            ->execute([$id]);
+    }
+
+    // Kesto tälle versiolle
+    $durationSeconds = max(5, min(120, (int)($_POST['display_duration_seconds'] ?? 30)));
+    $pdo->prepare("UPDATE sf_flashes SET display_duration_seconds = ? WHERE id = ?")
+        ->execute([$durationSeconds, $id]);
+
+} else {
+    // ===== TAPAUS A: Kaikkien valmiiden kieliversioiden julkaisu =====
+    $stmtAllVersions = $pdo->prepare("
+        SELECT id, lang, state FROM sf_flashes 
+        WHERE id = :gid OR translation_group_id = :gid2
+    ");
+    $stmtAllVersions->execute([':gid' => $groupId, ':gid2' => $groupId]);
+    $allVersions = $stmtAllVersions->fetchAll(PDO::FETCH_ASSOC);
+
+    $publishedVersionIds = [];
+    $allDisplayTargets = $_POST['display_targets'] ?? [];
+
+    foreach ($allVersions as $ver) {
+        $verId = (int)$ver['id'];
+        $verState = $ver['state'];
+        $hasTargets = !empty($allDisplayTargets[$verId]);
+
+        if ($verState !== 'draft' || $hasTargets) {
+            $publishedVersionIds[] = $verId;
+        } else {
+            sf_app_log("publish.php: Skipping draft version flash_id={$verId} ({$ver['lang']}) — no display targets selected");
+        }
+    }
+
+    if (!empty($publishedVersionIds)) {
+        $placeholders = implode(',', array_fill(0, count($publishedVersionIds), '?'));
+        $updateStmt = $pdo->prepare("
+            UPDATE sf_flashes 
+            SET state = 'published', 
+                status = 'JULKAISTU',
+                published_at = COALESCE(published_at, NOW()),
+                has_personal_injury = ?,
+                sent_to_distribution = ?,
+                updated_at = NOW()
+            WHERE id IN ({$placeholders})
+        ");
+        $params = array_merge(
+            [$hasPersonalInjury ? 1 : 0, $sendToDistribution ? 1 : 0],
+            $publishedVersionIds
+        );
+        $updateStmt->execute($params);
+
+        sf_app_log("publish.php: Published " . count($publishedVersionIds) . " versions: " . implode(',', $publishedVersionIds));
+    }
+
+    // Display targets per kieliversio
+    foreach ($allVersions as $ver) {
+        $verId = (int)$ver['id'];
+        if (!in_array($verId, $publishedVersionIds)) {
+            continue;
+        }
+
+        $targetsForThis = $allDisplayTargets[$verId] ?? [];
+        $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ?")->execute([$verId]);
+
+        if (!empty($targetsForThis)) {
+            $stmtInsert = $pdo->prepare("
+                INSERT INTO sf_flash_display_targets
+                (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
+                VALUES (?, ?, 1, ?, NOW(), NOW())
+            ");
+            foreach ($targetsForThis as $displayId) {
+                $displayId = (int)$displayId;
+                if ($displayId > 0) {
+                    $stmtInsert->execute([$verId, $displayId, $userId]);
+                }
+            }
+        }
+    }
+
+    // TTL ja kesto kaikille julkaistuille versioille
+    $ttlDays = (int)($_POST['display_ttl_days'] ?? 30);
+    $durationSeconds = max(5, min(120, (int)($_POST['display_duration_seconds'] ?? 30)));
+
+    foreach ($publishedVersionIds as $verId) {
+        if ($ttlDays > 0) {
+            $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
+            $pdo->prepare("UPDATE sf_flashes SET display_expires_at = ?, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+                ->execute([$expiresAt, $verId]);
+        } else {
+            $pdo->prepare("UPDATE sf_flashes SET display_expires_at = NULL, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+                ->execute([$verId]);
+        }
+        $pdo->prepare("UPDATE sf_flashes SET display_duration_seconds = ? WHERE id = ?")
+            ->execute([$durationSeconds, $verId]);
+    }
+}
+// ========================================
 
 // ========== SAVE SNAPSHOT ==========
 // Only save snapshot if this is a new publish (not already published)
@@ -221,102 +350,6 @@ sf_audit_log(
     $user ? (int)$user['id'] : null  // user id
 );
 // ================================
-
-// --- Infonäyttöjen näkyvyysaika ---
-$ttlDays = (int)($_POST['display_ttl_days'] ?? 30);
-
-// --- Infonäyttöjen näyttökesto (sekunteina) ---
-$displayDuration = (int)($_POST['display_duration_seconds'] ?? 30);
-$displayDuration = max(5, min(120, $displayDuration)); // Rajoita 5-120 sekuntiin
-
-if ($ttlDays > 0) {
-    $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
-    $stmtTtl = $pdo->prepare("
-        UPDATE sf_flashes 
-        SET display_expires_at = :expires_at,
-            display_removed_at = NULL,
-            display_removed_by = NULL,
-            display_duration_seconds = :duration
-        WHERE id = :id OR translation_group_id = :id2
-    ");
-    $stmtTtl->execute([
-        ':expires_at' => $expiresAt, 
-        ':duration' => $displayDuration,
-        ':id' => $groupId, 
-        ':id2' => $groupId
-    ]);
-} else {
-    $stmtTtl = $pdo->prepare("
-        UPDATE sf_flashes 
-        SET display_expires_at = NULL,
-            display_removed_at = NULL,
-            display_removed_by = NULL,
-            display_duration_seconds = :duration
-        WHERE id = :id OR translation_group_id = :id2
-    ");
-    $stmtTtl->execute([
-        ':duration' => $displayDuration,
-        ':id' => $groupId, 
-        ':id2' => $groupId
-    ]);
-}
-
-// ========== INFONÄYTTÖJEN AKTIVOINTI (per kieliversio) ==========
-$allDisplayTargets = $_POST['display_targets'] ?? [];
-
-if (!empty($allDisplayTargets)) {
-    // Hae kaikki kieliversiot tästä ryhmästä
-    $stmtVersions = $pdo->prepare("
-        SELECT id, lang FROM sf_flashes
-        WHERE id = :gid OR translation_group_id = :gid2
-    ");
-    $stmtVersions->execute([':gid' => $groupId, ':gid2' => $groupId]);
-    $versions = $stmtVersions->fetchAll(PDO::FETCH_ASSOC);
-
-    $totalDisplayCount = 0;
-
-    foreach ($versions as $version) {
-        $versionFlashId  = (int)$version['id'];
-        $targetsForThis  = $allDisplayTargets[$versionFlashId] ?? [];
-
-        // Poista vanhat valinnat TÄLLE kieliversiolle
-        $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ?")
-            ->execute([$versionFlashId]);
-
-        // Lisää uudet — per kieliversio, is_active = 1 (julkaistu)
-        if (!empty($targetsForThis)) {
-            $stmtInsert = $pdo->prepare("
-                INSERT INTO sf_flash_display_targets
-                    (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
-                VALUES (?, ?, 1, ?, NOW(), NOW())
-            ");
-            foreach ($targetsForThis as $displayId) {
-                $displayId = (int)$displayId;
-                if ($displayId > 0) {
-                    $stmtInsert->execute([$versionFlashId, $displayId, $userId]);
-                    $totalDisplayCount++;
-                }
-            }
-        }
-
-        sf_app_log("publish.php: Flash {$versionFlashId} ({$version['lang']}) activated on " . count($targetsForThis) . " displays");
-    }
-
-    // Lokimerkintä
-    if ($totalDisplayCount > 0) {
-        $logDisplay = $pdo->prepare("
-            INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
-            VALUES (:flash_id, :user_id, :event_type, :description, NOW())
-        ");
-        $logDisplay->execute([
-            ':flash_id'    => $logFlashId,
-            ':user_id'     => $userId,
-            ':event_type'  => 'display_targets_set',
-            ':description' => "log_display_targets_set|total_displays:{$totalDisplayCount}|versions:" . count($versions),
-        ]);
-    }
-}
-// ===============================================
 
 // Lähetetään julkaisu-sähköposti
 if (function_exists('sf_mail_published')) {
