@@ -4,6 +4,44 @@
  * TTL selectors, playlist status, and related terms
  */
 return [
+    // Display duration (Publish Modal)
+    'display_duration_heading' => [
+        'fi' => 'Näyttökesto infonäytöllä',
+        'sv' => 'Visningstid på informationsskärm',
+        'en' => 'Display duration on info screen',
+        'it' => 'Durata di visualizzazione sul display',
+        'el' => 'Διάρκεια εμφάνισης στην οθόνη πληροφοριών',
+    ],
+    'display_duration_description' => [
+        'fi' => 'Valitse kuinka monta sekuntia tämä kuva näytetään Xibo-näytöillä',
+        'sv' => 'Välj hur många sekunder denna bild visas på Xibo-skärmar',
+        'en' => 'Select how many seconds this image is shown on Xibo screens',
+        'it' => 'Seleziona quanti secondi questa immagine viene visualizzata sui display Xibo',
+        'el' => 'Επιλέξτε πόσα δευτερόλεπτα θα εμφανίζεται αυτή η εικόνα στις οθόνες Xibo',
+    ],
+    'duration_10s' => ['fi' => '10 s', 'sv' => '10 s', 'en' => '10 s', 'it' => '10 s', 'el' => '10 δ'],
+    'duration_15s' => ['fi' => '15 s', 'sv' => '15 s', 'en' => '15 s', 'it' => '15 s', 'el' => '15 δ'],
+    'duration_20s' => ['fi' => '20 s', 'sv' => '20 s', 'en' => '20 s', 'it' => '20 s', 'el' => '20 δ'],
+    'duration_30s' => ['fi' => '30 s', 'sv' => '30 s', 'en' => '30 s', 'it' => '30 s', 'el' => '30 δ'],
+    'duration_45s' => ['fi' => '45 s', 'sv' => '45 s', 'en' => '45 s', 'it' => '45 s', 'el' => '45 δ'],
+    'duration_60s' => ['fi' => '60 s', 'sv' => '60 s', 'en' => '60 s', 'it' => '60 s', 'el' => '60 δ'],
+
+    // Per-language display selection (Publish Modal)
+    'display_showing_lang_displays' => [
+        'fi' => 'Näytetään tämän kielen näytöt',
+        'sv' => 'Visar skärmar för detta språk',
+        'en' => 'Showing displays for this language',
+        'it' => 'Visualizzazione dei display per questa lingua',
+        'el' => 'Εμφάνιση οθονών για αυτή τη γλώσσα',
+    ],
+    'display_per_language_info' => [
+        'fi' => 'Jokaisella kieliversiolla on omat näyttövalintansa',
+        'sv' => 'Varje språkversion har sina egna skärmval',
+        'en' => 'Each language version has its own display selections',
+        'it' => 'Ogni versione linguistica ha le proprie selezioni di display',
+        'el' => 'Κάθε γλωσσική έκδοση έχει τις δικές της επιλογές οθόνης',
+    ],
+
     // TTL Selector (Publish Modal)
     'display_ttl_heading' => [
         'fi' => 'Näkyvyysaika infonäytöillä',
@@ -168,6 +206,50 @@ return [
         'el' => 'Επαναφέρθηκε στη λίστα',
     ],
     
+    // Single language version publish
+    'publish_language_version' => [
+        'fi' => 'Julkaise kieliversio',
+        'sv' => 'Publicera språkversion',
+        'en' => 'Publish language version',
+        'it' => 'Pubblica versione linguistica',
+        'el' => 'Δημοσίευση γλωσσικής έκδοσης',
+    ],
+    'publish_single_description' => [
+        'fi' => 'Tämä kieliversio on luonnos. Julkaise se erikseen omille infonäytöilleen.',
+        'sv' => 'Denna språkversion är ett utkast. Publicera den separat till sina egna informationsskärmar.',
+        'en' => 'This language version is a draft. Publish it separately to its own info displays.',
+        'it' => 'Questa versione linguistica è una bozza. Pubblicala separatamente sui propri schermi informativi.',
+        'el' => 'Αυτή η γλωσσική έκδοση είναι πρόχειρη. Δημοσιεύστε την ξεχωριστά στις δικές της οθόνες πληροφοριών.',
+    ],
+    'btn_publish_language_version' => [
+        'fi' => 'Julkaise tämä kieliversio →',
+        'sv' => 'Publicera denna språkversion →',
+        'en' => 'Publish this language version →',
+        'it' => 'Pubblica questa versione linguistica →',
+        'el' => 'Δημοσίευση αυτής της γλωσσικής έκδοσης →',
+    ],
+    'language_versions' => [
+        'fi' => 'Kieliversiot',
+        'sv' => 'Språkversioner',
+        'en' => 'Language versions',
+        'it' => 'Versioni linguistiche',
+        'el' => 'Γλωσσικές εκδόσεις',
+    ],
+    'state_published' => [
+        'fi' => 'Julkaistu',
+        'sv' => 'Publicerad',
+        'en' => 'Published',
+        'it' => 'Pubblicato',
+        'el' => 'Δημοσιεύτηκε',
+    ],
+    'state_draft' => [
+        'fi' => 'Luonnos',
+        'sv' => 'Utkast',
+        'en' => 'Draft',
+        'it' => 'Bozza',
+        'el' => 'Πρόχειρο',
+    ],
+
     // Log Messages
     'log_display_removed' => [
         'fi' => 'Poistettu infonäyttö-playlistasta',
