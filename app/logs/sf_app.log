@@ -1,0 +1,592 @@
+[2026-02-06 19:53:45] [INFO] users_update: Käyttäjä päivitetty, id=1, email=arto.huhta@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"1","first_name":"Arto","last_name":"Huhta","email":"arto.huhta@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","role_category_ids":["13"],"email_notifications_enabled":"1","additional_roles":["4"]}
+[2026-02-06 19:53:45] [INFO] users_update: Käyttäjä päivitetty, id=1, email=arto.huhta@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"1","first_name":"Arto","last_name":"Huhta","email":"arto.huhta@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","role_category_ids":["13"],"email_notifications_enabled":"1","additional_roles":["4"]}
+[2026-02-06 19:54:08] [INFO] sf_send_supervisor_notification: CALLED for flashId=604, email=arto.huhta@tapojarvi.com
+[2026-02-06 19:54:08] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 19:54:08] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 19:54:08] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 19:54:09] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 19:54:09] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-06 19:54:09] [INFO] Worker starting for flash_id: 604
+[2026-02-06 19:54:09] [INFO] Worker successfully processed flash_id: 604
+[2026-02-06 20:04:08] [INFO] sf_send_supervisor_notification: CALLED for flashId=605, email=arto.huhta@tapojarvi.com
+[2026-02-06 20:04:08] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:04:08] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 20:04:08] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:04:08] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 20:04:08] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-06 20:04:08] [INFO] Worker starting for flash_id: 605
+[2026-02-06 20:04:08] [INFO] Worker successfully processed flash_id: 605
+[2026-02-06 20:09:36] [INFO] sf_send_supervisor_notification: CALLED for flashId=606, email=arto.huhta@tapojarvi.com
+[2026-02-06 20:09:36] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:09:36] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 20:09:36] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:09:36] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 20:09:36] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-06 20:09:36] [INFO] Worker starting for flash_id: 606
+[2026-02-06 20:09:36] [INFO] Worker successfully processed flash_id: 606
+[2026-02-06 20:14:05] [INFO] sf_send_supervisor_notification: CALLED for flashId=607, email=arto.huhta@tapojarvi.com
+[2026-02-06 20:14:05] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:14:05] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 20:14:05] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:14:05] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 20:14:05] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-06 20:14:05] [INFO] Worker starting for flash_id: 607
+[2026-02-06 20:14:05] [INFO] Worker successfully processed flash_id: 607
+[2026-02-06 20:38:40] [INFO] sf_send_supervisor_notification: CALLED for flashId=608, email=arto.huhta@tapojarvi.com
+[2026-02-06 20:38:40] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:38:40] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 20:38:40] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:38:41] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 20:38:41] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-06 20:38:41] [INFO] Worker starting for flash_id: 608
+[2026-02-06 20:38:41] [INFO] Worker successfully processed flash_id: 608
+[2026-02-06 20:45:30] [INFO] sf_send_email: CALLED, recipients=jukka.alajoutsijarvi@tapojarvi.fi
+[2026-02-06 20:45:30] [INFO] sf_should_send_email: Active user email=jukka.alajoutsijarvi@tapojarvi.fi, notifications_enabled=YES
+[2026-02-06 20:45:30] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-06 20:58:57] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-06 20:58:57] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-06 20:58:57] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-07 00:00:37] [INFO] sf_send_supervisor_notification: CALLED for flashId=609, email=arto.huhta@tapojarvi.com
+[2026-02-07 00:00:37] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-07 00:00:37] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-07 00:00:37] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-07 00:00:37] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-07 00:00:37] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-07 00:00:37] [INFO] Worker starting for flash_id: 609
+[2026-02-07 00:00:38] [INFO] Worker successfully processed flash_id: 609
+[2026-02-07 11:17:23] [INFO] Worker starting for flash_id: 610
+[2026-02-07 11:17:23] [INFO] Worker successfully processed flash_id: 610
+[2026-02-08 13:15:21] [INFO] sf_send_supervisor_notification: CALLED for flashId=611, email=arto.huhta@tapojarvi.com
+[2026-02-08 13:15:21] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:15:21] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 13:15:21] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:15:22] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 13:15:22] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 13:15:22] [INFO] Worker starting for flash_id: 611
+[2026-02-08 13:15:22] [INFO] Worker successfully processed flash_id: 611
+[2026-02-08 13:53:38] [INFO] sf_send_supervisor_notification: CALLED for flashId=612, email=arto.huhta@tapojarvi.com
+[2026-02-08 13:53:38] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:53:38] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 13:53:38] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:53:38] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 13:53:38] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 13:53:38] [INFO] Worker starting for flash_id: 612
+[2026-02-08 13:53:38] [INFO] Worker successfully processed flash_id: 612
+[2026-02-08 13:56:17] [INFO] sf_send_supervisor_notification: CALLED for flashId=613, email=arto.huhta@tapojarvi.com
+[2026-02-08 13:56:17] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:56:17] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 13:56:17] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 13:56:17] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 13:56:17] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 13:56:17] [INFO] Worker starting for flash_id: 613
+[2026-02-08 13:56:17] [INFO] Worker successfully processed flash_id: 613
+[2026-02-08 16:08:03] [WARNING] csrf_validation_failed | {"request_method":"POST","request_uri":"\/safetyflash-system\/app\/api\/upload_extra_image.php"}
+[2026-02-08 16:10:32] [INFO] sf_send_supervisor_notification: CALLED for flashId=614, email=arto.huhta@tapojarvi.com
+[2026-02-08 16:10:32] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 16:10:32] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 16:10:32] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 16:10:32] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 16:10:32] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 16:10:32] [INFO] Worker starting for flash_id: 614
+[2026-02-08 16:10:32] [INFO] Worker successfully processed flash_id: 614
+[2026-02-08 19:23:24] [INFO] sf_send_supervisor_notification: CALLED for flashId=615, email=arto.huhta@tapojarvi.com
+[2026-02-08 19:23:24] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 19:23:24] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 19:23:24] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 19:23:24] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 19:23:24] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 19:23:24] [INFO] Worker starting for flash_id: 615
+[2026-02-08 19:23:25] [INFO] Worker successfully processed flash_id: 615
+[2026-02-08 20:50:41] [INFO] sf_send_supervisor_notification: CALLED for flashId=616, email=arto.huhta@tapojarvi.com
+[2026-02-08 20:50:41] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 20:50:41] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-08 20:50:41] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-08 20:50:41] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-08 20:50:41] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-08 20:50:41] [INFO] Worker starting for flash_id: 616
+[2026-02-08 20:50:42] [INFO] Worker successfully processed flash_id: 616
+[2026-02-09 07:55:34] [INFO] sf_send_email: CALLED, recipients=matti.hirvonen@tapojarvi.com
+[2026-02-09 07:55:34] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 07:55:34] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 08:30:42] [INFO] users_update: Käyttäjä päivitetty, id=20, email=arto.huhta@hannukainenmining.fi | {"csrf_token":"[REDACTED]","id":"20","first_name":"Arto","last_name":"Huhta","email":"arto.huhta@hannukainenmining.fi","role_id":"2","ui_lang":"fi","home_worksite_id":"","email_notifications_enabled":"1"}
+[2026-02-09 08:30:42] [INFO] users_update: Käyttäjä päivitetty, id=20, email=arto.huhta@hannukainenmining.fi | {"csrf_token":"[REDACTED]","id":"20","first_name":"Arto","last_name":"Huhta","email":"arto.huhta@hannukainenmining.fi","role_id":"2","ui_lang":"fi","home_worksite_id":"","email_notifications_enabled":"1"}
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Processing flash 598
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Languages: ["fi","el"]
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Screens option: selected
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Selected countries: ["el"]
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Selected worksites: ["7","1","16"]
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Flash 598 state updated to to_comms for 1 language version(s)
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Attempting to send email for flash 598
+[2026-02-09 08:47:32] [INFO] sf_mail_to_comms: CALLED for flashId=598
+[2026-02-09 08:47:32] [INFO] sf_mail_to_comms: Selected languages: fi, el
+[2026-02-09 08:47:32] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-09 08:47:32] [INFO] sf_mail_to_comms: Screens option: selected
+[2026-02-09 08:47:32] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,elina.svard@tapojarvi.com,matti.hirvonen@tapojarvi.com
+[2026-02-09 08:47:32] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 08:47:32] [INFO] sf_should_send_email: Active user email=elina.svard@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 08:47:32] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 08:47:32] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 08:47:32] [INFO] send_to_comms.php: Email sent successfully for flash 598
+[2026-02-09 09:06:48] [INFO] [FlashSaveService] Creating worker job for flash 598: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 09:06:48] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 598
+[2026-02-09 09:06:48] [INFO] Worker starting for flash_id: 598
+[2026-02-09 09:06:48] [INFO] Worker successfully processed flash_id: 598
+[2026-02-09 09:13:13] [INFO] [FlashSaveService] Creating worker job for flash 617: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 09:13:13] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 617
+[2026-02-09 09:13:13] [INFO] Worker starting for flash_id: 617
+[2026-02-09 09:13:14] [INFO] Worker successfully processed flash_id: 617
+[2026-02-09 09:14:07] [INFO] [FlashSaveService] Creating worker job for flash 617: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 09:14:07] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 617
+[2026-02-09 09:14:07] [INFO] Worker starting for flash_id: 617
+[2026-02-09 09:14:07] [INFO] Worker successfully processed flash_id: 617
+[2026-02-09 09:15:51] [INFO] [FlashSaveService] Creating worker job for flash 617: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 09:15:51] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 617
+[2026-02-09 09:15:51] [INFO] Worker starting for flash_id: 617
+[2026-02-09 09:15:51] [INFO] Worker successfully processed flash_id: 617
+[2026-02-09 09:17:40] [INFO] publish.php: Created new snapshot for flash 598, type: tutkintatiedote
+[2026-02-09 09:17:40] [INFO] sf_mail_published: CALLED for flashId=617
+[2026-02-09 09:17:40] [INFO] sf_send_email: CALLED, recipients=arto.huhta@gmail.com
+[2026-02-09 09:17:40] [INFO] sf_should_send_email: External recipient (not in database), allowing send: arto.huhta@gmail.com
+[2026-02-09 09:17:40] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 09:17:40] [INFO] sf_mail_published_to_creator: CALLED for flashId=617
+[2026-02-09 09:17:40] [INFO] sf_mail_published_to_creator: SENDING TO arto.huhta@tapojarvi.com
+[2026-02-09 09:17:40] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-09 09:17:40] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 09:17:40] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 09:22:55] [INFO] [FlashSaveService] Creating worker job for flash 598: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 09:22:55] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 598
+[2026-02-09 09:22:55] [INFO] Worker starting for flash_id: 598
+[2026-02-09 09:22:55] [INFO] [Worker] Updated existing snapshot for flash 598, type: tutkintatiedote
+[2026-02-09 09:22:55] [INFO] Worker successfully processed flash_id: 598
+[2026-02-09 09:41:28] [INFO] users_update: Käyttäjä päivitetty, id=9, email=pyry.rautalin@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"9","first_name":"Pyry","last_name":"Rautalin","email":"pyry.rautalin@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","role_category_ids":["5"],"email_notifications_enabled":"1"}
+[2026-02-09 09:41:28] [INFO] users_update: Käyttäjä päivitetty, id=9, email=pyry.rautalin@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"9","first_name":"Pyry","last_name":"Rautalin","email":"pyry.rautalin@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","role_category_ids":["5"],"email_notifications_enabled":"1"}
+[2026-02-09 09:41:48] [INFO] users_update: Käyttäjä päivitetty, id=9, email=pyry.rautalin@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"9","first_name":"Pyry","last_name":"Rautalin","email":"pyry.rautalin@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","email_notifications_enabled":"1","additional_roles":["4"]}
+[2026-02-09 09:41:48] [INFO] users_update: Käyttäjä päivitetty, id=9, email=pyry.rautalin@tapojarvi.com | {"csrf_token":"[REDACTED]","id":"9","first_name":"Pyry","last_name":"Rautalin","email":"pyry.rautalin@tapojarvi.com","role_id":"1","ui_lang":"fi","home_worksite_id":"","email_notifications_enabled":"1","additional_roles":["4"]}
+[2026-02-09 13:15:15] [INFO] sf_send_supervisor_notification: CALLED for flashId=603, email=mika.viinamaki@tapojarvi.fi
+[2026-02-09 13:15:15] [INFO] sf_should_send_email: User INACTIVE (is_active=0), blocking send: mika.viinamaki@tapojarvi.fi
+[2026-02-09 13:15:15] [INFO] sf_send_supervisor_notification: SKIPPED for mika.viinamaki@tapojarvi.fi (notifications disabled)
+[2026-02-09 13:15:15] [INFO] Worker starting for flash_id: 603
+[2026-02-09 13:15:17] [INFO] Worker successfully processed flash_id: 603
+[2026-02-09 13:41:38] [INFO] sf_send_email: CALLED, recipients=jukka.alajoutsijarvi@tapojarvi.fi
+[2026-02-09 13:41:38] [INFO] sf_should_send_email: Active user email=jukka.alajoutsijarvi@tapojarvi.fi, notifications_enabled=YES
+[2026-02-09 13:41:43] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 13:56:51] [INFO] sf_send_supervisor_notification: CALLED for flashId=566, email=vesa-matti.pirttipera@tapojarvi.com
+[2026-02-09 13:56:51] [INFO] sf_should_send_email: Active user email=vesa-matti.pirttipera@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 13:56:51] [INFO] sf_send_email: CALLED, recipients=vesa-matti.pirttipera@tapojarvi.com
+[2026-02-09 13:56:51] [INFO] sf_should_send_email: Active user email=vesa-matti.pirttipera@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 13:56:51] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 13:56:51] [INFO] sf_send_supervisor_notification: Email sent to vesa-matti.pirttipera@tapojarvi.com
+[2026-02-09 13:56:51] [INFO] Worker starting for flash_id: 566
+[2026-02-09 13:56:52] [INFO] Worker successfully processed flash_id: 566
+[2026-02-09 14:05:21] [INFO] sf_mail_to_safety_team: CALLED for flashId=566, stateBefore=pending_supervisor
+[2026-02-09 14:05:21] [INFO] sf_send_email: CALLED, recipients=janne.ulvinen@tapojarvi.com,janne.pajala@tapojarvi.fi,paivi.honkanen@tapojarvi.fi,tommi.hiltunen@tapojarvi.com,joni.kangas@tapojarvi.com
+[2026-02-09 14:05:21] [INFO] sf_should_send_email: Active user email=janne.ulvinen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 14:05:21] [INFO] sf_should_send_email: Active user email=janne.pajala@tapojarvi.fi, notifications_enabled=YES
+[2026-02-09 14:05:21] [INFO] sf_should_send_email: Active user email=paivi.honkanen@tapojarvi.fi, notifications_enabled=YES
+[2026-02-09 14:05:21] [INFO] sf_should_send_email: Active user email=tommi.hiltunen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 14:05:21] [INFO] sf_should_send_email: Active user email=joni.kangas@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 14:05:21] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 14:31:25] [INFO] [FlashSaveService] Creating worker job for flash 603: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 14:31:25] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 603
+[2026-02-09 14:31:25] [INFO] Worker starting for flash_id: 603
+[2026-02-09 14:31:26] [INFO] Worker successfully processed flash_id: 603
+[2026-02-09 15:00:08] [INFO] [FlashSaveService] Creating worker job for flash 603: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:00:08] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 603
+[2026-02-09 15:00:08] [INFO] Worker starting for flash_id: 603
+[2026-02-09 15:00:08] [INFO] Worker successfully processed flash_id: 603
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Processing flash 603
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Languages: ["fi","sv","en","it","el"]
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Screens option: all
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Selected countries: []
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Selected worksites: []
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Flash 603 state updated to to_comms for 1 language version(s)
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Attempting to send email for flash 603
+[2026-02-09 15:10:32] [INFO] sf_mail_to_comms: CALLED for flashId=603
+[2026-02-09 15:10:32] [INFO] sf_mail_to_comms: Selected languages: fi, sv, en, it, el
+[2026-02-09 15:10:32] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-09 15:10:32] [INFO] sf_mail_to_comms: Screens option: all
+[2026-02-09 15:10:32] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,pyry.rautalin@tapojarvi.com,elina.svard@tapojarvi.com,matti.hirvonen@tapojarvi.com
+[2026-02-09 15:10:32] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 15:10:32] [INFO] sf_should_send_email: Active user email=pyry.rautalin@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 15:10:32] [INFO] sf_should_send_email: Active user email=elina.svard@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 15:10:32] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 15:10:32] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 15:10:32] [INFO] send_to_comms.php: Email sent successfully for flash 603
+[2026-02-09 15:15:41] [INFO] [FlashSaveService] Creating worker job for flash 603: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:15:41] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 603
+[2026-02-09 15:15:41] [INFO] Worker starting for flash_id: 603
+[2026-02-09 15:15:41] [INFO] Worker successfully processed flash_id: 603
+[2026-02-09 15:29:14] [INFO] [FlashSaveService] Creating worker job for flash 618: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:29:14] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 618
+[2026-02-09 15:29:14] [INFO] Worker starting for flash_id: 618
+[2026-02-09 15:29:14] [INFO] Worker successfully processed flash_id: 618
+[2026-02-09 15:38:20] [INFO] [FlashSaveService] Creating worker job for flash 619: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:38:20] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 619
+[2026-02-09 15:38:20] [INFO] Worker starting for flash_id: 619
+[2026-02-09 15:38:20] [INFO] Worker successfully processed flash_id: 619
+[2026-02-09 15:44:06] [INFO] [FlashSaveService] Creating worker job for flash 620: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:44:06] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 620
+[2026-02-09 15:44:06] [INFO] Worker starting for flash_id: 620
+[2026-02-09 15:44:06] [INFO] Worker successfully processed flash_id: 620
+[2026-02-09 15:50:58] [INFO] [FlashSaveService] Creating worker job for flash 621: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 15:50:58] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 621
+[2026-02-09 15:50:58] [INFO] Worker starting for flash_id: 621
+[2026-02-09 15:50:59] [INFO] Worker successfully processed flash_id: 621
+[2026-02-09 16:34:33] [INFO] publish.php: Created new snapshot for flash 603, type: tutkintatiedote
+[2026-02-09 16:34:33] [INFO] sf_mail_published: CALLED for flashId=603
+[2026-02-09 16:34:33] [INFO] sf_send_email: CALLED, recipients=arto.huhta@gmail.com
+[2026-02-09 16:34:33] [INFO] sf_should_send_email: External recipient (not in database), allowing send: arto.huhta@gmail.com
+[2026-02-09 16:34:33] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 16:34:33] [INFO] sf_mail_published_to_creator: CALLED for flashId=603
+[2026-02-09 16:34:33] [INFO] sf_mail_published_to_creator: SENDING TO matti.hirvonen@tapojarvi.com
+[2026-02-09 16:34:33] [INFO] sf_send_email: CALLED, recipients=matti.hirvonen@tapojarvi.com
+[2026-02-09 16:34:33] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 16:34:33] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 17:43:41] [INFO] [FlashSaveService] Creating worker job for flash 621: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-09 17:43:41] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 621
+[2026-02-09 17:43:41] [INFO] Worker starting for flash_id: 621
+[2026-02-09 17:43:41] [INFO] [Worker] Updated existing snapshot for flash 603, type: tutkintatiedote
+[2026-02-09 17:43:41] [INFO] Worker successfully processed flash_id: 621
+[2026-02-09 23:22:54] [INFO] sf_send_supervisor_notification: CALLED for flashId=622, email=arto.huhta@tapojarvi.com
+[2026-02-09 23:22:54] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 23:22:54] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-09 23:22:54] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-09 23:22:54] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-09 23:22:54] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-09 23:22:54] [INFO] Worker starting for flash_id: 622
+[2026-02-09 23:22:54] [INFO] Worker successfully processed flash_id: 622
+[2026-02-11 21:21:56] [INFO] [FlashSaveService] Creating worker job for flash 603: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-11 21:21:56] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 603
+[2026-02-11 21:21:56] [INFO] Worker starting for flash_id: 603
+[2026-02-11 21:21:56] [INFO] [Worker] Updated existing snapshot for flash 603, type: tutkintatiedote
+[2026-02-11 21:21:56] [INFO] Worker successfully processed flash_id: 603
+[2026-02-11 22:01:54] [INFO] [FlashSaveService] Creating worker job for flash 589: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-11 22:01:54] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 589
+[2026-02-11 22:01:54] [INFO] Worker starting for flash_id: 589
+[2026-02-11 22:01:54] [INFO] [Worker] Updated existing snapshot for flash 589, type: tutkintatiedote
+[2026-02-11 22:01:54] [INFO] Worker successfully processed flash_id: 589
+[2026-02-11 22:38:28] [INFO] [FlashSaveService] Creating worker job for flash 598: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-11 22:38:28] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 598
+[2026-02-11 22:38:28] [INFO] Worker starting for flash_id: 598
+[2026-02-11 22:38:28] [INFO] [Worker] Updated existing snapshot for flash 598, type: tutkintatiedote
+[2026-02-11 22:38:28] [INFO] Worker successfully processed flash_id: 598
+[2026-02-11 23:31:20] [INFO] sf_send_supervisor_notification: CALLED for flashId=623, email=arto.huhta@tapojarvi.com
+[2026-02-11 23:31:20] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-11 23:31:20] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-11 23:31:20] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-11 23:31:20] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-11 23:31:20] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-11 23:31:20] [INFO] Worker starting for flash_id: 623
+[2026-02-11 23:31:21] [INFO] Worker successfully processed flash_id: 623
+[2026-02-12 00:05:19] [INFO] [FlashSaveService] Creating worker job for flash 582: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-12 00:05:19] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 582
+[2026-02-12 00:05:19] [INFO] Worker starting for flash_id: 582
+[2026-02-12 00:05:19] [INFO] [Worker] Created new snapshot for flash 582, type: tutkintatiedote, version: 1
+[2026-02-12 00:05:19] [INFO] Worker successfully processed flash_id: 582
+[2026-02-12 00:07:10] [INFO] [FlashSaveService] Creating worker job for flash 571: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-12 00:07:10] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 571
+[2026-02-12 00:07:10] [INFO] Worker starting for flash_id: 571
+[2026-02-12 00:07:10] [INFO] [Worker] Created new snapshot for flash 571, type: tutkintatiedote, version: 1
+[2026-02-12 00:07:11] [INFO] Worker successfully processed flash_id: 571
+[2026-02-12 00:17:48] [INFO] sf_send_supervisor_notification: CALLED for flashId=624, email=arto.huhta@tapojarvi.com
+[2026-02-12 00:17:48] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-12 00:17:48] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-12 00:17:48] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-12 00:17:48] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-12 00:17:48] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-12 00:17:48] [INFO] Worker starting for flash_id: 624
+[2026-02-12 00:17:49] [INFO] Worker successfully processed flash_id: 624
+[2026-02-12 09:43:19] [INFO] [FlashSaveService] Creating worker job for flash 567: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-12 09:43:19] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 567
+[2026-02-12 09:43:19] [INFO] Worker starting for flash_id: 567
+[2026-02-12 09:43:19] [INFO] [Worker] Created new snapshot for flash 567, type: tutkintatiedote, version: 1
+[2026-02-12 09:43:19] [INFO] Worker successfully processed flash_id: 567
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Processing flash 566
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Languages: ["fi"]
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Screens option: selected
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Selected countries: ["fi"]
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Selected worksites: ["5"]
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Flash 566 state updated to to_comms for 1 language version(s)
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Attempting to send email for flash 566
+[2026-02-13 09:07:44] [INFO] sf_mail_to_comms: CALLED for flashId=566
+[2026-02-13 09:07:44] [INFO] sf_mail_to_comms: Selected languages: fi
+[2026-02-13 09:07:44] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-13 09:07:44] [INFO] sf_mail_to_comms: Screens option: selected
+[2026-02-13 09:07:44] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,pyry.rautalin@tapojarvi.com,elina.svard@tapojarvi.com,aleksi.ratilainen@tapojarvi.com
+[2026-02-13 09:07:44] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 09:07:44] [INFO] sf_should_send_email: Active user email=pyry.rautalin@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 09:07:44] [INFO] sf_should_send_email: Active user email=elina.svard@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 09:07:44] [INFO] sf_should_send_email: Active user email=aleksi.ratilainen@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 09:07:44] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-13 09:07:44] [INFO] send_to_comms.php: Email sent successfully for flash 566
+[2026-02-13 09:09:25] [INFO] publish.php: Created new snapshot for flash 566, type: tutkintatiedote
+[2026-02-13 09:09:25] [INFO] sf_mail_published: CALLED for flashId=566
+[2026-02-13 09:09:25] [INFO] sf_send_email: CALLED, recipients=arto.huhta@gmail.com
+[2026-02-13 09:09:25] [INFO] sf_should_send_email: External recipient (not in database), allowing send: arto.huhta@gmail.com
+[2026-02-13 09:09:25] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-13 09:09:25] [INFO] sf_mail_published_to_creator: CALLED for flashId=566
+[2026-02-13 09:09:25] [INFO] sf_mail_published_to_creator: SENDING TO aleksi.ratilainen@tapojarvi.com
+[2026-02-13 09:09:25] [INFO] sf_send_email: CALLED, recipients=aleksi.ratilainen@tapojarvi.com
+[2026-02-13 09:09:25] [INFO] sf_should_send_email: Active user email=aleksi.ratilainen@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 09:09:25] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-13 13:55:17] [INFO] sf_send_supervisor_notification: CALLED for flashId=625, email=jukka.alajoutsijarvi@tapojarvi.fi
+[2026-02-13 13:55:17] [INFO] sf_should_send_email: Active user email=jukka.alajoutsijarvi@tapojarvi.fi, notifications_enabled=YES
+[2026-02-13 13:55:17] [INFO] sf_send_email: CALLED, recipients=jukka.alajoutsijarvi@tapojarvi.fi
+[2026-02-13 13:55:17] [INFO] sf_should_send_email: Active user email=jukka.alajoutsijarvi@tapojarvi.fi, notifications_enabled=YES
+[2026-02-13 13:55:17] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-13 13:55:17] [INFO] sf_send_supervisor_notification: Email sent to jukka.alajoutsijarvi@tapojarvi.fi
+[2026-02-13 13:55:17] [INFO] Worker starting for flash_id: 625
+[2026-02-13 13:55:18] [INFO] Worker successfully processed flash_id: 625
+[2026-02-13 16:40:01] [INFO] [FlashSaveService] Creating worker job for flash 625: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-13 16:40:01] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 625
+[2026-02-13 16:40:01] [INFO] Worker starting for flash_id: 625
+[2026-02-13 16:40:01] [INFO] Worker successfully processed flash_id: 625
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Processing flash 625
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Languages: ["fi"]
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Screens option: selected
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Selected countries: ["el"]
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Selected worksites: ["7","1","16"]
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Flash 625 state updated to to_comms for 1 language version(s)
+[2026-02-13 18:55:32] [INFO] send_to_comms.php: Attempting to send email for flash 625
+[2026-02-13 18:55:32] [INFO] sf_mail_to_comms: CALLED for flashId=625
+[2026-02-13 18:55:32] [INFO] sf_mail_to_comms: Selected languages: fi
+[2026-02-13 18:55:32] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-13 18:55:32] [INFO] sf_mail_to_comms: Screens option: selected
+[2026-02-13 18:55:32] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,pyry.rautalin@tapojarvi.com,elina.svard@tapojarvi.com,matti.hirvonen@tapojarvi.com
+[2026-02-13 18:55:32] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 18:55:32] [INFO] sf_should_send_email: Active user email=pyry.rautalin@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 18:55:32] [INFO] sf_should_send_email: Active user email=elina.svard@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 18:55:32] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-13 18:55:33] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-13 18:55:33] [INFO] send_to_comms.php: Email sent successfully for flash 625
+[2026-02-14 10:02:14] [INFO] [FlashSaveService] Creating worker job for flash 625: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 10:02:14] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 625
+[2026-02-14 10:02:14] [INFO] Worker starting for flash_id: 625
+[2026-02-14 10:02:14] [INFO] Worker successfully processed flash_id: 625
+[2026-02-14 10:05:23] [INFO] [FlashSaveService] Creating worker job for flash 626: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 10:05:23] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 626
+[2026-02-14 10:05:23] [INFO] Worker starting for flash_id: 626
+[2026-02-14 10:05:23] [INFO] Worker successfully processed flash_id: 626
+[2026-02-14 10:06:42] [INFO] publish.php: Created new snapshot for flash 625, type: vaaratilanne
+[2026-02-14 10:06:42] [INFO] sf_mail_published: CALLED for flashId=625
+[2026-02-14 10:06:42] [INFO] sf_send_email: CALLED, recipients=arto.huhta@gmail.com
+[2026-02-14 10:06:42] [INFO] sf_should_send_email: External recipient (not in database), allowing send: arto.huhta@gmail.com
+[2026-02-14 10:06:42] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:06:42] [INFO] sf_mail_published_to_creator: CALLED for flashId=625
+[2026-02-14 10:06:42] [INFO] sf_mail_published_to_creator: SENDING TO matti.hirvonen@tapojarvi.com
+[2026-02-14 10:06:42] [INFO] sf_send_email: CALLED, recipients=matti.hirvonen@tapojarvi.com
+[2026-02-14 10:06:42] [INFO] sf_should_send_email: Active user email=matti.hirvonen@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:06:42] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:21:09] [INFO] [FlashSaveService] Creating worker job for flash 625: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 10:21:09] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 625
+[2026-02-14 10:21:09] [INFO] Worker starting for flash_id: 625
+[2026-02-14 10:21:09] [INFO] [Worker] Created new snapshot for flash 625, type: ensitiedote, version: 2
+[2026-02-14 10:21:10] [INFO] Worker successfully processed flash_id: 625
+[2026-02-14 10:29:51] [INFO] bulk_update_notifications: Updated 16 users, enabled=0
+[2026-02-14 10:30:35] [INFO] sf_send_supervisor_notification: CALLED for flashId=627, email=arto.huhta@tapojarvi.com
+[2026-02-14 10:30:35] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:30:35] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-14 10:30:35] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:30:35] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:30:35] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-14 10:30:35] [INFO] Worker starting for flash_id: 627
+[2026-02-14 10:30:35] [INFO] Worker successfully processed flash_id: 627
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Processing flash 627
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Languages: ["fi","sv","en"]
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Screens option: selected
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Selected countries: ["el"]
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Selected worksites: ["1","16"]
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Flash 627 state updated to to_comms for 1 language version(s)
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Attempting to send email for flash 627
+[2026-02-14 10:31:54] [INFO] sf_mail_to_comms: CALLED for flashId=627
+[2026-02-14 10:31:54] [INFO] sf_mail_to_comms: Selected languages: fi, sv, en
+[2026-02-14 10:31:54] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-14 10:31:54] [INFO] sf_mail_to_comms: Screens option: selected
+[2026-02-14 10:31:54] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,arto.huhta@tapojarvi.com
+[2026-02-14 10:31:54] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:31:54] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:31:54] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:31:54] [INFO] send_to_comms.php: Email sent successfully for flash 627
+[2026-02-14 10:33:00] [INFO] request_info: calling sf_mail_request_info for flashId=627
+[2026-02-14 10:33:00] [INFO] sf_mail_request_info: CALLED for flashId=627
+[2026-02-14 10:33:00] [INFO] sf_mail_request_info: SENDING TO arto.huhta@tapojarvi.com
+[2026-02-14 10:33:00] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-14 10:33:00] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:33:00] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:33:00] [INFO] request_info: sf_mail_request_info DONE for flashId=627
+[2026-02-14 10:33:52] [INFO] [FlashSaveService] Creating worker job for flash 627: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 10:33:52] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 627
+[2026-02-14 10:33:52] [INFO] Worker starting for flash_id: 627
+[2026-02-14 10:33:53] [INFO] Worker successfully processed flash_id: 627
+[2026-02-14 10:33:53] [INFO] sf_send_supervisor_notification: CALLED for flashId=627, email=arto.huhta@tapojarvi.com
+[2026-02-14 10:33:53] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:33:53] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-14 10:33:53] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:33:53] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:33:53] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Processing flash 627
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Languages: ["fi"]
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Screens option: selected
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Selected countries: []
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Selected worksites: ["1","16"]
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Flash 627 state updated to to_comms for 1 language version(s)
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Attempting to send email for flash 627
+[2026-02-14 10:34:55] [INFO] sf_mail_to_comms: CALLED for flashId=627
+[2026-02-14 10:34:55] [INFO] sf_mail_to_comms: Selected languages: fi
+[2026-02-14 10:34:55] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-14 10:34:55] [INFO] sf_mail_to_comms: Screens option: selected
+[2026-02-14 10:34:55] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,arto.huhta@tapojarvi.com
+[2026-02-14 10:34:55] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:34:55] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 10:34:55] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 10:34:55] [INFO] send_to_comms.php: Email sent successfully for flash 627
+[2026-02-14 10:35:57] [INFO] bulk_update_notifications: Updated 16 users, enabled=1
+[2026-02-14 12:23:38] [INFO] sf_send_supervisor_notification: CALLED for flashId=628, email=arto.huhta@tapojarvi.com
+[2026-02-14 12:23:38] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 12:23:38] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-14 12:23:38] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-14 12:23:38] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-14 12:23:38] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-14 12:23:38] [INFO] Worker starting for flash_id: 628
+[2026-02-14 12:23:38] [INFO] Worker successfully processed flash_id: 628
+[2026-02-14 13:03:47] [INFO] [FlashSaveService] Creating worker job for flash 629: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 13:03:47] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 629
+[2026-02-14 13:03:47] [INFO] Worker starting for flash_id: 629
+[2026-02-14 13:03:47] [INFO] [Worker] Updated existing snapshot for flash 625, type: ensitiedote
+[2026-02-14 13:03:48] [INFO] Worker successfully processed flash_id: 629
+[2026-02-14 16:45:00] [INFO] [create_language_version] API called - starting
+[2026-02-14 16:45:00] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 16:45:00] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 16:45:00] [INFO] [create_language_version] Params: source_id=629, target_lang=sv
+[2026-02-14 16:45:00] [INFO] [create_language_version] Connecting to database
+[2026-02-14 16:45:00] [INFO] [create_language_version] Database connected
+[2026-02-14 16:45:00] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 16:45:00] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 16:45:00] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 16:45:00] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Therockbouncedintotheloaderskneeduringr-SV.jpg
+[2026-02-14 16:45:00] [INFO] [create_language_version] New translation created with ID: 630
+[2026-02-14 16:45:00] [INFO] [create_language_version] ERROR: Call to undefined function sf_term() in /home/deb4000107/domains/tapojarvi.online/public_html/safetyflash-system/app/api/create_language_version.php:243
+[2026-02-14 16:45:00] [INFO] [create_language_version] Stack trace: #0 {main}
+[2026-02-14 16:48:29] [INFO] [create_language_version] API called - starting
+[2026-02-14 16:48:29] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 16:48:29] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 16:48:29] [INFO] [create_language_version] Params: source_id=630, target_lang=it
+[2026-02-14 16:48:29] [INFO] [create_language_version] Connecting to database
+[2026-02-14 16:48:29] [INFO] [create_language_version] Database connected
+[2026-02-14 16:48:29] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 16:48:29] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 16:48:29] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 16:48:29] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Therockbouncedintotheloaderskneeduringr-IT.jpg
+[2026-02-14 16:48:29] [INFO] [create_language_version] New translation created with ID: 631
+[2026-02-14 16:48:29] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-14 17:02:33] [INFO] [create_language_version] API called - starting
+[2026-02-14 17:02:33] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 17:02:33] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 17:02:33] [INFO] [create_language_version] Params: source_id=625, target_lang=it
+[2026-02-14 17:02:33] [INFO] [create_language_version] Connecting to database
+[2026-02-14 17:02:33] [INFO] [create_language_version] Database connected
+[2026-02-14 17:02:33] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 17:02:33] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 17:02:33] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 17:02:33] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Kivikimposilastarinpolveenkauko-ohjainlastauks-IT.jpg
+[2026-02-14 17:02:33] [INFO] [create_language_version] New translation created with ID: 632
+[2026-02-14 17:02:33] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-14 17:23:47] [INFO] [create_language_version] API called - starting
+[2026-02-14 17:23:47] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 17:23:47] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 17:23:47] [INFO] [create_language_version] Params: source_id=625, target_lang=en
+[2026-02-14 17:23:47] [INFO] [create_language_version] Connecting to database
+[2026-02-14 17:23:47] [INFO] [create_language_version] Database connected
+[2026-02-14 17:23:47] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 17:23:47] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 17:23:47] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 17:23:47] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Kivikimposilastarinpolveenkauko-ohjainlastauks-EN.jpg
+[2026-02-14 17:23:47] [INFO] [create_language_version] New translation created with ID: 633
+[2026-02-14 17:23:47] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-14 20:36:17] [INFO] [create_language_version] API called - starting
+[2026-02-14 20:36:17] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 20:36:17] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 20:36:17] [INFO] [create_language_version] Params: source_id=625, target_lang=sv
+[2026-02-14 20:36:17] [INFO] [create_language_version] Connecting to database
+[2026-02-14 20:36:17] [INFO] [create_language_version] Database connected
+[2026-02-14 20:36:17] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 20:36:17] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 20:36:17] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 20:36:17] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Kivikimposilastarinpolveenkauko-ohjainlastauks-SV.jpg
+[2026-02-14 20:36:17] [INFO] [create_language_version] New translation created with ID: 634
+[2026-02-14 20:36:17] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-14 20:48:50] [INFO] [create_language_version] API called - starting
+[2026-02-14 20:48:50] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 20:48:50] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 20:48:50] [INFO] [create_language_version] Params: source_id=625, target_lang=sv
+[2026-02-14 20:48:50] [INFO] [create_language_version] Connecting to database
+[2026-02-14 20:48:50] [INFO] [create_language_version] Database connected
+[2026-02-14 20:48:50] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 20:48:50] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 20:48:50] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 20:48:50] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Kivikimposilastarinpolveenkauko-ohjainlastauks-SV.jpg
+[2026-02-14 20:48:50] [INFO] [create_language_version] New translation created with ID: 635
+[2026-02-14 20:48:50] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-14 21:07:47] [INFO] [FlashSaveService] Creating worker job for flash 625: preview_image_data length: 0, preview_image_data_2 length: 0
+[2026-02-14 21:07:47] [INFO] [FlashSaveService] Falling back to inline worker execution for flash 625
+[2026-02-14 21:07:47] [INFO] Worker starting for flash_id: 625
+[2026-02-14 21:07:47] [INFO] [Worker] Updated existing snapshot for flash 625, type: ensitiedote
+[2026-02-14 21:07:47] [INFO] Worker successfully processed flash_id: 625
+[2026-02-14 21:44:17] [INFO] [create_language_version] API called - starting
+[2026-02-14 21:44:17] [INFO] [create_language_version] Config and auth loaded
+[2026-02-14 21:44:17] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-14 21:44:17] [INFO] [create_language_version] Params: source_id=625, target_lang=en
+[2026-02-14 21:44:17] [INFO] [create_language_version] Connecting to database
+[2026-02-14 21:44:17] [INFO] [create_language_version] Database connected
+[2026-02-14 21:44:17] [INFO] [create_language_version] Source flash found: type=yellow
+[2026-02-14 21:44:17] [INFO] [create_language_version] Translation group ID: 625
+[2026-02-14 21:44:17] [INFO] [create_language_version] Inserting new translation
+[2026-02-14 21:44:17] [INFO] [create_language_version] Card 1 saved: SF_2026_02_14_YELLOW_Sotkamo-Kivikimposilastarinpolveenkauko-ohjainlastauks-EN.jpg
+[2026-02-14 21:44:17] [INFO] [create_language_version] New translation created with ID: 636
+[2026-02-14 21:44:17] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-15 22:29:38] [INFO] [create_language_version] API called - starting
+[2026-02-15 22:29:38] [INFO] [create_language_version] Config and auth loaded
+[2026-02-15 22:29:38] [INFO] [create_language_version] User authenticated: ID=1
+[2026-02-15 22:29:38] [INFO] [create_language_version] Params: source_id=596, target_lang=sv
+[2026-02-15 22:29:38] [INFO] [create_language_version] Connecting to database
+[2026-02-15 22:29:38] [INFO] [create_language_version] Database connected
+[2026-02-15 22:29:38] [INFO] [create_language_version] Source flash found: type=green
+[2026-02-15 22:29:38] [INFO] [create_language_version] Translation group ID: 588
+[2026-02-15 22:29:38] [INFO] [create_language_version] Inserting new translation
+[2026-02-15 22:29:38] [INFO] [create_language_version] Card 1 saved: SF_2026_02_15_GREEN_Sotkamo-Aliurakoitsijantyntekijnyrjyttinilkkansa-SV-1.jpg
+[2026-02-15 22:29:38] [INFO] [create_language_version] Card 2 saved: SF_2026_02_15_GREEN_Sotkamo-Aliurakoitsijantyntekijnyrjyttinilkkansa-SV-2.jpg
+[2026-02-15 22:29:38] [INFO] [create_language_version] New translation created with ID: 637
+[2026-02-15 22:29:38] [INFO] [create_language_version] SUCCESS - Translation created, redirecting to view
+[2026-02-16 14:48:27] [INFO] sf_send_supervisor_notification: CALLED for flashId=638, email=arto.huhta@tapojarvi.com
+[2026-02-16 14:48:27] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:48:27] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com
+[2026-02-16 14:48:27] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:48:27] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-16 14:48:27] [INFO] sf_send_supervisor_notification: Email sent to arto.huhta@tapojarvi.com
+[2026-02-16 14:48:27] [INFO] Worker starting for flash_id: 638
+[2026-02-16 14:48:27] [INFO] Worker successfully processed flash_id: 638
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Processing flash 638
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Languages: ["fi","sv","en","el"]
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Wider distribution: No
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Screens option: all
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Selected countries: []
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Selected worksites: []
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Flash 638 state updated to to_comms for 1 language version(s)
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Attempting to send email for flash 638
+[2026-02-16 14:49:22] [INFO] sf_mail_to_comms: CALLED for flashId=638
+[2026-02-16 14:49:22] [INFO] sf_mail_to_comms: Selected languages: fi, sv, en, el
+[2026-02-16 14:49:22] [INFO] sf_mail_to_comms: Wider distribution: No
+[2026-02-16 14:49:22] [INFO] sf_mail_to_comms: Screens option: all
+[2026-02-16 14:49:22] [INFO] sf_send_email: CALLED, recipients=arto.huhta@tapojarvi.com,pyry.rautalin@tapojarvi.com,elina.svard@tapojarvi.com,arto.huhta@tapojarvi.com
+[2026-02-16 14:49:22] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:49:22] [INFO] sf_should_send_email: Active user email=pyry.rautalin@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:49:22] [INFO] sf_should_send_email: Active user email=elina.svard@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:49:22] [INFO] sf_should_send_email: Active user email=arto.huhta@tapojarvi.com, notifications_enabled=YES
+[2026-02-16 14:49:22] [INFO] sf_send_email: MAIL SENT OK
+[2026-02-16 14:49:22] [INFO] send_to_comms.php: Email sent successfully for flash 638

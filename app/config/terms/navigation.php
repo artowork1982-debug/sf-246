@@ -1,0 +1,104 @@
+<?php
+/**
+ * Navigation and UI Structure - Navigation menus, view states
+ */
+return [
+'nav_settings' => [
+    'fi' => 'Asetukset',
+    'sv' => 'Inställningar',
+    'en' => 'Settings',
+    'it' => 'Impostazioni',
+    'el' => 'Ρυθμίσεις',
+],
+'view_status' => [
+    'fi' => 'Tila',
+    'sv' => 'Status',
+    'en' => 'Status',
+    'it' => 'Stato',
+    'el' => 'Κατάσταση',
+],
+'view_details_heading' => [
+    'fi' => 'Safetyflash-tiedot',
+    'sv' => 'Information om Safetyflash',
+    'en' => 'Safetyflash details',
+    'it' => 'Dettagli Safetyflash',
+    'el' => 'Λεπτομέρειες Safetyflash',
+],
+'view_languages_aria' => [
+    'fi' => 'Kielet',
+    'sv' => 'Språk',
+    'en' => 'Languages',
+    'it' => 'Lingue',
+    'el' => 'Γλώσσες',
+],
+'nav_list' => [
+    'fi' => 'Lista',
+    'sv' => 'Lista',
+    'en' => 'List',
+    'it' => 'Lista',
+    'el' => 'Λίστα',
+],
+'nav_new_safetyflash' => [
+    'fi' => 'Uusi Safetyflash',
+    'sv' => 'Ny Safetyflash',
+    'en' => 'New Safetyflash',
+    'it' => 'Nuovo Safetyflash',
+    'el' => 'Νέο Safetyflash',
+],
+'nav_profile' => [
+    'fi' => 'Profiili',
+    'sv' => 'Profil',
+    'en' => 'Profile',
+    'it' => 'Profilo',
+    'el' => 'Προφίλ',
+],
+'nav_logout' => [
+    'fi' => 'Kirjaudu ulos',
+    'sv' => 'Logga ut',
+    'en' => 'Log out',
+    'it' => 'Esci',
+    'el' => 'Αποσύνδεση',
+],
+'view_grid' => [
+    'fi' => 'Ruudukko',
+    'sv' => 'Rutnät',
+    'en' => 'Grid',
+    'it' => 'Griglia',
+    'el' => 'Πλέγμα',
+],
+'view_list' => [
+    'fi' => 'Lista',
+    'sv' => 'Lista',
+    'en' => 'List',
+    'it' => 'Elenco',
+    'el' => 'Λίστα',
+],
+'view_compact' => [
+    'fi' => 'Tiivis',
+    'sv' => 'Kompakt',
+    'en' => 'Compact',
+    'it' => 'Compatto',
+    'el' => 'Συμπαγής',
+],
+'view_toggle' => [
+    'fi' => 'Vaihda näkymää',
+    'sv' => 'Byt vy',
+    'en' => 'Toggle view',
+    'it' => 'Cambia visualizzazione',
+    'el' => 'Εναλλαγή προβολής',
+],
+'nav_feedback' => [
+    'fi' => 'Palaute',
+    'sv' => 'Feedback',
+    'en' => 'Feedback',
+    'it' => 'Feedback',
+    'el' => 'Ανατροφοδότηση',
+],
+'nav_language_select' => [
+    'fi' => 'Valitse kieli',
+    'sv' => 'Välj språk',
+    'en' => 'Select language',
+    'it' => 'Seleziona lingua',
+    'el' => 'Επιλέξτε γλώσσα',
+],
+];
