@@ -26,6 +26,7 @@ $modules = [
     'buttons'    => require $termsDir . '/buttons.php',
     'messages'   => require $termsDir . '/messages.php',
     'images'     => require $termsDir . '/images.php',
+    'display'    => require $termsDir . '/display.php',
 ];
 
 // Merge all terms into one array

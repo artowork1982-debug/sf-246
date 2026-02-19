@@ -1,0 +1,316 @@
+/**
+ * SafetyFlash - Display TTL & Playlist Management Styles
+ * 
+ * Tyylit infonäyttöjen TTL-valitsimelle ja playlist-statukselle.
+ * 
+ * @package SafetyFlash
+ * @subpackage CSS
+ * @created 2026-02-19
+ */
+
+/* ============================================================================
+   TTL Selector (Publish Modal)
+   ========================================================================= */
+
+.sf-publish-ttl-section {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--sf-bg-secondary, #f8f9fa);
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 8px;
+}
+
+.sf-ttl-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sf-ttl-icon {
+    color: var(--sf-primary, #0066cc);
+    flex-shrink: 0;
+}
+
+.sf-ttl-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sf-text-primary, #212529);
+}
+
+.sf-ttl-description {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: var(--sf-text-secondary, #6c757d);
+}
+
+/* TTL Chips (Radio Buttons as Pills) */
+.sf-ttl-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sf-ttl-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 2px solid var(--sf-border, #dee2e6);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sf-text-primary, #212529);
+    user-select: none;
+}
+
+.sf-ttl-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sf-chip-icon {
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.sf-chip-label {
+    white-space: nowrap;
+}
+
+/* Hover State */
+.sf-ttl-chip:hover {
+    border-color: var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.05);
+    transform: translateY(-1px);
+}
+
+/* Selected State */
+.sf-ttl-chip-selected,
+.sf-ttl-chip:has(.sf-ttl-radio:checked) {
+    background: var(--sf-primary, #0066cc);
+    border-color: var(--sf-primary, #0066cc);
+    color: white;
+}
+
+.sf-ttl-chip-selected .sf-chip-icon,
+.sf-ttl-chip:has(.sf-ttl-radio:checked) .sf-chip-icon {
+    opacity: 1;
+    color: white;
+}
+
+/* TTL Preview */
+.sf-ttl-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--sf-text-primary, #212529);
+}
+
+.sf-ttl-preview.sf-ttl-preview-hidden {
+    display: none;
+}
+
+.sf-preview-icon {
+    flex-shrink: 0;
+    color: var(--sf-text-secondary, #6c757d);
+}
+
+#ttlPreviewDate {
+    color: var(--sf-primary, #0066cc);
+    font-weight: 600;
+}
+
+/* ============================================================================
+   Playlist Status Card (View Page)
+   ========================================================================= */
+
+.sf-playlist-status-card {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid;
+    background: white;
+}
+
+/* Active Status (Green) */
+.sf-playlist-status-active {
+    border-color: #28a745;
+    background: #f8fff9;
+}
+
+.sf-playlist-status-active .sf-playlist-status-header h4 {
+    color: #28a745;
+}
+
+/* Expired Status (Yellow/Warning) */
+.sf-playlist-status-expired {
+    border-color: #ffc107;
+    background: #fffbf0;
+}
+
+.sf-playlist-status-expired .sf-playlist-status-header h4 {
+    color: #e69500;
+}
+
+/* Removed Status (Gray) */
+.sf-playlist-status-removed {
+    border-color: #6c757d;
+    background: #f8f9fa;
+}
+
+.sf-playlist-status-removed .sf-playlist-status-header h4 {
+    color: #6c757d;
+}
+
+.sf-playlist-status-header h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.sf-status-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.sf-playlist-status-body {
+    margin-bottom: 1rem;
+}
+
+.sf-playlist-status-body p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--sf-text-primary, #212529);
+}
+
+.sf-playlist-status-body small {
+    font-size: 0.75rem;
+    color: var(--sf-text-secondary, #6c757d);
+}
+
+.sf-playlist-expires,
+.sf-playlist-no-limit,
+.sf-playlist-expired-at,
+.sf-playlist-removed-at {
+    line-height: 1.6;
+}
+
+/* Playlist Actions */
+.sf-playlist-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.sf-btn-outline-danger,
+.sf-btn-outline-primary {
+    padding: 0.5rem 1rem;
+    border: 2px solid;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sf-btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.sf-btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.sf-btn-outline-primary {
+    border-color: var(--sf-primary, #0066cc);
+    color: var(--sf-primary, #0066cc);
+}
+
+.sf-btn-outline-primary:hover {
+    background: var(--sf-primary, #0066cc);
+    color: white;
+}
+
+.sf-btn-outline-danger:disabled,
+.sf-btn-outline-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================================================
+   Responsive (Mobile)
+   ========================================================================= */
+
+@media (max-width: 768px) {
+    .sf-publish-ttl-section {
+        padding: 1rem;
+    }
+    
+    .sf-ttl-chips {
+        gap: 0.375rem;
+    }
+    
+    .sf-ttl-chip {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+    
+    .sf-chip-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .sf-ttl-preview {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.8125rem;
+    }
+    
+    .sf-playlist-status-card {
+        padding: 1rem;
+    }
+    
+    .sf-playlist-status-header h4 {
+        font-size: 0.9375rem;
+    }
+    
+    .sf-playlist-actions {
+        gap: 0.5rem;
+    }
+    
+    .sf-btn-outline-danger,
+    .sf-btn-outline-primary {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sf-ttl-chips {
+        flex-direction: column;
+    }
+    
+    .sf-ttl-chip {
+        width: 100%;
+        justify-content: center;
+    }
+}
