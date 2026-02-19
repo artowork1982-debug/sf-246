@@ -3579,3 +3579,84 @@ body.sf-modal-open .view-footer-actions {
     border-color: #ef4444 !important;
     color: white !important;
 }
+/* ===== YKSITTÄISEN KIELIVERSION JULKAISU ===== */
+
+/* Julkaisupainike-kortti */
+.sf-publish-single-card {
+    border: 2px solid var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.04);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.sf-publish-single-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95em;
+}
+
+/* Kieliversioiden tilalista */
+.sf-lang-versions-card {
+    padding: 0.75rem;
+    border: 1px solid var(--sf-border, #e0e0e0);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.sf-lang-versions-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9em;
+    color: var(--sf-text-secondary, #666);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sf-lang-version-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--sf-border, #e0e0e0);
+    font-size: 0.9em;
+}
+
+.sf-lang-version-row:last-child {
+    border-bottom: none;
+}
+
+.sf-badge {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.sf-badge-success {
+    background: #e6f4ea;
+    color: #1a7f37;
+}
+
+.sf-badge-draft {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.sf-badge-info {
+    background: #e7f1ff;
+    color: #0366d6;
+}
+
+.sf-display-count-badge {
+    font-size: 0.75em;
+    color: var(--sf-text-secondary, #666);
+    margin-left: auto;
+}
+
+.sf-link-small {
+    font-size: 0.8em;
+    color: var(--sf-primary, #0066cc);
+    text-decoration: none;
+}
+
+.sf-link-small:hover {
+    text-decoration: underline;
+}
