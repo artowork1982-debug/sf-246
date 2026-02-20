@@ -250,6 +250,36 @@ return [
         'el' => 'Πρόχειρο',
     ],
 
+    // Display Targets Status (View Page)
+    'display_targets_heading' => [
+        'fi' => 'Infonäyttökohteet',
+        'sv' => 'Informationsskärmsmål',
+        'en' => 'Info screen targets',
+        'it' => 'Destinazioni display',
+        'el' => 'Στόχοι οθόνης πληροφοριών',
+    ],
+    'display_targets_count' => [
+        'fi' => '%d / %d aktiivinen',
+        'sv' => '%d / %d aktiv',
+        'en' => '%d / %d active',
+        'it' => '%d / %d attivo',
+        'el' => '%d / %d ενεργό',
+    ],
+    'display_target_active' => [
+        'fi' => 'Aktiivinen — julkaistu tällä näytöllä',
+        'sv' => 'Aktiv — publicerad på denna skärm',
+        'en' => 'Active — published on this display',
+        'it' => 'Attivo — pubblicato su questo display',
+        'el' => 'Ενεργό — δημοσιευμένο σε αυτή την οθόνη',
+    ],
+    'display_target_preselected' => [
+        'fi' => 'Esiasetettu — ei vielä julkaistu',
+        'sv' => 'Förvald — inte publicerad ännu',
+        'en' => 'Preselected — not yet published',
+        'it' => 'Preselezionato — non ancora pubblicato',
+        'el' => 'Προεπιλεγμένο — δεν έχει δημοσιευτεί ακόμα',
+    ],
+
     // Log Messages
     'log_display_removed' => [
         'fi' => 'Poistettu infonäyttö-playlistasta',

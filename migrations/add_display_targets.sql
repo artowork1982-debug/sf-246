@@ -15,3 +15,10 @@ CREATE TABLE sf_flash_display_targets (
     INDEX idx_is_active (is_active),
     UNIQUE KEY uq_flash_display (flash_id, display_key_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Add grouping and sort columns to display keys
+ALTER TABLE sf_display_api_keys
+    ADD COLUMN site_group VARCHAR(100) DEFAULT NULL
+        COMMENT 'Group name for UI grouping, e.g. "Helsinki", "Espoo"',
+    ADD COLUMN sort_order INT DEFAULT 0
+        COMMENT 'Sort order in the selector list';

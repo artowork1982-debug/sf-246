@@ -277,6 +277,55 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
         }
     }
 
+    // Save display target preselections (is_active=0 = preselected by safety team, not yet published)
+    try {
+        $allDisplayTargets = $_POST['display_targets'] ?? [];
+        if (!empty($allDisplayTargets)) {
+            $groupId = !empty($flash['translation_group_id'])
+                ? (int) $flash['translation_group_id']
+                : (int) $flash['id'];
+
+            $stmtVersList = $pdo->prepare("
+                SELECT id FROM sf_flashes
+                WHERE id = :gid OR translation_group_id = :gid2
+            ");
+            $stmtVersList->execute([':gid' => $groupId, ':gid2' => $groupId]);
+            $allVersionIds = $stmtVersList->fetchAll(PDO::FETCH_COLUMN);
+
+            $stmtDelete = $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ?");
+            $stmtInsert = $pdo->prepare("
+                INSERT INTO sf_flash_display_targets
+                (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
+                VALUES (?, ?, 0, ?, NOW(), NULL)
+            ");
+
+            foreach ($allVersionIds as $verId) {
+                $verId = (int) $verId;
+                $targetsForThis = $allDisplayTargets[$verId] ?? [];
+                $stmtDelete->execute([$verId]);
+
+                if (!empty($targetsForThis)) {
+                    foreach ($targetsForThis as $displayId) {
+                        $displayId = (int) $displayId;
+                        if ($displayId > 0) {
+                            $stmtInsert->execute([$verId, $displayId, $userId]);
+                        }
+                    }
+                }
+            }
+
+            if (function_exists('sf_log_event')) {
+                sf_log_event($logFlashId, 'display_targets_preselected', '');
+            }
+            sf_app_log("send_to_comms.php: Display targets preselected for flash {$id}");
+        }
+    } catch (Throwable $dtError) {
+        sf_app_log(
+            "send_to_comms.php: display_targets ERROR for flash {$id}: " . $dtError->getMessage(),
+            LOG_LEVEL_ERROR
+        );
+    }
+
     // Email sending (don't fail whole request if email fails)
     try {
         if (function_exists('sf_mail_to_comms')) {
