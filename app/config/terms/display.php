@@ -257,6 +257,64 @@ return [
         'el' => 'Πρόχειρο',
     ],
 
+    // Publish Modal Stepper Titles & Summary Labels
+    'publish_step1_title' => [
+        'fi' => 'Julkaisun asetukset',
+        'sv' => 'Publiceringsinställningar',
+        'en' => 'Publishing settings',
+        'it' => 'Impostazioni di pubblicazione',
+        'el' => 'Ρυθμίσεις δημοσίευσης',
+    ],
+    'publish_step2_title' => [
+        'fi' => 'Infonäytöt',
+        'sv' => 'Informationsskärmar',
+        'en' => 'Info screens',
+        'it' => 'Schermi informativi',
+        'el' => 'Οθόνες πληροφοριών',
+    ],
+    'publish_step3_title' => [
+        'fi' => 'Vahvista julkaisu',
+        'sv' => 'Bekräfta publicering',
+        'en' => 'Confirm publishing',
+        'it' => 'Conferma pubblicazione',
+        'el' => 'Επιβεβαίωση δημοσίευσης',
+    ],
+    'publish_summary_distribution' => [
+        'fi' => 'Jakelu',
+        'sv' => 'Distribution',
+        'en' => 'Distribution',
+        'it' => 'Distribuzione',
+        'el' => 'Διανομή',
+    ],
+    'publish_summary_ttl' => [
+        'fi' => 'Näkyvyysaika',
+        'sv' => 'Visningstid',
+        'en' => 'Display time',
+        'it' => 'Tempo di visualizzazione',
+        'el' => 'Χρόνος εμφάνισης',
+    ],
+    'publish_summary_duration' => [
+        'fi' => 'Näyttökesto',
+        'sv' => 'Visningstid per bild',
+        'en' => 'Display duration',
+        'it' => 'Durata visualizzazione',
+        'el' => 'Διάρκεια εμφάνισης',
+    ],
+    'publish_summary_displays' => [
+        'fi' => 'Infonäytöt',
+        'sv' => 'Informationsskärmar',
+        'en' => 'Info screens',
+        'it' => 'Schermi informativi',
+        'el' => 'Οθόνες πληροφοριών',
+    ],
+    'publish_step1_subtitle' => [
+        'fi' => 'Haluatko julkaista tämän tiedotteen?',
+        'sv' => 'Vill du publicera detta meddelande?',
+        'en' => 'Do you want to publish this notice?',
+        'it' => 'Vuoi pubblicare questo avviso?',
+        'el' => 'Θέλετε να δημοσιεύσετε αυτήν την ανακοίνωση;',
+    ],
+
     // Display Targets Status (View Page)
     'display_targets_heading' => [
         'fi' => 'Infonäyttökohteet',
