@@ -1709,9 +1709,10 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 <?php require __DIR__ . '/../partials/view_meta_box.php'; ?>
             </div>
 
-            <?php if (file_exists(__DIR__ . '/../partials/view_display_targets.php')): ?>
+            <?php /* view_display_targets.php removed: info is already accessible via the footer "Infonäytöt" button modal */ ?>
+            <?php /* if (file_exists(__DIR__ . '/../partials/view_display_targets.php')): ?>
                 <?php require __DIR__ . '/../partials/view_display_targets.php'; ?>
-            <?php endif; ?>
+            <?php endif; */ ?>
 
             <?php if (file_exists(__DIR__ . '/../partials/view_playlist_status.php')): ?>
                 <?php require __DIR__ . '/../partials/view_playlist_status.php'; ?>

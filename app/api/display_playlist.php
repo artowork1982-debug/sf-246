@@ -234,7 +234,12 @@ try {
         exit;
     }
     
-    // HTML/Slideshow format
+    // HTML/Slideshow format - override restrictive CSP set by config.php/bootstrap.php
+    // so this page can be embedded in an iframe from the same origin (playlist preview modal)
+    header('Content-Security-Policy: frame-ancestors \'self\'', true);
+    header('X-Frame-Options: SAMEORIGIN', true);
+    header('Cross-Origin-Resource-Policy: same-origin', true);
+
     $includeHtmlWrapper = ($format === 'html');
     
     if ($includeHtmlWrapper) {

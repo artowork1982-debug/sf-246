@@ -79,7 +79,7 @@ $ttlOptions = [
         </svg>
         <span id="ttlPreviewText">
             <?= htmlspecialchars(sf_term('ttl_preview_default', $currentUiLang) ?? 'Vanhenee', ENT_QUOTES, 'UTF-8') ?>: 
-            <strong id="ttlPreviewDate"></strong>
+            <strong id="ttlPreviewDate" class="sf-ttl-preview-date"></strong>
         </span>
     </div>
 </div>
