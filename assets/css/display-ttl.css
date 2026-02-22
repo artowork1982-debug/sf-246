@@ -673,3 +673,72 @@
         justify-content: center;
     }
 }
+
+/* ============================================================================
+   Display Targets Modal
+   ========================================================================= */
+
+.sf-dt-modal-content {
+    max-width: 600px;
+    width: 100%;
+}
+
+.sf-dt-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--sf-border, #dee2e6);
+}
+
+.sf-dt-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sf-dt-displays-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sf-dt-displays-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sf-text-primary, #212529);
+}
+
+.sf-dt-status {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    min-height: 1.25rem;
+}
+
+.sf-dt-status-ok {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.sf-dt-status-error {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Footer button: Infonäytöt */
+.footer-btn.fb-display-targets {
+    background: transparent;
+    border: none;
+    color: var(--sf-primary, #0066cc);
+}
+
+.footer-btn.fb-display-targets:hover {
+    background: rgba(0, 102, 204, 0.08);
+}
+
+@media (min-width: 769px) {
+    .sf-dt-modal-content {
+        border-radius: 12px;
+    }
+}
+
