@@ -13,6 +13,18 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
+        // ── Display navigation select ──────────────────────────────────────
+        var navSelect = document.getElementById('sfPmDisplaySelect');
+        if (navSelect) {
+            navSelect.addEventListener('change', function () {
+                var val = this.value;
+                var navUrl = this.dataset.navUrl;
+                if (val && navUrl) {
+                    window.location.href = navUrl + encodeURIComponent(val);
+                }
+            });
+        }
+
         var list = document.getElementById('sfPlaylistItems');
         if (!list) return;
 
