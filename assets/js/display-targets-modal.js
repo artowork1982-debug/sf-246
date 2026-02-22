@@ -122,10 +122,11 @@
                 btn.disabled = false;
                 if (data && data.ok) {
                     setStatus(data.message || 'Tallennettu!', false);
-                    // Close modal after short delay
-                    setTimeout(closeDisplayTargetsModal, 800);
-                    // Reload page to reflect changes
-                    setTimeout(function () { window.location.reload(); }, 900);
+                    // Reload page after short delay to reflect changes
+                    setTimeout(function () {
+                        closeDisplayTargetsModal();
+                        window.location.reload();
+                    }, 800);
                 } else {
                     setStatus((data && data.error) ? data.error : 'Tallentaminen epäonnistui.', true);
                 }

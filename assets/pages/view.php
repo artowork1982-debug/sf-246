@@ -2484,21 +2484,25 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
         var distCb = document.getElementById('publishSendDistribution');
         var summaryDist = document.getElementById('summaryDistribution');
         if (summaryDist && distCb) {
-            summaryDist.textContent = distCb.checked ? '✅ Kyllä' : '—';
+            summaryDist.textContent = distCb.checked
+                ? (window.SF_TERMS && window.SF_TERMS.publish_yes ? window.SF_TERMS.publish_yes : '✅ Kyllä')
+                : '—';
         }
 
-        // TTL
+        // TTL — read the label text directly from the selected chip
         var ttlInput = document.querySelector('#publishForm input[name="display_ttl_days"]:checked');
         var summaryTtl = document.getElementById('summaryTtl');
         if (summaryTtl) {
-            summaryTtl.textContent = ttlInput ? (ttlInput.closest('label') ? ttlInput.closest('label').textContent.trim() : ttlInput.value) : '—';
+            var ttlLabel = ttlInput ? ttlInput.closest('label') : null;
+            summaryTtl.textContent = ttlLabel ? ttlLabel.textContent.trim() : (ttlInput ? ttlInput.value : '—');
         }
 
-        // Duration
+        // Duration — read the label text directly from the selected chip
         var durInput = document.querySelector('#publishForm input[name="display_duration_seconds"]:checked');
         var summaryDur = document.getElementById('summaryDuration');
         if (summaryDur) {
-            summaryDur.textContent = durInput ? (durInput.closest('label') ? durInput.closest('label').textContent.trim() : durInput.value + 's') : '—';
+            var durLabel = durInput ? durInput.closest('label') : null;
+            summaryDur.textContent = durLabel ? durLabel.textContent.trim() : (durInput ? durInput.value + 's' : '—');
         }
 
         // Display targets
@@ -3152,7 +3156,9 @@ window.SF_TERMS = {
     type_red: <?php echo json_encode(sf_term('type_red', $currentUiLang)); ?>,
     type_yellow: <?php echo json_encode(sf_term('type_yellow', $currentUiLang)); ?>,
     type_green: <?php echo json_encode(sf_term('type_green', $currentUiLang)); ?>,
-    confirm_creating_translation: <?php echo json_encode(sf_term('confirm_creating_translation', $currentUiLang)); ?>
+    confirm_creating_translation: <?php echo json_encode(sf_term('confirm_creating_translation', $currentUiLang)); ?>,
+    // Publish summary terms
+    publish_yes: <?php echo json_encode(sf_term('publish_yes', $currentUiLang) ?? '✅ Kyllä'); ?>
 };
 window.SF_FLASH_DATA      = <?php echo json_encode($flashDataForJs); ?>;
 window.SF_SUPPORTED_LANGS = <?php echo json_encode($supportedLangs); ?>;

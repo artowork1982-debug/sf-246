@@ -28,9 +28,9 @@ if (!isset($flash['state']) || $flash['state'] !== 'published') {
 $hasActiveTargets = false;
 if (isset($pdo)) {
     try {
-        $stmtActiveCount = $pdo->prepare("SELECT COUNT(*) FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1");
+        $stmtActiveCount = $pdo->prepare("SELECT 1 FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1 LIMIT 1");
         $stmtActiveCount->execute([(int)$id]);
-        $hasActiveTargets = (int)$stmtActiveCount->fetchColumn() > 0;
+        $hasActiveTargets = $stmtActiveCount->fetch() !== false;
     } catch (Throwable $eac) {
         // Silently ignore — migration may not be applied yet
     }

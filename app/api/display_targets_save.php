@@ -116,7 +116,8 @@ try {
 
     $pdo->beginTransaction();
 
-    // Delete existing active targets for this flash
+    // Replace-all strategy: delete all current active targets, then insert the new selection.
+    // This simplifies partial updates and ensures the stored state always matches the user's choices.
     $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1")->execute([$flashId]);
 
     // Insert new active targets
