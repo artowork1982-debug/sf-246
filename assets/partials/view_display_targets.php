@@ -54,7 +54,8 @@ foreach ($targets as $t) {
 
 <div class="sf-card sf-display-targets-card">
     <h4>
-        📺 <?= htmlspecialchars(sf_term('display_targets_heading', $currentUiLang) ?? 'Infonäyttökohteet', ENT_QUOTES, 'UTF-8') ?>
+        <img src="<?= $baseUrl ?? '' ?>/assets/img/icons/display.svg" alt="" class="sf-icon" aria-hidden="true" style="width:18px;height:18px;vertical-align:middle;">
+        <?= htmlspecialchars(sf_term('display_targets_heading', $currentUiLang) ?? 'Infonäyttökohteet', ENT_QUOTES, 'UTF-8') ?>
     </h4>
     <p class="sf-display-targets-count">
         <?= htmlspecialchars(
@@ -75,9 +76,13 @@ foreach ($targets as $t) {
             <?php foreach ($items as $t): ?>
                 <li class="sf-display-target-item">
                     <?php if ((int)$t['is_active'] === 1): ?>
-                        <span class="sf-display-target-active" title="<?= htmlspecialchars(sf_term('display_target_active', $currentUiLang) ?? 'Aktiivinen', ENT_QUOTES, 'UTF-8') ?>">✅</span>
+                        <span class="sf-display-target-active" title="<?= htmlspecialchars(sf_term('display_target_active', $currentUiLang) ?? 'Aktiivinen', ENT_QUOTES, 'UTF-8') ?>">
+                            <img src="<?= $baseUrl ?? '' ?>/assets/img/icons/display.svg" alt="✓" style="width:14px;height:14px;vertical-align:middle;color:green;">
+                        </span>
                     <?php else: ?>
-                        <span class="sf-display-target-preselected" title="<?= htmlspecialchars(sf_term('display_target_preselected', $currentUiLang) ?? 'Esiasetettu', ENT_QUOTES, 'UTF-8') ?>">⏳</span>
+                        <span class="sf-display-target-preselected" title="<?= htmlspecialchars(sf_term('display_target_preselected', $currentUiLang) ?? 'Esiasetettu', ENT_QUOTES, 'UTF-8') ?>">
+                            <img src="<?= $baseUrl ?? '' ?>/assets/img/icons/pending.svg" alt="…" style="width:14px;height:14px;vertical-align:middle;">
+                        </span>
                     <?php endif; ?>
                     <?= htmlspecialchars($t['label'] ?? $t['site'], ENT_QUOTES, 'UTF-8') ?>
                 </li>

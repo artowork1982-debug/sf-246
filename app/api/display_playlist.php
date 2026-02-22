@@ -182,11 +182,10 @@ try {
             f.title,
             f.preview_filename,
             f.type,
-            f.is_pinned,
-            f.sort_order,
             f.published_at,
             f.created_at,
-            f.display_duration_seconds
+            f.display_duration_seconds,
+            COALESCE(t.sort_order, 0) AS sort_order
         FROM sf_flashes f
         INNER JOIN sf_flash_display_targets t ON t.flash_id = f.id
         WHERE t.display_key_id = :display_key_id
@@ -195,7 +194,7 @@ try {
           AND f.lang = :lang
           AND (f.display_expires_at IS NULL OR f.display_expires_at > NOW())
           AND f.display_removed_at IS NULL
-        ORDER BY f.is_pinned DESC, f.sort_order ASC, f.published_at DESC
+        ORDER BY COALESCE(t.sort_order, 0) ASC, f.published_at DESC
         LIMIT 100
     ");
 

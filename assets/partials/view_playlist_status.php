@@ -63,13 +63,19 @@ if (isset($pdo) && $displayStatus === 'active') {
     <div class="sf-playlist-status-header">
         <h4>
             <?php if ($displayStatus === 'active'): ?>
-                <span class="sf-status-icon">📺</span>
+                <span class="sf-status-icon">
+                    <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/display.svg" alt="" style="width:18px;height:18px;vertical-align:middle;">
+                </span>
                 <?= htmlspecialchars(sf_term('playlist_status_active', $currentUiLang) ?? 'Näytetään infonäytöillä', ENT_QUOTES, 'UTF-8') ?>
             <?php elseif ($displayStatus === 'expired'): ?>
-                <span class="sf-status-icon">⏰</span>
+                <span class="sf-status-icon">
+                    <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/pending.svg" alt="" style="width:18px;height:18px;vertical-align:middle;">
+                </span>
                 <?= htmlspecialchars(sf_term('playlist_status_expired', $currentUiLang) ?? 'Vanhentunut', ENT_QUOTES, 'UTF-8') ?>
             <?php else: ?>
-                <span class="sf-status-icon">🚫</span>
+                <span class="sf-status-icon">
+                    <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/empty-data.svg" alt="" style="width:18px;height:18px;vertical-align:middle;">
+                </span>
                 <?= htmlspecialchars(sf_term('playlist_status_removed', $currentUiLang) ?? 'Poistettu playlistasta', ENT_QUOTES, 'UTF-8') ?>
             <?php endif; ?>
         </h4>
@@ -123,7 +129,8 @@ if (isset($pdo) && $displayStatus === 'active') {
                 <a href="<?= htmlspecialchars("{$base}/app/api/display_playlist.php?key={$worksiteApiKey}&format=html", ENT_QUOTES, 'UTF-8') ?>"
                    target="_blank"
                    class="sf-btn sf-btn-outline-primary">
-                    📺 <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
+                    <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/display.svg" alt="" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;">
+                    <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php endif; ?>
             <?php if ($displayStatus !== 'removed'): ?>

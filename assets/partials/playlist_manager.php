@@ -82,18 +82,21 @@ $csrfToken    = sf_csrf_token();
 <div class="sf-page-container" id="playlistManagerWrap">
     <div class="sf-page-header">
         <h1 class="sf-page-title">
-            📺 <?= htmlspecialchars(sf_term('playlist_manager_heading', $currentUiLang) ?? 'Ajolistan hallinta', ENT_QUOTES, 'UTF-8') ?>
+            <img src="<?= htmlspecialchars("{$baseUrl}/assets/img/icons/playlist.svg", ENT_QUOTES, 'UTF-8') ?>" alt="" class="sf-heading-icon" aria-hidden="true">
+            <?= htmlspecialchars(sf_term('playlist_manager_heading', $currentUiLang) ?? 'Ajolistan hallinta', ENT_QUOTES, 'UTF-8') ?>
             — <?= $displayLabel ?>
         </h1>
         <a href="<?= $playlistUrl ?>" target="_blank" class="sf-btn sf-btn-outline-primary">
-            📺 <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
+            <img src="<?= htmlspecialchars("{$baseUrl}/assets/img/icons/display.svg", ENT_QUOTES, 'UTF-8') ?>" alt="" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;">
+            <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
         </a>
     </div>
 
     <?php if (empty($items)): ?>
-        <p class="sf-notice sf-notice-info">
-            <?= htmlspecialchars(sf_term('playlist_empty', $currentUiLang) ?? 'Ajolista on tyhjä — ei aktiivisia flasheja tällä näytöllä', ENT_QUOTES, 'UTF-8') ?>
-        </p>
+        <div class="sf-empty-state">
+            <img src="<?= htmlspecialchars("{$baseUrl}/assets/img/icons/playlist.svg", ENT_QUOTES, 'UTF-8') ?>" alt="" class="sf-empty-state-icon" aria-hidden="true">
+            <p><?= htmlspecialchars(sf_term('playlist_empty', $currentUiLang) ?? 'Ajolista on tyhjä — ei aktiivisia flasheja tällä näytöllä', ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
     <?php else: ?>
         <div id="sfPlaylistSaveMsg" class="sf-notice sf-notice-success" style="display:none;">
             <?= htmlspecialchars(sf_term('playlist_reorder_saved', $currentUiLang) ?? 'Järjestys tallennettu', ENT_QUOTES, 'UTF-8') ?>
