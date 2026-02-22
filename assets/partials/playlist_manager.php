@@ -75,22 +75,75 @@ try {
 }
 
 $displayLabel = htmlspecialchars($displayKey['label'] ?? $displayKey['site'], ENT_QUOTES, 'UTF-8');
-$playlistUrl  = htmlspecialchars("{$baseUrl}/app/api/display_playlist.php?key={$displayKey['api_key']}&format=html", ENT_QUOTES, 'UTF-8');
+$playlistUrl  = "{$baseUrl}/app/api/display_playlist.php?key={$displayKey['api_key']}&format=html";
 $csrfToken    = sf_csrf_token();
+
+// Fetch all active displays for navigation
+$allDisplays = [];
+try {
+    $stmtAll = $pdo->prepare("
+        SELECT id, label, site, site_group
+        FROM sf_display_api_keys
+        WHERE is_active = 1
+        ORDER BY site_group ASC, sort_order ASC, label ASC
+    ");
+    $stmtAll->execute();
+    $allDisplays = $stmtAll->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    $allDisplays = [];
+}
+
+// Group displays by site_group for <optgroup>
+$displayGroups = [];
+foreach ($allDisplays as $d) {
+    $g = $d['site_group'] ?: '';
+    $displayGroups[$g][] = $d;
+}
 ?>
 
 <div class="sf-page-container" id="playlistManagerWrap">
-    <div class="sf-page-header">
+    <div class="sf-page-header sf-pm-page-header">
         <h1 class="sf-page-title">
-            <img src="<?= htmlspecialchars("{$baseUrl}/assets/img/icons/playlist.svg", ENT_QUOTES, 'UTF-8') ?>" alt="" class="sf-heading-icon" aria-hidden="true">
+            <svg class="sf-pm-heading-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                <polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/>
+            </svg>
             <?= htmlspecialchars(sf_term('playlist_manager_heading', $currentUiLang) ?? 'Ajolistan hallinta', ENT_QUOTES, 'UTF-8') ?>
             — <?= $displayLabel ?>
         </h1>
-        <a href="<?= $playlistUrl ?>" target="_blank" class="sf-btn sf-btn-outline-primary">
-            <img src="<?= htmlspecialchars("{$baseUrl}/assets/img/icons/display.svg", ENT_QUOTES, 'UTF-8') ?>" alt="" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;">
+        <button type="button"
+                class="sf-btn sf-btn-outline-primary"
+                data-modal-open="#modalPlaylistPreview">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle;">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/>
+            </svg>
             <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
-        </a>
+        </button>
     </div>
+
+    <?php if (count($allDisplays) > 1): ?>
+    <div class="sf-pm-nav">
+        <label for="sfPmDisplaySelect" class="sf-pm-nav-label">
+            <?= htmlspecialchars(sf_term('playlist_nav_label', $currentUiLang) ?? 'Näyttö:', ENT_QUOTES, 'UTF-8') ?>
+        </label>
+        <select id="sfPmDisplaySelect" class="sf-pm-nav-select"
+                data-nav-url="<?= htmlspecialchars("{$baseUrl}/index.php?page=playlist_manager&display_key_id=", ENT_QUOTES, 'UTF-8') ?>">
+            <?php foreach ($displayGroups as $groupName => $groupDisplays): ?>
+                <?php if ($groupName !== ''): ?>
+                    <optgroup label="<?= htmlspecialchars($groupName, ENT_QUOTES, 'UTF-8') ?>">
+                <?php endif; ?>
+                <?php foreach ($groupDisplays as $d): ?>
+                    <option value="<?= (int)$d['id'] ?>" <?= ((int)$d['id'] === $displayKeyId) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($d['label'] ?? $d['site'], ENT_QUOTES, 'UTF-8') ?>
+                    </option>
+                <?php endforeach; ?>
+                <?php if ($groupName !== ''): ?>
+                    </optgroup>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <?php endif; ?>
 
     <?php if (empty($items)): ?>
         <div class="sf-empty-state">
@@ -145,3 +198,25 @@ $csrfToken    = sf_csrf_token();
 
 <link rel="stylesheet" href="<?= htmlspecialchars("{$baseUrl}/assets/css/display-ttl.css", ENT_QUOTES, 'UTF-8') ?>">
 <script src="<?= htmlspecialchars("{$baseUrl}/assets/js/playlist-manager.js", ENT_QUOTES, 'UTF-8') ?>"></script>
+
+<!-- Ajolistan esikatselu -modaali -->
+<div class="sf-modal hidden" id="modalPlaylistPreview" role="dialog" aria-modal="true" aria-labelledby="modalPlaylistPreviewTitle">
+    <div class="sf-modal-content sf-pm-preview-modal">
+        <div class="sf-modal-header">
+            <h3 id="modalPlaylistPreviewTitle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle;margin-right:6px;">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/>
+                </svg>
+                <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Ajolista', ENT_QUOTES, 'UTF-8') ?> — <?= $displayLabel ?>
+            </h3>
+            <button type="button" data-modal-close class="sf-modal-close" aria-label="<?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">✕</button>
+        </div>
+        <div class="sf-pm-preview-body">
+            <iframe src="<?= htmlspecialchars($playlistUrl, ENT_QUOTES, 'UTF-8') ?>"
+                    title="<?= $displayLabel ?>"
+                    class="sf-pm-preview-iframe"
+                    sandbox="allow-scripts allow-same-origin"
+                    loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
