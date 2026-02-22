@@ -505,8 +505,114 @@
 }
 
 /* ============================================================================
-   Responsive (Mobile)
+   Display Target Chip Selector (Publish Modal)
    ========================================================================= */
+
+.sf-display-group-heading {
+    margin: 0.75rem 0 0.375rem 0;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--sf-text-secondary, #6c757d);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sf-display-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
+}
+
+.sf-display-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.875rem;
+    background: white;
+    border: 2px solid var(--sf-border, #dee2e6);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sf-text-primary, #212529);
+    user-select: none;
+}
+
+.sf-display-chip-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+.sf-display-chip:hover {
+    border-color: var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.05);
+}
+
+.sf-display-chip-selected,
+.sf-display-chip:has(.sf-display-chip-input:checked) {
+    background: var(--sf-primary, #0066cc);
+    border-color: var(--sf-primary, #0066cc);
+    color: white;
+}
+
+/* ============================================================================
+   Playlist Manager Empty State
+   ========================================================================= */
+
+.sf-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 3rem 1.5rem;
+    color: var(--sf-text-secondary, #6c757d);
+    text-align: center;
+}
+
+.sf-empty-state-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.35;
+}
+
+.sf-empty-state p {
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+/* ============================================================================
+   Worksite Table Flash Counter
+   ========================================================================= */
+
+.sf-flash-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.375rem;
+    background: var(--sf-primary, #0066cc);
+    color: white;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.sf-table-worksites tbody tr:hover {
+    background: rgba(0, 102, 204, 0.04);
+}
+
+.sf-table-worksites tbody tr.is-inactive {
+    opacity: 0.6;
+}
+
+
 
 @media (max-width: 768px) {
     .sf-publish-ttl-section,

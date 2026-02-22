@@ -2263,21 +2263,8 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             ?>
             <?php if (!empty($langVersions)): ?>
                 <div class="sf-display-targets-section">
-                    <p class="sf-help-text sf-display-per-lang-info">
-                        ℹ️ <?= htmlspecialchars(
-                            sf_term('display_per_language_info', $currentUiLang)
-                                ?: 'Jokaisella kieliversiolla on omat näyttövalintansa',
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ) ?>
-                    </p>
                     <?php foreach ($langVersions as $ver): ?>
                         <div class="sf-lang-display-section">
-                            <h4>
-                                <?= sf_lang_flag($ver['lang']) ?>
-                                <?= htmlspecialchars(strtoupper($ver['lang']), ENT_QUOTES, 'UTF-8') ?> —
-                                <?= htmlspecialchars($ver['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-                            </h4>
                             <?php
                                 $flash = $ver;
                                 $context = 'publish';
@@ -2328,12 +2315,8 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 <!-- Kesto valitsin -->
                 <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
 
-                <!-- Näyttövalitsin — VAIN tämän kielen näytöt -->
+                <!-- Näyttövalitsin — kaikki aktiiviset näytöt -->
                 <div class="sf-lang-display-section">
-                    <h4>
-                        <?= sf_lang_flag($flash['lang']) ?>
-                        <?= htmlspecialchars(sf_term('display_targets_label', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?>
-                    </h4>
                     <?php
                         $context = 'publish';
                         require __DIR__ . '/../partials/display_target_selector.php';

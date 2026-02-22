@@ -84,8 +84,20 @@
     }
     
     /**
-     * Alusta playlist-painikkeet (view-sivulla)
+     * Alusta display chip valitsimet (julkaisumodaalissa)
      */
+    function initDisplayChips() {
+        document.querySelectorAll('.sf-display-chip').forEach(function(chip) {
+            var input = chip.querySelector('.sf-display-chip-input');
+            if (input) {
+                input.addEventListener('change', function() {
+                    chip.classList.toggle('sf-display-chip-selected', this.checked);
+                });
+            }
+        });
+    }
+    
+    /**
     function initPlaylistButtons() {
         const btnRemove = document.getElementById('btnRemoveFromPlaylist');
         const btnRestore = document.getElementById('btnRestoreToPlaylist');
@@ -198,6 +210,7 @@
      */
     document.addEventListener('DOMContentLoaded', function() {
         initTtlChips();
+        initDisplayChips();
         initPlaylistButtons();
     });
     
