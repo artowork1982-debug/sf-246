@@ -2233,9 +2233,6 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                     </div>
                 </div>
 
-                <!-- Näkyvyysaika infonäytöillä -->
-                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
-
                 <div class="sf-modal-actions">
                     <button type="button" class="sf-btn sf-btn-secondary" data-modal-close="modalPublish">
                         <?= htmlspecialchars(sf_term('btn_cancel', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
@@ -2249,6 +2246,9 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             <!-- ===== VAIHE 2: Infonäyttöasetukset ===== -->
             <div class="sf-publish-step hidden" id="publishStep2">
                 <h2><?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Infonäyttöasetukset', ENT_QUOTES, 'UTF-8') ?></h2>
+
+                <!-- Näkyvyysaika infonäytöillä -->
+                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
 
                 <!-- Näyttökesto per kuva -->
                 <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
@@ -3087,6 +3087,7 @@ function updateDeleteModalContent() {
 <link rel="stylesheet" href="<?= sf_asset_url('assets/css/image_captions.css', $base) ?>">
 <!-- view.js and copy-to-clipboard.js are loaded in index.php with versioning, removed duplicates here -->
 <script src="<?= sf_asset_url('assets/js/translation.js', $base) ?>"></script>
+<script src="<?= sf_asset_url('assets/js/display-playlist.js', $base) ?>"></script>
 <script src="<?= sf_asset_url('assets/js/comms-modal.js', $base) ?>"></script>
 <?php if (in_array('display_targets', $actions ?? [])): ?>
 <script src="<?= sf_asset_url('assets/js/display-targets-modal.js', $base) ?>"></script>

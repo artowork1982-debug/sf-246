@@ -54,12 +54,13 @@ if ($displayRemovedAt !== null) {
 // Oikeudet hallintaan (admin, turvatiimi, viestintä)
 $canManage = $isAdmin || $isSafety || $isComms;
 
-// Hae työmaan API-avain aktiivisista display-kohteista
+// Hae työmaan API-avain ja label aktiivisista display-kohteista
 $worksiteApiKey = null;
+$worksiteLabel = null;
 if (isset($pdo) && $displayStatus === 'active') {
     try {
         $stmtApiKey = $pdo->prepare("
-            SELECT k.api_key
+            SELECT k.api_key, k.label
             FROM sf_flash_display_targets t
             JOIN sf_display_api_keys k ON k.id = t.display_key_id
             WHERE t.flash_id = ? AND t.is_active = 1 AND k.is_active = 1
@@ -68,6 +69,7 @@ if (isset($pdo) && $displayStatus === 'active') {
         $stmtApiKey->execute([(int)$id]);
         $keyRow = $stmtApiKey->fetch(PDO::FETCH_ASSOC);
         $worksiteApiKey = $keyRow ? ($keyRow['api_key'] ?? null) : null;
+        $worksiteLabel = $keyRow ? ($keyRow['label'] ?? null) : null;
     } catch (Throwable $ek) {
         // Silently ignore — migration may not be applied yet
     }
@@ -142,12 +144,12 @@ if (isset($pdo) && $displayStatus === 'active') {
     <?php if ($canManage): ?>
         <div class="sf-playlist-actions">
             <?php if ($worksiteApiKey): ?>
-                <a href="<?= htmlspecialchars("{$base}/app/api/display_playlist.php?key={$worksiteApiKey}&format=html", ENT_QUOTES, 'UTF-8') ?>"
-                   target="_blank"
+                <button type="button"
+                   data-modal-open="#modalKatsoAjolista"
                    class="sf-btn sf-btn-outline-primary">
                     <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/display.svg" alt="" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;">
                     <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
-                </a>
+                </button>
             <?php endif; ?>
             <?php if ($displayStatus !== 'removed'): ?>
                 <button 
@@ -171,3 +173,26 @@ if (isset($pdo) && $displayStatus === 'active') {
         </div>
     <?php endif; ?>
 </div>
+
+<?php if ($worksiteApiKey): ?>
+<!-- Katso ajolista -modaali -->
+<div class="sf-modal hidden" id="modalKatsoAjolista" role="dialog" aria-modal="true" aria-labelledby="modalKatsoAjolistaTitle">
+    <div class="sf-modal-content sf-pm-preview-modal">
+        <div class="sf-modal-header">
+            <h3 id="modalKatsoAjolistaTitle">
+                <img src="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/assets/img/icons/display.svg" alt="" aria-hidden="true" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;">
+                <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
+                <?php if ($worksiteLabel): ?> — <?= htmlspecialchars($worksiteLabel, ENT_QUOTES, 'UTF-8') ?><?php endif; ?>
+            </h3>
+            <button type="button" data-modal-close class="sf-modal-close" aria-label="<?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">✕</button>
+        </div>
+        <div class="sf-pm-preview-body">
+            <iframe src="<?= htmlspecialchars("{$base}/app/api/display_playlist.php?key={$worksiteApiKey}&format=html", ENT_QUOTES, 'UTF-8') ?>"
+                    title="<?= htmlspecialchars($worksiteLabel ?? 'Ajolista', ENT_QUOTES, 'UTF-8') ?>"
+                    class="sf-pm-preview-iframe"
+                    sandbox="allow-scripts allow-same-origin"
+                    loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
