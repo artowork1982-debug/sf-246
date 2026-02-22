@@ -199,7 +199,105 @@ foreach ($worksites as $ws):
     $playlistBase = rtrim($baseUrl ?? '', '/') . '/app/api/display_playlist.php';
     $htmlUrl = $playlistBase . '?key=' . urlencode($xiboKey) . '&format=html';
     $jsonUrl = $playlistBase . '?key=' . urlencode($xiboKey);
-    $embeddedCode = "<script>\nfetch(" . json_encode($jsonUrl, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ")\n  .then(r => r.json())\n  .then(data => { console.log(data); });\n<\/script>";
+    $jsonApiUrl = $jsonUrl . '&format=json';
+    $embeddedHtml = '<div id="sf-slideshow">' . "\n"
+        . '  <div id="sf-slide" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1a2e;">' . "\n"
+        . '    <p style="color:#aaa;font-size:1.5em;">Ladataan&#8230;</p>' . "\n"
+        . '  </div>' . "\n"
+        . '</div>' . "\n\n"
+        . '<script>' . "\n"
+        . '(function(){' . "\n"
+        . '  var API_URL = "' . $jsonApiUrl . '";' . "\n"
+        . '  var REFRESH_MIN = 5;' . "\n"
+        . '  var container = document.getElementById("sf-slide");' . "\n\n"
+        . '  function load(){' . "\n"
+        . '    var xhr = new XMLHttpRequest();' . "\n"
+        . '    xhr.open("GET", API_URL, true);' . "\n"
+        . '    xhr.onload = function(){' . "\n"
+        . '      if(xhr.status===200){' . "\n"
+        . '        try {' . "\n"
+        . '          var data = JSON.parse(xhr.responseText);' . "\n"
+        . '          if(data.ok && data.items && data.items.length > 0){' . "\n"
+        . '            startSlideshow(data.items);' . "\n"
+        . '          } else {' . "\n"
+        . '            showEmpty(data.lang || "fi");' . "\n"
+        . '          }' . "\n"
+        . '        } catch(e){ showError(); }' . "\n"
+        . '      } else { showError(); }' . "\n"
+        . '    };' . "\n"
+        . '    xhr.onerror = function(){ showError(); };' . "\n"
+        . '    xhr.send();' . "\n"
+        . '  }' . "\n\n"
+        . '  var current = 0;' . "\n"
+        . '  var items = [];' . "\n"
+        . '  var timer = null;' . "\n\n"
+        . '  function startSlideshow(list){' . "\n"
+        . '    items = list;' . "\n"
+        . '    current = 0;' . "\n"
+        . '    showSlide();' . "\n"
+        . '  }' . "\n\n"
+        . '  function showSlide(){' . "\n"
+        . '    if(!items.length) return;' . "\n"
+        . '    var item = items[current];' . "\n"
+        . '    container.innerHTML =' . "\n"
+        . '      \'<img src="\' + item.image_url + \'" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">\';' . "\n"
+        . '    var dur = (item.duration_seconds || 10) * 1000;' . "\n"
+        . '    clearTimeout(timer);' . "\n"
+        . '    timer = setTimeout(function(){' . "\n"
+        . '      current = (current + 1) % items.length;' . "\n"
+        . '      showSlide();' . "\n"
+        . '    }, dur);' . "\n"
+        . '  }' . "\n\n"
+        . '  function showEmpty(lang){' . "\n"
+        . '    var msgs = {' . "\n"
+        . '      fi:"Ei n\u00e4ytett\u00e4vi\u00e4 flasheja",' . "\n"
+        . '      sv:"Inga flash att visa",' . "\n"
+        . '      en:"No flashes to display",' . "\n"
+        . '      it:"Nessun flash da visualizzare",' . "\n"
+        . '      el:"\u0394\u03b5\u03bd \u03c5\u03c0\u03ac\u03c1\u03c7\u03bf\u03c5\u03bd flash"' . "\n"
+        . '    };' . "\n"
+        . '    container.innerHTML =' . "\n"
+        . '      \'<p style="color:#ccc;font-size:1.4em;text-align:center;">\' +' . "\n"
+        . '      (msgs[lang]||msgs.fi) + \'</p>\';' . "\n"
+        . '  }' . "\n\n"
+        . '  function showError(){' . "\n"
+        . '    container.innerHTML =' . "\n"
+        . '      \'<p style="color:#f66;font-size:1.2em;text-align:center;">Yhteysvirhe</p>\';' . "\n"
+        . '  }' . "\n\n"
+        . '  load();' . "\n"
+        . '  setInterval(load, REFRESH_MIN * 60 * 1000);' . "\n"
+        . '})();' . "\n"
+        . '</script>';
+    $embeddedCss = 'body, html {' . "\n"
+        . '  margin: 0;' . "\n"
+        . '  padding: 0;' . "\n"
+        . '  width: 100%;' . "\n"
+        . '  height: 100%;' . "\n"
+        . '  overflow: hidden;' . "\n"
+        . '  background: #1a1a2e;' . "\n"
+        . '  font-family: -apple-system, "Segoe UI", sans-serif;' . "\n"
+        . '}' . "\n\n"
+        . '#sf-slideshow {' . "\n"
+        . '  width: 100%;' . "\n"
+        . '  height: 100%;' . "\n"
+        . '}' . "\n\n"
+        . '#sf-slide {' . "\n"
+        . '  width: 100%;' . "\n"
+        . '  height: 100%;' . "\n"
+        . '  display: flex;' . "\n"
+        . '  align-items: center;' . "\n"
+        . '  justify-content: center;' . "\n"
+        . '}' . "\n\n"
+        . '#sf-slide img {' . "\n"
+        . '  max-width: 100%;' . "\n"
+        . '  max-height: 100%;' . "\n"
+        . '  object-fit: contain;' . "\n"
+        . '  animation: sf-fadein 0.6s ease;' . "\n"
+        . '}' . "\n\n"
+        . '@keyframes sf-fadein {' . "\n"
+        . '  from { opacity: 0; }' . "\n"
+        . '  to   { opacity: 1; }' . "\n"
+        . '}';
 ?>
 <div class="sf-modal hidden" id="xiboModal<?= $xiboWsId ?>" role="dialog" aria-modal="true" aria-labelledby="xiboModalTitle<?= $xiboWsId ?>">
     <div class="sf-modal-content">
@@ -216,36 +314,37 @@ foreach ($worksites as $ws):
             </p>
 
             <div style="margin-bottom:1.25rem;">
-                <strong style="display:block;margin-bottom:0.4rem;">▸ <?= htmlspecialchars(sf_term('xibo_webpage_url', $currentUiLang) ?? 'Webpage Widget URL', ENT_QUOTES, 'UTF-8') ?></strong>
+                <strong style="display:block;margin-bottom:0.4rem;">▸ <?= htmlspecialchars(sf_term('xibo_webpage_url_label', $currentUiLang) ?? 'Webpage Widget URL', ENT_QUOTES, 'UTF-8') ?></strong>
                 <div style="display:flex;gap:0.5rem;align-items:stretch;">
                     <code id="xiboHtmlUrl<?= $xiboWsId ?>" style="flex:1;display:block;background:var(--sf-bg-secondary,#f5f5f5);padding:0.5rem 0.75rem;border-radius:4px;font-size:0.82rem;word-break:break-all;"><?= htmlspecialchars($htmlUrl, ENT_QUOTES, 'UTF-8') ?></code>
-                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboHtmlUrl<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-html">
-                        📋 <?= htmlspecialchars(sf_term('btn_copy', $currentUiLang) ?? 'Kopioi', ENT_QUOTES, 'UTF-8') ?>
+                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboHtmlUrl<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-url">
+                        📋 <?= htmlspecialchars(sf_term('xibo_copy_url', $currentUiLang) ?? 'Kopioi URL', ENT_QUOTES, 'UTF-8') ?>
                     </button>
                 </div>
-                <span id="xiboCopied<?= $xiboWsId ?>-html" style="display:none;color:green;font-size:0.85rem;margin-top:0.25rem;">✅ <?= htmlspecialchars(sf_term('msg_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
+                <span id="xiboCopied<?= $xiboWsId ?>-url" style="display:none;color:green;font-size:0.85rem;margin-top:0.25rem;">✅ <?= htmlspecialchars(sf_term('xibo_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
             </div>
 
             <div style="margin-bottom:1.25rem;">
-                <strong style="display:block;margin-bottom:0.4rem;">▸ <?= htmlspecialchars(sf_term('xibo_embedded_code', $currentUiLang) ?? 'Embedded Widget (JavaScript)', ENT_QUOTES, 'UTF-8') ?></strong>
-                <div style="display:flex;gap:0.5rem;align-items:stretch;">
-                    <code id="xiboEmbedCode<?= $xiboWsId ?>" style="flex:1;display:block;background:var(--sf-bg-secondary,#f5f5f5);padding:0.5rem 0.75rem;border-radius:4px;font-size:0.82rem;word-break:break-all;white-space:pre-wrap;"><?= htmlspecialchars($embeddedCode, ENT_QUOTES, 'UTF-8') ?></code>
-                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboEmbedCode<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-embed">
-                        📋 <?= htmlspecialchars(sf_term('btn_copy', $currentUiLang) ?? 'Kopioi', ENT_QUOTES, 'UTF-8') ?>
+                <strong style="display:block;margin-bottom:0.25rem;">▸ <?= htmlspecialchars(sf_term('xibo_embedded_html_label', $currentUiLang) ?? 'HTML-kenttä (Embedded Widget)', ENT_QUOTES, 'UTF-8') ?></strong>
+                <p style="margin:0 0 0.5rem;color:var(--sf-text-secondary,#666);font-size:0.85rem;">ℹ️ <?= htmlspecialchars(sf_term('xibo_embedded_instructions', $currentUiLang) ?? 'Liitä HTML ja CSS Xibon Embedded Widget -kenttiin', ENT_QUOTES, 'UTF-8') ?></p>
+                <pre id="xiboEmbedHtml<?= $xiboWsId ?>" style="background:var(--sf-bg-secondary,#f5f5f5);padding:0.5rem 0.75rem;border-radius:4px;font-size:0.78rem;overflow:auto;max-height:200px;white-space:pre-wrap;word-break:break-all;margin:0 0 0.4rem;"><code><?= htmlspecialchars($embeddedHtml, ENT_QUOTES, 'UTF-8') ?></code></pre>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboEmbedHtml<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-html">
+                        📋 <?= htmlspecialchars(sf_term('xibo_copy_html', $currentUiLang) ?? 'Kopioi HTML', ENT_QUOTES, 'UTF-8') ?>
                     </button>
+                    <span id="xiboCopied<?= $xiboWsId ?>-html" style="display:none;color:green;font-size:0.85rem;">✅ <?= htmlspecialchars(sf_term('xibo_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
-                <span id="xiboCopied<?= $xiboWsId ?>-embed" style="display:none;color:green;font-size:0.85rem;margin-top:0.25rem;">✅ <?= htmlspecialchars(sf_term('msg_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
             </div>
 
             <div style="margin-bottom:1rem;">
-                <strong style="display:block;margin-bottom:0.4rem;">▸ <?= htmlspecialchars(sf_term('xibo_json_endpoint', $currentUiLang) ?? 'JSON API', ENT_QUOTES, 'UTF-8') ?></strong>
-                <div style="display:flex;gap:0.5rem;align-items:stretch;">
-                    <code id="xiboJsonUrl<?= $xiboWsId ?>" style="flex:1;display:block;background:var(--sf-bg-secondary,#f5f5f5);padding:0.5rem 0.75rem;border-radius:4px;font-size:0.82rem;word-break:break-all;"><?= htmlspecialchars($jsonUrl, ENT_QUOTES, 'UTF-8') ?></code>
-                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboJsonUrl<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-json">
-                        📋 <?= htmlspecialchars(sf_term('btn_copy', $currentUiLang) ?? 'Kopioi', ENT_QUOTES, 'UTF-8') ?>
+                <strong style="display:block;margin-bottom:0.4rem;">▸ <?= htmlspecialchars(sf_term('xibo_embedded_css_label', $currentUiLang) ?? 'CSS-kenttä (Embedded Widget)', ENT_QUOTES, 'UTF-8') ?></strong>
+                <pre id="xiboEmbedCss<?= $xiboWsId ?>" style="background:var(--sf-bg-secondary,#f5f5f5);padding:0.5rem 0.75rem;border-radius:4px;font-size:0.78rem;overflow:auto;max-height:200px;white-space:pre-wrap;word-break:break-all;margin:0 0 0.4rem;"><code><?= htmlspecialchars($embeddedCss, ENT_QUOTES, 'UTF-8') ?></code></pre>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <button type="button" class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn" data-copy-target="xiboEmbedCss<?= $xiboWsId ?>" data-ws-id="<?= $xiboWsId ?>-css">
+                        📋 <?= htmlspecialchars(sf_term('xibo_copy_css', $currentUiLang) ?? 'Kopioi CSS', ENT_QUOTES, 'UTF-8') ?>
                     </button>
+                    <span id="xiboCopied<?= $xiboWsId ?>-css" style="display:none;color:green;font-size:0.85rem;">✅ <?= htmlspecialchars(sf_term('xibo_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
-                <span id="xiboCopied<?= $xiboWsId ?>-json" style="display:none;color:green;font-size:0.85rem;margin-top:0.25rem;">✅ <?= htmlspecialchars(sf_term('msg_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?></span>
             </div>
         </div>
         <div class="sf-modal-footer" style="padding:1rem 1.25rem;text-align:right;">
