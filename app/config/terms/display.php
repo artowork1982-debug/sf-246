@@ -361,6 +361,14 @@ return [
         'el' => 'Επαναφέρθηκε στη λίστα αναπαραγωγής',
     ],
 
+    'footer_display_targets' => [
+        'fi' => 'Infonäytöt',
+        'sv' => 'Infoskärmar',
+        'en' => 'Info screens',
+        'it' => 'Display',
+        'el' => 'Οθόνες',
+    ],
+
     // Playlist Manager
     'playlist_manager_heading' => [
         'fi' => 'Ajolistan hallinta',

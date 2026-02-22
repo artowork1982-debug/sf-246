@@ -18,69 +18,78 @@
      * Alusta TTL-chip valitsin (julkaisumodaalissa)
      */
     function initTtlChips() {
-        const chips = document.querySelectorAll('.sf-ttl-chip');
-        const preview = document.getElementById('ttlPreview');
-        const previewDate = document.getElementById('ttlPreviewDate');
-        
-        if (!chips.length || !preview || !previewDate) {
-            return;
-        }
-        
-        // Päivitä esikatselu
-        function updatePreview() {
-            const selectedRadio = document.querySelector('.sf-ttl-radio:checked');
-            if (!selectedRadio) {
+        // Support multiple TTL sections on the same page (e.g. different modals)
+        document.querySelectorAll('.sf-publish-ttl-section').forEach(function(container) {
+            const chips = container.querySelectorAll('.sf-ttl-chip');
+            const preview = container.querySelector('.sf-ttl-preview');
+            const previewDate = container.querySelector('.sf-ttl-preview-date');
+
+            if (!chips.length) {
                 return;
             }
-            
-            const days = parseInt(selectedRadio.value, 10);
-            
-            if (days === 0) {
-                // Ei aikarajaa
-                preview.classList.add('sf-ttl-preview-hidden');
-                return;
-            }
-            
-            preview.classList.remove('sf-ttl-preview-hidden');
-            
-            // Laske vanhenemispäivä
-            const expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + days);
-            
-            // Suomalainen päivämääräformaatti
-            const formatted = expiryDate.toLocaleDateString('fi-FI', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            previewDate.textContent = formatted;
-        }
-        
-        // Käsittele chip-klikkaukset
-        chips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                // Poista selected-luokka kaikilta
-                chips.forEach(c => c.classList.remove('sf-ttl-chip-selected'));
-                
-                // Lisää selected-luokka klikatulle
-                this.classList.add('sf-ttl-chip-selected');
-                
-                // Valitse radio
-                const radio = this.querySelector('.sf-ttl-radio');
-                if (radio) {
-                    radio.checked = true;
+
+            // Päivitä esikatselu
+            function updatePreview() {
+                const selectedRadio = container.querySelector('.sf-ttl-radio:checked');
+                if (!selectedRadio) {
+                    return;
                 }
-                
-                // Päivitä esikatselu
-                updatePreview();
+
+                const days = parseInt(selectedRadio.value, 10);
+
+                if (!preview) {
+                    return;
+                }
+
+                if (days === 0) {
+                    // Ei aikarajaa
+                    preview.classList.add('sf-ttl-preview-hidden');
+                    return;
+                }
+
+                preview.classList.remove('sf-ttl-preview-hidden');
+
+                // Laske vanhenemispäivä
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + days);
+
+                // Suomalainen päivämääräformaatti
+                const formatted = expiryDate.toLocaleDateString('fi-FI', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                if (previewDate) {
+                    previewDate.textContent = formatted;
+                }
+            }
+
+            // Käsittele chip-klikkaukset
+            chips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    // Poista selected-luokka kaikilta
+                    chips.forEach(c => c.classList.remove('sf-ttl-chip-selected'));
+
+                    // Lisää selected-luokka klikatulle
+                    this.classList.add('sf-ttl-chip-selected');
+
+                    // Valitse radio
+                    const radio = this.querySelector('.sf-ttl-radio');
+                    if (radio) {
+                        radio.checked = true;
+                    }
+
+                    // Päivitä esikatselu
+                    updatePreview();
+                });
             });
+
+            // Alusta esikatselu
+            updatePreview();
         });
-        
-        // Alusta esikatselu
-        updatePreview();
     }
     
     /**
