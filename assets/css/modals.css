@@ -2461,4 +2461,80 @@ body.sf-modal-open {
         gap: 6px;
     }
 }
+
+/* ============================================================================
+   Publish Modal Stepper
+   ========================================================================= */
+
+.sf-modal-publish-stepper {
+    max-width: 640px;
+}
+
+.sf-publish-step-indicator {
+    margin: 1rem 1.5rem 0 1.5rem;
+}
+
+.sf-publish-step.hidden {
+    display: none;
+}
+
+.sf-publish-step h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.sf-publish-step-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--sf-text-secondary, #6c757d);
+    margin-top: 0.125rem;
+}
+
+/* Summary list in step 3 */
+.sf-publish-summary {
+    background: var(--sf-bg-secondary, #f8f9fa);
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.sf-summary-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.375rem 1rem;
+    margin: 0;
+}
+
+.sf-summary-list dt {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--sf-text-secondary, #6c757d);
+    white-space: nowrap;
+}
+
+.sf-summary-list dd {
+    font-size: 0.875rem;
+    color: var(--sf-text-primary, #212529);
+    margin: 0;
+    word-break: break-word;
+}
+
+@media (max-width: 480px) {
+    .sf-summary-list {
+        grid-template-columns: 1fr;
+        gap: 0.125rem;
+    }
+
+    .sf-summary-list dt {
+        margin-top: 0.5rem;
+    }
+
+    .sf-summary-list dt:first-child {
+        margin-top: 0;
+    }
+}
+
 }

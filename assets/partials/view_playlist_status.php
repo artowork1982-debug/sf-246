@@ -24,6 +24,22 @@ if (!isset($flash['state']) || $flash['state'] !== 'published') {
     return;
 }
 
+// Tarkista onko flashilla aktiivisia display target -rivejä
+$hasActiveTargets = false;
+if (isset($pdo)) {
+    try {
+        $stmtActiveCount = $pdo->prepare("SELECT COUNT(*) FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1");
+        $stmtActiveCount->execute([(int)$id]);
+        $hasActiveTargets = (int)$stmtActiveCount->fetchColumn() > 0;
+    } catch (Throwable $eac) {
+        // Silently ignore — migration may not be applied yet
+    }
+}
+
+if (!$hasActiveTargets) {
+    return;
+}
+
 // Määritä playlist-status
 $displayStatus = 'active'; // oletus
 $displayExpiresAt = $flash['display_expires_at'] ?? null;

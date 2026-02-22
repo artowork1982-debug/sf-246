@@ -531,6 +531,10 @@ case 'request_info':
         if (($isAdmin || $isSafety) && !$isArchived) {
             $actions[] = 'archive';
         }
+        // Infonäyttöjen hallinta julkaistuille flasheille
+        if ($isAdmin || $isSafety || $isComms) {
+            $actions[] = 'display_targets';
+        }
         break;
 }
 
@@ -655,6 +659,13 @@ $iconBase = $base .'/assets/img/icons/';
                 <button class="footer-btn fb-archive" id="footerArchive" type="button" aria-label="<?= htmlspecialchars(sf_term('btn_archive', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>">
                     <img src="<?= $iconBase ?>archive_icon.svg" alt="" class="footer-icon">
                     <span class="btn-label"><?= htmlspecialchars(sf_term('btn_archive', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></span>
+                </button>
+            <?php endif; ?>
+
+            <?php if (in_array('display_targets', $actions)): ?>
+                <button class="footer-btn fb-display-targets" id="footerDisplayTargets" type="button" aria-label="<?= htmlspecialchars(sf_term('footer_display_targets', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?>">
+                    <img src="<?= $iconBase ?>display.svg" alt="" class="footer-icon">
+                    <span class="btn-label"><?= htmlspecialchars(sf_term('footer_display_targets', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?></span>
                 </button>
             <?php endif; ?>
 
@@ -1657,41 +1668,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             $allLangVersions = $stmtAllLangVers->fetchAll(PDO::FETCH_ASSOC);
             ?>
 
-            <?php if (count($allLangVersions) > 1): ?>
-            <div class="sf-card sf-lang-versions-card">
-                <h4><?= htmlspecialchars(sf_term('language_versions', $currentUiLang) ?? 'Kieliversiot', ENT_QUOTES, 'UTF-8') ?></h4>
-                <?php foreach ($allLangVersions as $ver): ?>
-                    <div class="sf-lang-version-row">
-                        <span>
-                            <?= sf_lang_flag($ver['lang']) ?>
-                            <?= htmlspecialchars(strtoupper($ver['lang']), ENT_QUOTES, 'UTF-8') ?>
-                        </span>
-                        <span>
-                            <?php if ($ver['state'] === 'published'): ?>
-                                <span class="sf-badge sf-badge-success">✅ <?= htmlspecialchars(sf_term('state_published', $currentUiLang) ?? 'Julkaistu', ENT_QUOTES, 'UTF-8') ?></span>
-                            <?php elseif ($ver['state'] === 'draft'): ?>
-                                <span class="sf-badge sf-badge-draft">📝 <?= htmlspecialchars(sf_term('state_draft', $currentUiLang) ?? 'Luonnos', ENT_QUOTES, 'UTF-8') ?></span>
-                            <?php else: ?>
-                                <span class="sf-badge sf-badge-info"><?= htmlspecialchars($ver['state'], ENT_QUOTES, 'UTF-8') ?></span>
-                            <?php endif; ?>
-                        </span>
-                        <?php if ((int)$ver['id'] !== (int)$flash['id']): ?>
-                            <a href="<?= htmlspecialchars($base) ?>/index.php?page=view&id=<?= (int)$ver['id'] ?>" class="sf-link-small">
-                                <?= htmlspecialchars(sf_term('btn_view', $currentUiLang) ?? 'Näytä', ENT_QUOTES, 'UTF-8') ?> →
-                            </a>
-                        <?php endif; ?>
-                        <?php
-                            $stmtDisplayCount = $pdo->prepare("SELECT COUNT(*) FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1");
-                            $stmtDisplayCount->execute([(int)$ver['id']]);
-                            $displayCount = (int)$stmtDisplayCount->fetchColumn();
-                        ?>
-                        <?php if ($displayCount > 0): ?>
-                            <span class="sf-display-count-badge">🖥️ <?= $displayCount ?></span>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
+            <?php /* Kieliversiot-osio poistettu sidebarista — tuplatieto, näkyy jo yläosan välilehtinä */ ?>
 
             <?php
             // Tarkista onko tämä julkaisematon kieliversio jonka ryhmässä on jo julkaistuja
@@ -2178,116 +2155,166 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
 </div>
 
 <div class="sf-modal hidden" id="modalPublish" role="dialog" aria-modal="true" aria-labelledby="modalPublishTitle">
-    <div class="sf-modal-content">
-        <h2 id="modalPublishTitle">
-            <?= htmlspecialchars(sf_term('modal_publish_title', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
-        </h2>
-        <p>
-            <?= htmlspecialchars(sf_term('modal_publish_text', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
-        </p>
-        
-        <!-- Julkaisuvaihtoehdot -->
+    <div class="sf-modal-content sf-modal-publish-stepper">
+
+        <!-- Stepper-indikaattori -->
+        <div class="sf-step-indicator sf-publish-step-indicator">
+            <span class="sf-step active" id="publishStepDot1" title="<?= htmlspecialchars(sf_term('publish_step1_title', $currentUiLang) ?? 'Perustiedot', ENT_QUOTES, 'UTF-8') ?>">1</span>
+            <span class="sf-step-line" id="publishStepLine1"></span>
+            <span class="sf-step" id="publishStepDot2" title="<?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?>">2</span>
+            <span class="sf-step-line" id="publishStepLine2"></span>
+            <span class="sf-step" id="publishStepDot3" title="<?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Vahvista', ENT_QUOTES, 'UTF-8') ?>">3</span>
+        </div>
+
+        <!-- Julkaisuvaihtoehdot — yhteinen form kaikille askelille -->
         <form id="publishForm" method="POST" action="<?= htmlspecialchars($base) ?>/app/actions/publish.php?id=<?= (int)$id ?>">
             <?= sf_csrf_field() ?>
-            <div class="sf-publish-options">
-                <!-- Lähetä jakeluryhmälle -->
-                <label class="sf-checkbox-option">
-                    <input type="checkbox" name="send_to_distribution" id="publishSendDistribution" value="1">
-                    <span class="sf-checkbox-label">
-                        <strong><?= htmlspecialchars(sf_term('publish_send_to_distribution', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></strong>
-                        <small><?= htmlspecialchars(sf_term('publish_send_to_distribution_hint', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></small>
-                    </span>
-                </label>
-                
-                <!-- Maakohtainen jakelu -->
-                <div class="sf-country-selection" id="countrySelectionDiv" style="display:none;">
-                    <label class="sf-label"><?= htmlspecialchars(sf_term('publish_select_countries', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></label>
-                    <div class="sf-country-flags">
-                        <?php 
-                        $distributionCountries = [
-                            'fi' => ['label_key' => 'country_finland', 'icon' => 'finnish-flag.png', 'default' => true],
-                            'sv' => ['label_key' => 'country_sweden', 'icon' => 'swedish-flag.png', 'default' => false],
-                            'en' => ['label_key' => 'country_uk', 'icon' => 'english-flag.png', 'default' => false],
-                            'it' => ['label_key' => 'country_italy', 'icon' => 'italian-flag.png', 'default' => false],
-                            'el' => ['label_key' => 'country_greece', 'icon' => 'greece-flag.png', 'default' => false],
-                        ];
-                        
-                        foreach ($distributionCountries as $countryCode => $countryData):
-                        ?>
-                            <label class="sf-flag-chip">
-                                <input type="checkbox" 
-                                       name="distribution_countries[]" 
-                                       value="<?= htmlspecialchars($countryCode) ?>"
-                                       <?= $countryData['default'] ? 'checked' : '' ?>>
-                                <img src="<?= htmlspecialchars($base) ?>/assets/img/<?= htmlspecialchars($countryData['icon']) ?>" 
-                                     alt="<?= htmlspecialchars(sf_term($countryData['label_key'], $currentUiLang), ENT_QUOTES, 'UTF-8') ?>">
-                            </label>
-                        <?php endforeach; ?>
+
+            <!-- ===== VAIHE 1: Perustiedot ===== -->
+            <div class="sf-publish-step" id="publishStep1">
+                <h2 id="modalPublishTitle">
+                    <?= htmlspecialchars(sf_term('modal_publish_title', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
+                    <small class="sf-publish-step-label"><?= htmlspecialchars(sf_term('publish_step1_title', $currentUiLang) ?? 'Perustiedot', ENT_QUOTES, 'UTF-8') ?></small>
+                </h2>
+                <p><?= htmlspecialchars(sf_term('modal_publish_text', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></p>
+
+                <div class="sf-publish-options">
+                    <!-- Lähetä jakeluryhmälle -->
+                    <label class="sf-checkbox-option">
+                        <input type="checkbox" name="send_to_distribution" id="publishSendDistribution" value="1">
+                        <span class="sf-checkbox-label">
+                            <strong><?= htmlspecialchars(sf_term('publish_send_to_distribution', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></strong>
+                            <small><?= htmlspecialchars(sf_term('publish_send_to_distribution_hint', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></small>
+                        </span>
+                    </label>
+
+                    <!-- Maakohtainen jakelu -->
+                    <div class="sf-country-selection" id="countrySelectionDiv" style="display:none;">
+                        <label class="sf-label"><?= htmlspecialchars(sf_term('publish_select_countries', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></label>
+                        <div class="sf-country-flags">
+                            <?php
+                            $distributionCountries = [
+                                'fi' => ['label_key' => 'country_finland', 'icon' => 'finnish-flag.png', 'default' => true],
+                                'sv' => ['label_key' => 'country_sweden', 'icon' => 'swedish-flag.png', 'default' => false],
+                                'en' => ['label_key' => 'country_uk', 'icon' => 'english-flag.png', 'default' => false],
+                                'it' => ['label_key' => 'country_italy', 'icon' => 'italian-flag.png', 'default' => false],
+                                'el' => ['label_key' => 'country_greece', 'icon' => 'greece-flag.png', 'default' => false],
+                            ];
+                            foreach ($distributionCountries as $countryCode => $countryData):
+                            ?>
+                                <label class="sf-flag-chip">
+                                    <input type="checkbox"
+                                           name="distribution_countries[]"
+                                           value="<?= htmlspecialchars($countryCode) ?>"
+                                           <?= $countryData['default'] ? 'checked' : '' ?>>
+                                    <img src="<?= htmlspecialchars($base) ?>/assets/img/<?= htmlspecialchars($countryData['icon']) ?>"
+                                         alt="<?= htmlspecialchars(sf_term($countryData['label_key'], $currentUiLang), ENT_QUOTES, 'UTF-8') ?>">
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Henkilövahinkoja - VAIN punaisille -->
+                    <?php if (($flash['type'] ?? '') === 'red'): ?>
+                    <label class="sf-checkbox-option sf-checkbox-warning">
+                        <input type="checkbox" name="has_personal_injury" id="publishPersonalInjury" value="1">
+                        <span class="sf-checkbox-label">
+                            <strong>⚠️ <?= htmlspecialchars(sf_term('publish_personal_injury', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></strong>
+                            <small><?= htmlspecialchars(sf_term('publish_personal_injury_hint', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></small>
+                        </span>
+                    </label>
+                    <?php endif; ?>
+
+                    <!-- Otsikon esikatselu -->
+                    <div class="sf-email-subject-preview" id="emailSubjectPreview" style="display:none;">
+                        <strong><?= htmlspecialchars(sf_term('publish_subject_preview', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>:</strong>
+                        <code id="emailSubjectText"></code>
                     </div>
                 </div>
-                
-                <!-- Henkilövahinkoja - VAIN punaisille -->
-                <?php if (($flash['type'] ?? '') === 'red'): ?>
-                <label class="sf-checkbox-option sf-checkbox-warning">
-                    <input type="checkbox" name="has_personal_injury" id="publishPersonalInjury" value="1">
-                    <span class="sf-checkbox-label">
-                        <strong>⚠️ <?= htmlspecialchars(sf_term('publish_personal_injury', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></strong>
-                        <small><?= htmlspecialchars(sf_term('publish_personal_injury_hint', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></small>
-                    </span>
-                </label>
+
+                <!-- Näkyvyysaika infonäytöillä -->
+                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
+
+                <div class="sf-modal-actions">
+                    <button type="button" class="sf-btn sf-btn-secondary" data-modal-close="modalPublish">
+                        <?= htmlspecialchars(sf_term('btn_cancel', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <button type="button" class="sf-btn sf-btn-primary" id="btnPublishStep1Next">
+                        <?= htmlspecialchars(sf_term('btn_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?> →
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== VAIHE 2: Infonäyttöasetukset ===== -->
+            <div class="sf-publish-step hidden" id="publishStep2">
+                <h2><?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Infonäyttöasetukset', ENT_QUOTES, 'UTF-8') ?></h2>
+
+                <!-- Näyttökesto per kuva -->
+                <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
+
+                <!-- Infonäyttövalinnat per kieliversio -->
+                <?php
+                $originalFlash = $flash;
+                $stmtLangVersions = $pdo->prepare("
+                    SELECT id, lang, title FROM sf_flashes
+                    WHERE id = :gid OR translation_group_id = :gid2
+                    ORDER BY FIELD(lang, 'fi', 'sv', 'en', 'it', 'el')
+                ");
+                $stmtLangVersions->execute([':gid' => $translationGroupId, ':gid2' => $translationGroupId]);
+                $langVersions = $stmtLangVersions->fetchAll(PDO::FETCH_ASSOC);
+                ?>
+                <?php if (!empty($langVersions)): ?>
+                    <div class="sf-display-targets-section">
+                        <?php foreach ($langVersions as $ver): ?>
+                            <div class="sf-lang-display-section">
+                                <?php
+                                    $flash = $ver;
+                                    $context = 'publish';
+                                    require __DIR__ . '/../partials/display_target_selector.php';
+                                ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php $flash = $originalFlash; ?>
+                    </div>
                 <?php endif; ?>
-                
-                <!-- Otsikon esikatselu -->
-                <div class="sf-email-subject-preview" id="emailSubjectPreview" style="display:none;">
-                    <strong><?= htmlspecialchars(sf_term('publish_subject_preview', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>:</strong>
-                    <code id="emailSubjectText"></code>
+
+                <div class="sf-modal-actions">
+                    <button type="button" class="sf-btn sf-btn-secondary" id="btnPublishStep2Back">
+                        ← <?= htmlspecialchars(sf_term('btn_back', $currentUiLang) ?? 'Takaisin', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <button type="button" class="sf-btn sf-btn-primary" id="btnPublishStep2Next">
+                        <?= htmlspecialchars(sf_term('btn_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?> →
+                    </button>
                 </div>
             </div>
 
-            <!-- Näkyvyysaika infonäytöillä -->
-            <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
+            <!-- ===== VAIHE 3: Vahvistus ===== -->
+            <div class="sf-publish-step hidden" id="publishStep3">
+                <h2><?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Vahvista julkaisu', ENT_QUOTES, 'UTF-8') ?></h2>
 
-            <!-- Näyttökesto per kuva -->
-            <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
-
-            <!-- Infonäyttövalinnat per kieliversio -->
-            <?php
-            $originalFlash = $flash;
-            $stmtLangVersions = $pdo->prepare("
-                SELECT id, lang, title FROM sf_flashes
-                WHERE id = :gid OR translation_group_id = :gid2
-                ORDER BY FIELD(lang, 'fi', 'sv', 'en', 'it', 'el')
-            ");
-            $stmtLangVersions->execute([':gid' => $translationGroupId, ':gid2' => $translationGroupId]);
-            $langVersions = $stmtLangVersions->fetchAll(PDO::FETCH_ASSOC);
-            ?>
-            <?php if (!empty($langVersions)): ?>
-                <div class="sf-display-targets-section">
-                    <?php foreach ($langVersions as $ver): ?>
-                        <div class="sf-lang-display-section">
-                            <?php
-                                $flash = $ver;
-                                $context = 'publish';
-                                require __DIR__ . '/../partials/display_target_selector.php';
-                            ?>
-                        </div>
-                    <?php endforeach; ?>
-                    <?php $flash = $originalFlash; ?>
+                <div class="sf-publish-summary" id="publishSummary">
+                    <dl class="sf-summary-list">
+                        <dt><?= htmlspecialchars(sf_term('publish_summary_distribution', $currentUiLang) ?? 'Jakeluryhmä', ENT_QUOTES, 'UTF-8') ?></dt>
+                        <dd id="summaryDistribution">—</dd>
+                        <dt><?= htmlspecialchars(sf_term('publish_summary_ttl', $currentUiLang) ?? 'Näkyvyysaika', ENT_QUOTES, 'UTF-8') ?></dt>
+                        <dd id="summaryTtl">—</dd>
+                        <dt><?= htmlspecialchars(sf_term('publish_summary_duration', $currentUiLang) ?? 'Näyttökesto', ENT_QUOTES, 'UTF-8') ?></dt>
+                        <dd id="summaryDuration">—</dd>
+                        <dt><?= htmlspecialchars(sf_term('publish_summary_displays', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?></dt>
+                        <dd id="summaryDisplays">—</dd>
+                    </dl>
                 </div>
-            <?php endif; ?>
-            
-            <div class="sf-modal-actions">
-                <button
-                  type="button"
-                  class="sf-btn sf-btn-secondary"
-                  data-modal-close="modalPublish"
-                >
-                  <?= htmlspecialchars(sf_term('btn_cancel', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
-                </button>
-                <button type="submit" class="sf-btn sf-btn-primary">
-                  <?= htmlspecialchars(sf_term('btn_publish', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
-                </button>
+
+                <div class="sf-modal-actions">
+                    <button type="button" class="sf-btn sf-btn-secondary" id="btnPublishStep3Back">
+                        ← <?= htmlspecialchars(sf_term('btn_back', $currentUiLang) ?? 'Takaisin', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <button type="submit" class="sf-btn sf-btn-primary">
+                        <?= htmlspecialchars(sf_term('btn_publish', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
             </div>
+
         </form>
     </div>
 </div>
@@ -2411,6 +2438,108 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
     }
     
     updatePreview();
+})();
+</script>
+
+<script>
+// ===== Publish Modal Stepper =====
+(function () {
+    'use strict';
+
+    var currentStep = 1;
+    var totalSteps = 3;
+
+    function showPublishStep(step) {
+        for (var i = 1; i <= totalSteps; i++) {
+            var el = document.getElementById('publishStep' + i);
+            if (el) {
+                if (i === step) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            }
+            // Update dot states
+            var dot = document.getElementById('publishStepDot' + i);
+            if (dot) {
+                dot.classList.toggle('active', i === step);
+                dot.classList.toggle('done', i < step);
+            }
+            // Update line states
+            if (i < totalSteps) {
+                var line = document.getElementById('publishStepLine' + i);
+                if (line) {
+                    line.classList.toggle('done', i < step);
+                }
+            }
+        }
+        currentStep = step;
+        if (step === 3) {
+            updatePublishSummary();
+        }
+    }
+
+    function updatePublishSummary() {
+        // Distribution
+        var distCb = document.getElementById('publishSendDistribution');
+        var summaryDist = document.getElementById('summaryDistribution');
+        if (summaryDist && distCb) {
+            summaryDist.textContent = distCb.checked ? '✅ Kyllä' : '—';
+        }
+
+        // TTL
+        var ttlInput = document.querySelector('#publishForm input[name="display_ttl_days"]:checked');
+        var summaryTtl = document.getElementById('summaryTtl');
+        if (summaryTtl) {
+            summaryTtl.textContent = ttlInput ? (ttlInput.closest('label') ? ttlInput.closest('label').textContent.trim() : ttlInput.value) : '—';
+        }
+
+        // Duration
+        var durInput = document.querySelector('#publishForm input[name="display_duration_seconds"]:checked');
+        var summaryDur = document.getElementById('summaryDuration');
+        if (summaryDur) {
+            summaryDur.textContent = durInput ? (durInput.closest('label') ? durInput.closest('label').textContent.trim() : durInput.value + 's') : '—';
+        }
+
+        // Display targets
+        var selectedDisplays = [];
+        document.querySelectorAll('#publishForm .sf-display-chip-input:checked').forEach(function (cb) {
+            var chip = cb.closest('.sf-display-chip');
+            if (chip) {
+                selectedDisplays.push(chip.textContent.trim());
+            }
+        });
+        var summaryDisplays = document.getElementById('summaryDisplays');
+        if (summaryDisplays) {
+            summaryDisplays.textContent = selectedDisplays.length > 0 ? selectedDisplays.join(', ') : '—';
+        }
+    }
+
+    function init() {
+        var btn1Next = document.getElementById('btnPublishStep1Next');
+        var btn2Back = document.getElementById('btnPublishStep2Back');
+        var btn2Next = document.getElementById('btnPublishStep2Next');
+        var btn3Back = document.getElementById('btnPublishStep3Back');
+
+        if (btn1Next) btn1Next.addEventListener('click', function () { showPublishStep(2); });
+        if (btn2Back) btn2Back.addEventListener('click', function () { showPublishStep(1); });
+        if (btn2Next) btn2Next.addEventListener('click', function () { showPublishStep(3); });
+        if (btn3Back) btn3Back.addEventListener('click', function () { showPublishStep(2); });
+
+        // Reset to step 1 when modal opens
+        var footerPublish = document.getElementById('footerPublish');
+        if (footerPublish) {
+            footerPublish.addEventListener('click', function () {
+                showPublishStep(1);
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
 </script>
 
@@ -2936,6 +3065,10 @@ function updateDeleteModalContent() {
     </div>
 </div>
 
+<?php if (in_array('display_targets', $actions ?? [])): ?>
+<?php require __DIR__ . '/../partials/modal_display_targets.php'; ?>
+<?php endif; ?>
+
 
 <?php /* Footer action bar siirretty ylös (näkyy heti sivun latautuessa). */ ?>
 
@@ -2950,6 +3083,9 @@ function updateDeleteModalContent() {
 <!-- view.js and copy-to-clipboard.js are loaded in index.php with versioning, removed duplicates here -->
 <script src="<?= sf_asset_url('assets/js/translation.js', $base) ?>"></script>
 <script src="<?= sf_asset_url('assets/js/comms-modal.js', $base) ?>"></script>
+<?php if (in_array('display_targets', $actions ?? [])): ?>
+<script src="<?= sf_asset_url('assets/js/display-targets-modal.js', $base) ?>"></script>
+<?php endif; ?>
 
 <!-- Sivukohtaiset datat -->
 <script>
