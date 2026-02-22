@@ -2,6 +2,12 @@
 // app/pages/settings/tab_worksites.php
 declare(strict_types=1);
 
+// Fallback image current value
+$fallbackImagePath = sf_get_setting('display_fallback_image', '');
+$fallbackImageUrl  = ($fallbackImagePath && $baseUrl)
+    ? rtrim($baseUrl, '/') . '/' . ltrim($fallbackImagePath, '/')
+    : '';
+
 // Hae työmaat, niiden display API-avaimet ja aktiivisten flashien määrä
 $worksites = [];
 $worksitesRes = $mysqli->query(
@@ -24,6 +30,120 @@ if ($worksitesRes) {
     $worksitesRes->free();
 }
 ?>
+
+<div class="sf-settings-section" style="margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #e2e8f0;">
+    <h2>
+        <img src="<?= $baseUrl ?>/assets/img/icons/display.svg" alt="" class="sf-heading-icon" aria-hidden="true">
+        <?= htmlspecialchars(sf_term('display_fallback_heading', $currentUiLang) ?? 'Infonäyttöjen fallback-kuva', ENT_QUOTES, 'UTF-8') ?>
+    </h2>
+    <p style="margin-bottom:1rem;color:#64748b;font-size:0.9rem;">
+        <?= htmlspecialchars(sf_term('display_fallback_description', $currentUiLang) ?? 'Näytetään kun playlistassa ei ole flasheja. Suositeltu koko 1920×1080. Näkyy 5 sekuntia.', ENT_QUOTES, 'UTF-8') ?>
+    </p>
+
+    <div id="sfFallbackPreview" style="margin-bottom:0.75rem;<?= $fallbackImageUrl ? '' : 'display:none;' ?>">
+        <p style="font-size:0.85rem;color:#475569;margin-bottom:0.4rem;">
+            <?= htmlspecialchars(sf_term('display_fallback_current', $currentUiLang) ?? 'Nykyinen kuva', ENT_QUOTES, 'UTF-8') ?>
+        </p>
+        <img id="sfFallbackImg" src="<?= htmlspecialchars($fallbackImageUrl, ENT_QUOTES, 'UTF-8') ?>" alt=""
+             style="max-width:200px;border:1px solid #cbd5e1;border-radius:4px;">
+    </div>
+    <?php if (!$fallbackImageUrl): ?>
+    <p id="sfFallbackNone" style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.75rem;">
+        <?= htmlspecialchars(sf_term('display_fallback_none', $currentUiLang) ?? 'Ei fallback-kuvaa asetettu', ENT_QUOTES, 'UTF-8') ?>
+    </p>
+    <?php endif; ?>
+
+    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+        <label class="sf-btn sf-btn-outline-primary sf-btn-sm" style="cursor:pointer;margin:0;">
+            <?= htmlspecialchars(sf_term('display_fallback_choose', $currentUiLang) ?? 'Valitse kuva...', ENT_QUOTES, 'UTF-8') ?>
+            <input type="file" id="sfFallbackFile" accept="image/jpeg,image/png,image/webp" style="display:none;">
+        </label>
+        <button type="button" id="sfFallbackRemove"
+                class="sf-btn sf-btn-sm sf-btn-outline-danger"
+                style="<?= $fallbackImageUrl ? '' : 'display:none;' ?>">
+            <?= htmlspecialchars(sf_term('display_fallback_remove', $currentUiLang) ?? 'Poista', ENT_QUOTES, 'UTF-8') ?>
+        </button>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    var baseUrl      = <?= json_encode(rtrim($baseUrl, '/'), JSON_UNESCAPED_SLASHES) ?>;
+    var csrfToken    = <?= json_encode($_SESSION['csrf_token'] ?? '', JSON_UNESCAPED_SLASHES) ?>;
+    var apiUrl       = baseUrl + '/app/api/upload_display_fallback.php';
+    var msgUploadErr = <?= json_encode(sf_term('save_error', $currentUiLang) ?? 'Upload failed', JSON_UNESCAPED_UNICODE) ?>;
+    var msgRemoveErr = <?= json_encode(sf_term('save_error', $currentUiLang) ?? 'Remove failed', JSON_UNESCAPED_UNICODE) ?>;
+
+    var fileInput    = document.getElementById('sfFallbackFile');
+    var removeBtn    = document.getElementById('sfFallbackRemove');
+    var previewWrap  = document.getElementById('sfFallbackPreview');
+    var previewImg   = document.getElementById('sfFallbackImg');
+    var noneMsg      = document.getElementById('sfFallbackNone');
+
+    function showPreview(url) {
+        if (previewImg)  previewImg.src = url;
+        if (previewWrap) previewWrap.style.display = '';
+        if (noneMsg)     noneMsg.style.display = 'none';
+        if (removeBtn)   removeBtn.style.display = '';
+    }
+
+    function hidePreview() {
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (noneMsg)     noneMsg.style.display = '';
+        if (removeBtn)   removeBtn.style.display = 'none';
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (!fileInput.files || !fileInput.files.length) return;
+            var fd = new FormData();
+            fd.append('action', 'upload');
+            fd.append('csrf_token', csrfToken);
+            fd.append('image', fileInput.files[0]);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', apiUrl, true);
+            xhr.onload = function() {
+                try {
+                    var r = JSON.parse(xhr.responseText);
+                    if (r.ok) {
+                        showPreview(r.url);
+                    } else {
+                        alert(r.error || msgUploadErr);
+                    }
+                } catch(e) { alert(msgUploadErr); }
+                fileInput.value = '';
+            };
+            xhr.onerror = function() { alert(msgUploadErr); fileInput.value = ''; };
+            xhr.send(fd);
+        });
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+            var fd = new FormData();
+            fd.append('action', 'remove');
+            fd.append('csrf_token', csrfToken);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', apiUrl, true);
+            xhr.onload = function() {
+                try {
+                    var r = JSON.parse(xhr.responseText);
+                    if (r.ok) {
+                        hidePreview();
+                    } else {
+                        alert(r.error || msgRemoveErr);
+                    }
+                } catch(e) { alert(msgRemoveErr); }
+            };
+            xhr.onerror = function() { alert(msgRemoveErr); };
+            xhr.send(fd);
+        });
+    }
+})();
+</script>
 
 <h2>
     <img src="<?= $baseUrl ?>/assets/img/icons/worksite.svg" alt="" class="sf-heading-icon" aria-hidden="true">
@@ -220,7 +340,7 @@ foreach ($worksites as $ws):
         . '          if(data.ok && data.items && data.items.length > 0){' . "\n"
         . '            startSlideshow(data.items);' . "\n"
         . '          } else {' . "\n"
-        . '            showEmpty(data.lang || "fi");' . "\n"
+        . '            showEmpty(data.lang || "fi", data.fallback_image || null);' . "\n"
         . '          }' . "\n"
         . '        } catch(e){ showError(); }' . "\n"
         . '      } else { showError(); }' . "\n"
@@ -248,17 +368,22 @@ foreach ($worksites as $ws):
         . '      showSlide();' . "\n"
         . '    }, dur);' . "\n"
         . '  }' . "\n\n"
-        . '  function showEmpty(lang){' . "\n"
-        . '    var msgs = {' . "\n"
-        . '      fi:"Ei n\u00e4ytett\u00e4vi\u00e4 flasheja",' . "\n"
-        . '      sv:"Inga flash att visa",' . "\n"
-        . '      en:"No flashes to display",' . "\n"
-        . '      it:"Nessun flash da visualizzare",' . "\n"
-        . '      el:"\u0394\u03b5\u03bd \u03c5\u03c0\u03ac\u03c1\u03c7\u03bf\u03c5\u03bd flash"' . "\n"
-        . '    };' . "\n"
-        . '    container.innerHTML =' . "\n"
-        . '      \'<p style="color:#ccc;font-size:1.4em;text-align:center;">\' +' . "\n"
-        . '      (msgs[lang]||msgs.fi) + \'</p>\';' . "\n"
+        . '  function showEmpty(lang, fallbackUrl){' . "\n"
+        . '    if(fallbackUrl){' . "\n"
+        . '      container.innerHTML =' . "\n"
+        . '        \'<img src="\' + fallbackUrl + \'" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">\';' . "\n"
+        . '      setTimeout(function(){' . "\n"
+        . '        if(typeof xiboIC !== "undefined" && xiboIC.expireNow){' . "\n"
+        . '          xiboIC.expireNow();' . "\n"
+        . '        }' . "\n"
+        . '      }, 5000);' . "\n"
+        . '    } else {' . "\n"
+        . '      container.innerHTML = "";' . "\n"
+        . '      document.body.style.background = "transparent";' . "\n"
+        . '      if(typeof xiboIC !== "undefined" && xiboIC.expireNow){' . "\n"
+        . '        xiboIC.expireNow();' . "\n"
+        . '      }' . "\n"
+        . '    }' . "\n"
         . '  }' . "\n\n"
         . '  function showError(){' . "\n"
         . '    container.innerHTML =' . "\n"

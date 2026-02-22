@@ -223,12 +223,28 @@ try {
     // Return based on format
     if ($format === 'json') {
         header('Content-Type: application/json');
+
+        // Fetch fallback image setting
+        $fallbackImage = null;
+        try {
+            $fbStmt = $pdo->prepare("SELECT setting_value FROM sf_settings WHERE setting_key = 'display_fallback_image' LIMIT 1");
+            $fbStmt->execute();
+            $fbRow = $fbStmt->fetch(PDO::FETCH_ASSOC);
+            $fbPath = $fbRow['setting_value'] ?? '';
+            if ($fbPath) {
+                $fallbackImage = $baseUrl . '/' . ltrim($fbPath, '/');
+            }
+        } catch (Exception $e) {
+            // Silently ignore if sf_settings not yet migrated
+        }
+
         echo json_encode([
             'ok' => true,
             'site' => $site,
             'lang' => $lang,
             'count' => count($items),
             'items' => $items,
+            'fallback_image' => $fallbackImage,
             'updated_at' => date('c'),
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
