@@ -540,4 +540,48 @@ return [
         'it' => 'Incolla HTML e CSS nei campi Embedded Widget di Xibo',
         'el' => 'Επικολλήστε HTML και CSS στα πεδία Embedded Widget του Xibo',
     ],
+
+    // Display Fallback Image (Settings)
+    'display_fallback_heading' => [
+        'fi' => 'Infonäyttöjen fallback-kuva',
+        'sv' => 'Fallback-bild för skärmar',
+        'en' => 'Fallback image for displays',
+        'it' => 'Immagine di fallback per i display',
+        'el' => 'Εφεδρική εικόνα για οθόνες',
+    ],
+    'display_fallback_description' => [
+        'fi' => 'Näytetään kun playlistassa ei ole flasheja. Suositeltu koko 1920×1080. Näkyy 5 sekuntia.',
+        'sv' => 'Visas när spellistan inte har några flash. Rekommenderad storlek 1920×1080. Visas i 5 sekunder.',
+        'en' => 'Shown when the playlist has no flashes. Recommended size 1920×1080. Displayed for 5 seconds.',
+        'it' => 'Mostrata quando la playlist non ha flash. Dimensioni consigliate 1920×1080. Visualizzata per 5 secondi.',
+        'el' => 'Εμφανίζεται όταν η λίστα δεν έχει flash. Συνιστώμενο μέγεθος 1920×1080. Εμφανίζεται για 5 δευτερόλεπτα.',
+    ],
+    'display_fallback_choose' => [
+        'fi' => 'Valitse kuva...',
+        'sv' => 'Välj bild...',
+        'en' => 'Choose image...',
+        'it' => 'Scegli immagine...',
+        'el' => 'Επιλέξτε εικόνα...',
+    ],
+    'display_fallback_remove' => [
+        'fi' => 'Poista',
+        'sv' => 'Ta bort',
+        'en' => 'Remove',
+        'it' => 'Rimuovi',
+        'el' => 'Αφαίρεση',
+    ],
+    'display_fallback_current' => [
+        'fi' => 'Nykyinen kuva',
+        'sv' => 'Nuvarande bild',
+        'en' => 'Current image',
+        'it' => 'Immagine attuale',
+        'el' => 'Τρέχουσα εικόνα',
+    ],
+    'display_fallback_none' => [
+        'fi' => 'Ei fallback-kuvaa asetettu',
+        'sv' => 'Ingen fallback-bild inställd',
+        'en' => 'No fallback image set',
+        'it' => 'Nessuna immagine di fallback impostata',
+        'el' => 'Δεν έχει οριστεί εφεδρική εικόνα',
+    ],
 ];
