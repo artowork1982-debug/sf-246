@@ -1735,6 +1735,10 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             <?php if (file_exists(__DIR__ . '/../partials/view_display_targets.php')): ?>
                 <?php require __DIR__ . '/../partials/view_display_targets.php'; ?>
             <?php endif; ?>
+
+            <?php if (file_exists(__DIR__ . '/../partials/view_playlist_status.php')): ?>
+                <?php require __DIR__ . '/../partials/view_playlist_status.php'; ?>
+            <?php endif; ?>
         </div>
     </div> <!-- .view-layout -->
 

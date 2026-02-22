@@ -257,6 +257,94 @@
 }
 
 /* ============================================================================
+   Duration Selector (Publish Modal)
+   ========================================================================= */
+
+.sf-publish-duration-section {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--sf-bg-secondary, #f8f9fa);
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 8px;
+}
+
+.sf-duration-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sf-duration-icon {
+    color: var(--sf-primary, #0066cc);
+    flex-shrink: 0;
+}
+
+.sf-duration-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sf-text-primary, #212529);
+}
+
+.sf-duration-description {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: var(--sf-text-secondary, #6c757d);
+}
+
+/* Duration Chips (Radio Buttons as Pills) */
+.sf-duration-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sf-duration-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 2px solid var(--sf-border, #dee2e6);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sf-text-primary, #212529);
+    user-select: none;
+}
+
+.sf-duration-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hover State */
+.sf-duration-chip:hover {
+    border-color: var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.05);
+    transform: translateY(-1px);
+}
+
+/* Selected State */
+.sf-duration-chip-selected,
+.sf-duration-chip:has(.sf-duration-radio:checked) {
+    background: var(--sf-primary, #0066cc);
+    border-color: var(--sf-primary, #0066cc);
+    color: white;
+}
+
+.sf-duration-chip-selected .sf-chip-icon,
+.sf-duration-chip:has(.sf-duration-radio:checked) .sf-chip-icon {
+    opacity: 1;
+    color: white;
+}
+
+/* ============================================================================
    Lang-specific Display Sections (Publish Modal)
    ========================================================================= */
 
@@ -319,19 +407,120 @@
 }
 
 /* ============================================================================
+   Playlist Manager
+   ========================================================================= */
+
+.sf-playlist-manager-list {
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+    max-width: 700px;
+}
+
+.sf-playlist-manager-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: white;
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 6px;
+    margin-bottom: 0.375rem;
+    cursor: grab;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sf-playlist-manager-item.sf-pm-dragging {
+    opacity: 0.5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.sf-pm-drag-handle {
+    color: var(--sf-text-secondary, #6c757d);
+    font-size: 1.1rem;
+    cursor: grab;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.sf-pm-thumb {
+    width: 56px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: #f0f0f0;
+}
+
+.sf-pm-title {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sf-text-primary, #212529);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sf-pm-order-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.sf-pm-btn-up,
+.sf-pm-btn-down {
+    background: none;
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 3px;
+    padding: 0 0.25rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    cursor: pointer;
+    color: var(--sf-text-primary, #212529);
+    transition: background 0.15s ease;
+}
+
+.sf-pm-btn-up:hover:not(:disabled),
+.sf-pm-btn-down:hover:not(:disabled) {
+    background: var(--sf-primary, #0066cc);
+    color: white;
+    border-color: var(--sf-primary, #0066cc);
+}
+
+.sf-pm-btn-up:disabled,
+.sf-pm-btn-down:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.sf-playlist-manager-actions {
+    margin-top: 1rem;
+}
+
+.sf-btn-sm {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8125rem;
+}
+
+/* ============================================================================
    Responsive (Mobile)
    ========================================================================= */
 
 @media (max-width: 768px) {
-    .sf-publish-ttl-section {
+    .sf-publish-ttl-section,
+    .sf-publish-duration-section {
         padding: 1rem;
     }
     
-    .sf-ttl-chips {
+    .sf-ttl-chips,
+    .sf-duration-chips {
         gap: 0.375rem;
     }
     
-    .sf-ttl-chip {
+    .sf-ttl-chip,
+    .sf-duration-chip {
         padding: 0.375rem 0.75rem;
         font-size: 0.8125rem;
     }
@@ -367,11 +556,13 @@
 }
 
 @media (max-width: 480px) {
-    .sf-ttl-chips {
+    .sf-ttl-chips,
+    .sf-duration-chips {
         flex-direction: column;
     }
     
-    .sf-ttl-chip {
+    .sf-ttl-chip,
+    .sf-duration-chip {
         width: 100%;
         justify-content: center;
     }

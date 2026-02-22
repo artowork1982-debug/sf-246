@@ -2,9 +2,18 @@
 // app/pages/settings/tab_worksites.php
 declare(strict_types=1);
 
-// Hae työmaat
+// Hae työmaat ja niiden display API-avaimet
 $worksites = [];
-$worksitesRes = $mysqli->query('SELECT id, name, is_active FROM sf_worksites ORDER BY name ASC');
+$worksitesRes = $mysqli->query(
+    'SELECT w.id, w.name, w.is_active, k.api_key AS display_api_key, k.id AS display_key_id
+     FROM sf_worksites w
+     LEFT JOIN sf_display_api_keys k ON k.worksite_id = w.id AND k.is_active = 1
+     ORDER BY w.name ASC'
+);
+if (!$worksitesRes) {
+    // Fallback if worksite_id column not yet migrated
+    $worksitesRes = $mysqli->query('SELECT id, name, is_active FROM sf_worksites ORDER BY name ASC');
+}
 if ($worksitesRes) {
     while ($w = $worksitesRes->fetch_assoc()) {
         $worksites[] = $w;
@@ -81,6 +90,13 @@ action="app/actions/worksites_save.php"
                     'UTF-8'
                 ) ?>
             </th>
+            <th>
+                <?= htmlspecialchars(
+                    sf_term('settings_worksites_col_playlist', $currentUiLang) ?? 'Ajolista',
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -121,6 +137,29 @@ action="app/actions/worksites_save.php"
                             ?>
                         </button>
                     </form>
+                </td>
+                <td>
+                    <?php if (!empty($ws['display_api_key'])): ?>
+                        <a href="<?= htmlspecialchars(
+                            ($baseUrl ?? '') . '/app/api/display_playlist.php?key=' . $ws['display_api_key'] . '&format=html',
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
+                           target="_blank"
+                           class="sf-btn sf-btn-outline-primary sf-btn-sm">
+                            📺 <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
+                        </a>
+                        <?php if (!empty($ws['display_key_id'])): ?>
+                        <a href="<?= htmlspecialchars(
+                            ($baseUrl ?? '') . '/index.php?page=playlist_manager&display_key_id=' . (int)$ws['display_key_id'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
+                           class="sf-btn sf-btn-outline-primary sf-btn-sm">
+                            ✏️ <?= htmlspecialchars(sf_term('playlist_manager_heading', $currentUiLang) ?? 'Hallinnoi', ENT_QUOTES, 'UTF-8') ?>
+                        </a>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
