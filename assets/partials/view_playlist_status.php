@@ -64,9 +64,10 @@ if (isset($pdo) && $displayStatus === 'active') {
             FROM sf_flash_display_targets t
             JOIN sf_display_api_keys k ON k.id = t.display_key_id
             WHERE t.flash_id = ? AND t.is_active = 1 AND k.is_active = 1
+              AND k.lang = ?
             LIMIT 1
         ");
-        $stmtApiKey->execute([(int)$id]);
+        $stmtApiKey->execute([(int)$id, $flash['lang'] ?? 'fi']);
         $keyRow = $stmtApiKey->fetch(PDO::FETCH_ASSOC);
         $worksiteApiKey = $keyRow ? ($keyRow['api_key'] ?? null) : null;
         $worksiteLabel = $keyRow ? ($keyRow['label'] ?? null) : null;

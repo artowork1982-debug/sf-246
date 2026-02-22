@@ -2164,7 +2164,9 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             <span class="sf-step-line" id="publishStepLine1"></span>
             <span class="sf-step" id="publishStepDot2" title="<?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?>">2</span>
             <span class="sf-step-line" id="publishStepLine2"></span>
-            <span class="sf-step" id="publishStepDot3" title="<?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Vahvista', ENT_QUOTES, 'UTF-8') ?>">3</span>
+            <span class="sf-step" id="publishStepDot3" title="<?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Aika-asetukset', ENT_QUOTES, 'UTF-8') ?>">3</span>
+            <span class="sf-step-line" id="publishStepLine3"></span>
+            <span class="sf-step" id="publishStepDot4" title="<?= htmlspecialchars(sf_term('publish_step4_title', $currentUiLang) ?? 'Vahvista', ENT_QUOTES, 'UTF-8') ?>">4</span>
         </div>
 
         <!-- Julkaisuvaihtoehdot — yhteinen form kaikille askelille -->
@@ -2243,15 +2245,9 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 </div>
             </div>
 
-            <!-- ===== VAIHE 2: Infonäyttöasetukset ===== -->
+            <!-- ===== VAIHE 2: Työmaan infonäytöt ===== -->
             <div class="sf-publish-step hidden" id="publishStep2">
-                <h2><?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Infonäyttöasetukset', ENT_QUOTES, 'UTF-8') ?></h2>
-
-                <!-- Näkyvyysaika infonäytöillä -->
-                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
-
-                <!-- Näyttökesto per kuva -->
-                <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
+                <h2><?= htmlspecialchars(sf_term('publish_step2_title', $currentUiLang) ?? 'Työmaan infonäytöt', ENT_QUOTES, 'UTF-8') ?></h2>
 
                 <!-- Infonäyttövalinnat per kieliversio -->
                 <?php
@@ -2289,25 +2285,45 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 </div>
             </div>
 
-            <!-- ===== VAIHE 3: Vahvistus ===== -->
+            <!-- ===== VAIHE 3: Aika-asetukset ===== -->
             <div class="sf-publish-step hidden" id="publishStep3">
-                <h2><?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Vahvista julkaisu', ENT_QUOTES, 'UTF-8') ?></h2>
+                <h2><?= htmlspecialchars(sf_term('publish_step3_title', $currentUiLang) ?? 'Aika-asetukset', ENT_QUOTES, 'UTF-8') ?></h2>
+
+                <!-- Näkyvyysaika infonäytöillä -->
+                <?php require __DIR__ . '/../partials/publish_display_ttl.php'; ?>
+
+                <!-- Näyttökesto per kuva -->
+                <?php require __DIR__ . '/../partials/publish_display_duration.php'; ?>
+
+                <div class="sf-modal-actions">
+                    <button type="button" class="sf-btn sf-btn-secondary" id="btnPublishStep3Back">
+                        ← <?= htmlspecialchars(sf_term('btn_back', $currentUiLang) ?? 'Takaisin', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <button type="button" class="sf-btn sf-btn-primary" id="btnPublishStep3Next">
+                        <?= htmlspecialchars(sf_term('btn_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?> →
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== VAIHE 4: Vahvistus ===== -->
+            <div class="sf-publish-step hidden" id="publishStep4">
+                <h2><?= htmlspecialchars(sf_term('publish_step4_title', $currentUiLang) ?? 'Vahvista julkaisu', ENT_QUOTES, 'UTF-8') ?></h2>
 
                 <div class="sf-publish-summary" id="publishSummary">
                     <dl class="sf-summary-list">
                         <dt><?= htmlspecialchars(sf_term('publish_summary_distribution', $currentUiLang) ?? 'Jakeluryhmä', ENT_QUOTES, 'UTF-8') ?></dt>
                         <dd id="summaryDistribution">—</dd>
+                        <dt><?= htmlspecialchars(sf_term('publish_summary_displays', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?></dt>
+                        <dd id="summaryDisplays">—</dd>
                         <dt><?= htmlspecialchars(sf_term('publish_summary_ttl', $currentUiLang) ?? 'Näkyvyysaika', ENT_QUOTES, 'UTF-8') ?></dt>
                         <dd id="summaryTtl">—</dd>
                         <dt><?= htmlspecialchars(sf_term('publish_summary_duration', $currentUiLang) ?? 'Näyttökesto', ENT_QUOTES, 'UTF-8') ?></dt>
                         <dd id="summaryDuration">—</dd>
-                        <dt><?= htmlspecialchars(sf_term('publish_summary_displays', $currentUiLang) ?? 'Infonäytöt', ENT_QUOTES, 'UTF-8') ?></dt>
-                        <dd id="summaryDisplays">—</dd>
                     </dl>
                 </div>
 
                 <div class="sf-modal-actions">
-                    <button type="button" class="sf-btn sf-btn-secondary" id="btnPublishStep3Back">
+                    <button type="button" class="sf-btn sf-btn-secondary" id="btnPublishStep4Back">
                         ← <?= htmlspecialchars(sf_term('btn_back', $currentUiLang) ?? 'Takaisin', ENT_QUOTES, 'UTF-8') ?>
                     </button>
                     <button type="submit" class="sf-btn sf-btn-primary">
@@ -2448,7 +2464,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
     'use strict';
 
     var currentStep = 1;
-    var totalSteps = 3;
+    var totalSteps = 4;
 
     function showPublishStep(step) {
         for (var i = 1; i <= totalSteps; i++) {
@@ -2475,7 +2491,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             }
         }
         currentStep = step;
-        if (step === 3) {
+        if (step === 4) {
             updatePublishSummary();
         }
     }
@@ -2525,11 +2541,15 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
         var btn2Back = document.getElementById('btnPublishStep2Back');
         var btn2Next = document.getElementById('btnPublishStep2Next');
         var btn3Back = document.getElementById('btnPublishStep3Back');
+        var btn3Next = document.getElementById('btnPublishStep3Next');
+        var btn4Back = document.getElementById('btnPublishStep4Back');
 
         if (btn1Next) btn1Next.addEventListener('click', function () { showPublishStep(2); });
         if (btn2Back) btn2Back.addEventListener('click', function () { showPublishStep(1); });
         if (btn2Next) btn2Next.addEventListener('click', function () { showPublishStep(3); });
         if (btn3Back) btn3Back.addEventListener('click', function () { showPublishStep(2); });
+        if (btn3Next) btn3Next.addEventListener('click', function () { showPublishStep(4); });
+        if (btn4Back) btn4Back.addEventListener('click', function () { showPublishStep(3); });
 
         // Reset to step 1 when modal opens
         var footerPublish = document.getElementById('footerPublish');

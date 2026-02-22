@@ -261,6 +261,11 @@ try {
     echo ".sf-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }\n";
     echo ".sf-no-content { color: #fff; text-align: center; padding: 2rem; font-size: 1.5rem; }\n";
     echo ".sf-progress-bar { position: fixed; bottom: 0; left: 0; height: 4px; background: rgba(255, 255, 255, 0.5); width: 0; transition: width linear; z-index: 10; }\n";
+    echo ".sf-standby { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; background: linear-gradient(135deg, #0f1923 0%, #1a2a3a 50%, #0f1923 100%); color: #fff; text-align: center; padding: 2rem; }\n";
+    echo ".sf-standby-icon { margin-bottom: 1.5rem; opacity: 0.7; }\n";
+    echo ".sf-standby-msg { font-size: 1.4rem; font-weight: 500; opacity: 0.9; margin-bottom: 1rem; }\n";
+    echo ".sf-standby-clock { font-size: 2.5rem; font-weight: 300; letter-spacing: 0.05em; opacity: 0.8; font-variant-numeric: tabular-nums; }\n";
+    echo ".sf-standby-date { font-size: 1rem; opacity: 0.5; margin-top: 0.5rem; }\n";
     echo "</style>\n";
     
     if ($includeHtmlWrapper) {
@@ -271,7 +276,32 @@ try {
     echo "<div class=\"sf-slideshow-container\" id=\"slideshow\">\n";
     
     if (empty($items)) {
-        echo "<div class=\"sf-no-content\">No active safety flashes to display</div>\n";
+        $standbyMessages = [
+            'fi' => 'Ei aktiivisia tiedotteita tällä näytöllä',
+            'sv' => 'Inga aktiva meddelanden på denna skärm',
+            'en' => 'No active safety notices on this display',
+            'it' => 'Nessun avviso attivo su questo display',
+            'el' => 'Δεν υπάρχουν ενεργές ειδοποιήσεις σε αυτήν την οθόνη',
+        ];
+        $standbyMsg = htmlspecialchars($standbyMessages[$lang] ?? $standbyMessages['en'], ENT_QUOTES, 'UTF-8');
+        echo "<div class=\"sf-standby\" id=\"sfStandby\">\n";
+        echo "  <div class=\"sf-standby-icon\">\n";
+        echo "    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"72\" height=\"72\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg>\n";
+        echo "  </div>\n";
+        echo "  <div class=\"sf-standby-msg\">{$standbyMsg}</div>\n";
+        echo "  <div class=\"sf-standby-clock\" id=\"sfClock\"></div>\n";
+        echo "  <div class=\"sf-standby-date\" id=\"sfDate\"></div>\n";
+        echo "</div>\n";
+        echo "<script>(function(){\n";
+        echo "  function pad(n){return n<10?'0'+n:n;}\n";
+        echo "  function tick(){\n";
+        echo "    var d=new Date();\n";
+        echo "    document.getElementById('sfClock').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());\n";
+        echo "    document.getElementById('sfDate').textContent=pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.'+d.getFullYear();\n";
+        echo "  }\n";
+        echo "  tick();\n";
+        echo "  setInterval(tick,1000);\n";
+        echo "})();</script>\n";
     } else {
         foreach ($items as $index => $item) {
             $activeClass = ($index === 0) ? ' active' : '';
