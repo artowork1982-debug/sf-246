@@ -166,6 +166,13 @@ return [
     ],
     
     // Action Buttons
+    'btn_view_playlist' => [
+        'fi' => 'Katso ajolista',
+        'sv' => 'Visa spellista',
+        'en' => 'View playlist',
+        'it' => 'Visualizza playlist',
+        'el' => 'Προβολή λίστας',
+    ],
     'btn_remove_from_playlist' => [
         'fi' => 'Poista playlistasta',
         'sv' => 'Ta bort från spellistan',
@@ -294,5 +301,49 @@ return [
         'en' => 'Restored to info screen playlist',
         'it' => 'Ripristinato nella playlist del display',
         'el' => 'Επαναφέρθηκε στη λίστα αναπαραγωγής',
+    ],
+
+    // Playlist Manager
+    'playlist_manager_heading' => [
+        'fi' => 'Ajolistan hallinta',
+        'sv' => 'Hantera spellista',
+        'en' => 'Manage playlist',
+        'it' => 'Gestisci playlist',
+        'el' => 'Διαχείριση λίστας',
+    ],
+    'playlist_reorder_saved' => [
+        'fi' => 'Järjestys tallennettu',
+        'sv' => 'Ordning sparad',
+        'en' => 'Order saved',
+        'it' => 'Ordine salvato',
+        'el' => 'Η σειρά αποθηκεύτηκε',
+    ],
+    'playlist_empty' => [
+        'fi' => 'Ajolista on tyhjä — ei aktiivisia flasheja tällä näytöllä',
+        'sv' => 'Spellistan är tom — inga aktiva flash på denna skärm',
+        'en' => 'Playlist is empty — no active flashes on this display',
+        'it' => 'La playlist è vuota — nessun flash attivo su questo display',
+        'el' => 'Η λίστα είναι κενή — κανένα ενεργό flash σε αυτήν την οθόνη',
+    ],
+    'settings_worksites_col_playlist' => [
+        'fi' => 'Ajolista',
+        'sv' => 'Spellista',
+        'en' => 'Playlist',
+        'it' => 'Playlist',
+        'el' => 'Λίστα',
+    ],
+    'playlist_move_up' => [
+        'fi' => 'Siirrä ylös',
+        'sv' => 'Flytta upp',
+        'en' => 'Move up',
+        'it' => 'Sposta su',
+        'el' => 'Μετακίνηση πάνω',
+    ],
+    'playlist_move_down' => [
+        'fi' => 'Siirrä alas',
+        'sv' => 'Flytta ner',
+        'en' => 'Move down',
+        'it' => 'Sposta giù',
+        'el' => 'Μετακίνηση κάτω',
     ],
 ];

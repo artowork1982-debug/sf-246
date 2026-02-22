@@ -38,6 +38,25 @@ if ($displayRemovedAt !== null) {
 // Oikeudet hallintaan (admin, turvatiimi, viestintä)
 $canManage = $isAdmin || $isSafety || $isComms;
 
+// Hae työmaan API-avain aktiivisista display-kohteista
+$worksiteApiKey = null;
+if (isset($pdo) && $displayStatus === 'active') {
+    try {
+        $stmtApiKey = $pdo->prepare("
+            SELECT k.api_key
+            FROM sf_flash_display_targets t
+            JOIN sf_display_api_keys k ON k.id = t.display_key_id
+            WHERE t.flash_id = ? AND t.is_active = 1 AND k.is_active = 1
+            LIMIT 1
+        ");
+        $stmtApiKey->execute([(int)$id]);
+        $keyRow = $stmtApiKey->fetch(PDO::FETCH_ASSOC);
+        $worksiteApiKey = $keyRow ? ($keyRow['api_key'] ?? null) : null;
+    } catch (Throwable $ek) {
+        // Silently ignore — migration may not be applied yet
+    }
+}
+
 ?>
 
 <div class="sf-playlist-status-card sf-playlist-status-<?= htmlspecialchars($displayStatus, ENT_QUOTES, 'UTF-8') ?>">
@@ -100,6 +119,13 @@ $canManage = $isAdmin || $isSafety || $isComms;
     
     <?php if ($canManage): ?>
         <div class="sf-playlist-actions">
+            <?php if ($worksiteApiKey): ?>
+                <a href="<?= htmlspecialchars("{$base}/app/api/display_playlist.php?key={$worksiteApiKey}&format=html", ENT_QUOTES, 'UTF-8') ?>"
+                   target="_blank"
+                   class="sf-btn sf-btn-outline-primary">
+                    📺 <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
+                </a>
+            <?php endif; ?>
             <?php if ($displayStatus !== 'removed'): ?>
                 <button 
                     type="button" 

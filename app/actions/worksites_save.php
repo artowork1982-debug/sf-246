@@ -73,6 +73,43 @@ if ($action === 'add') {
     $newWorksiteId = $mysqli->insert_id;
     $stmt->close();
 
+    // ========== AUTO-CREATE DISPLAY API KEY ==========
+    if ($ok && $newWorksiteId > 0) {
+        try {
+            // Slugify name
+            $slug = strtolower((string)preg_replace(
+                ['/[äÄ]/u', '/[öÖ]/u', '/[åÅ]/u', '/[^a-z0-9]+/i'],
+                ['a', 'o', 'a', '_'],
+                $name
+            ));
+            $slug = trim($slug, '_');
+
+            // Language and site_group by name
+            $dispLang = 'fi';
+            $siteGroup = 'Suomi';
+            if (stripos($name, 'Hellas') !== false) {
+                $dispLang = 'el';
+                $siteGroup = 'Kreikka';
+            } elseif (stripos($name, 'Italia') !== false) {
+                $dispLang = 'it';
+                $siteGroup = 'Italia';
+            }
+
+            $stmtKey = $mysqli->prepare(
+                "INSERT INTO sf_display_api_keys (api_key, site, label, lang, site_group, worksite_id, is_active, created_at)
+                 VALUES (CONCAT('sf_dk_', MD5(CONCAT(?, NOW(), RAND()))), ?, ?, ?, ?, ?, 1, NOW())"
+            );
+            if ($stmtKey) {
+                $stmtKey->bind_param('sssssi', $name, $slug, $name, $dispLang, $siteGroup, $newWorksiteId);
+                $stmtKey->execute();
+                $stmtKey->close();
+            }
+        } catch (Throwable $ek) {
+            sf_app_log('worksites_save: auto-create display key failed: ' . $ek->getMessage(), LOG_LEVEL_ERROR);
+        }
+    }
+    // ================================================
+
     // ========== AUDIT LOG ==========
     if ($ok) {
         sf_audit_log(
@@ -170,6 +207,23 @@ if ($ok) {
 }
 // ================================
 
+// ========== SYNC DISPLAY IS_ACTIVE ==========
+if ($ok && $newActive !== null) {
+    try {
+        $stmtSync = $mysqli->prepare(
+            "UPDATE sf_display_api_keys SET is_active = ? WHERE worksite_id = ?"
+        );
+        if ($stmtSync) {
+            $stmtSync->bind_param('ii', $newActive, $id);
+            $stmtSync->execute();
+            $stmtSync->close();
+        }
+    } catch (Throwable $es) {
+        sf_app_log('worksites_save: sync display is_active failed: ' . $es->getMessage(), LOG_LEVEL_ERROR);
+    }
+}
+// ============================================
+
 $notice = ($newActive === 0) ? 'worksite_disabled' : 'worksite_enabled';
 $uiLang = $_SESSION['ui_lang'] ?? 'fi';
 $msg    = sf_term($notice, $uiLang) ?: (($newActive === 0) ? 'Työmaa asetettu passiiviseksi.' : 'Työmaa aktivoitu.');
@@ -241,6 +295,23 @@ exit;
             );
         }
         // ================================
+
+        // ========== DEACTIVATE DISPLAY ON DELETE ==========
+        if ($ok) {
+            try {
+                $stmtDel = $mysqli->prepare(
+                    "UPDATE sf_display_api_keys SET is_active = 0 WHERE worksite_id = ?"
+                );
+                if ($stmtDel) {
+                    $stmtDel->bind_param('i', $id);
+                    $stmtDel->execute();
+                    $stmtDel->close();
+                }
+            } catch (Throwable $ed) {
+                sf_app_log('worksites_save: deactivate display on delete failed: ' . $ed->getMessage(), LOG_LEVEL_ERROR);
+            }
+        }
+        // ==================================================
 
         if (sf_is_fetch()) sf_json(['ok' => (bool)$ok, 'notice' => 'deleted']);
         header("Location: {$base}/index.php?page=settings&tab=worksites&notice=deleted");

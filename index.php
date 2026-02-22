@@ -39,16 +39,17 @@ $page = $_GET['page'] ?? 'list';
 
 // Sallitut sivut
 $allowed = [
-    'dashboard'     => '/assets/pages/dashboard.php',
-    'list'          => '/assets/pages/list.php',
-    'form'          => '/assets/pages/form.php',
-    'form_language' => '/assets/pages/form_language.php',
-    'view'          => '/assets/pages/view.php',
-    'users'         => '/assets/pages/users.php',
-    'settings'      => '/assets/pages/settings.php',
-    'profile'       => '/assets/pages/profile.php',
-    'role_categories' => '/assets/pages/role_categories.php',
-    'feedback'      => '/assets/pages/feedback.php',
+    'dashboard'        => '/assets/pages/dashboard.php',
+    'list'             => '/assets/pages/list.php',
+    'form'             => '/assets/pages/form.php',
+    'form_language'    => '/assets/pages/form_language.php',
+    'view'             => '/assets/pages/view.php',
+    'users'            => '/assets/pages/users.php',
+    'settings'         => '/assets/pages/settings.php',
+    'profile'          => '/assets/pages/profile.php',
+    'role_categories'  => '/assets/pages/role_categories.php',
+    'feedback'         => '/assets/pages/feedback.php',
+    'playlist_manager' => '/assets/pages/playlist_manager.php',
 ];
 
 if (!isset($allowed[$page])) {
