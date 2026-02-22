@@ -104,9 +104,24 @@
                 });
             }
         });
+
+        // Select all toggle
+        var selectAll = document.getElementById('sfDisplaySelectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                var chips = document.querySelectorAll('.sf-display-chip-input:not(#sfDisplaySelectAll)');
+                chips.forEach(function(chip) {
+                    chip.checked = selectAll.checked;
+                    chip.closest('.sf-display-chip').classList.toggle('sf-display-chip-selected', selectAll.checked);
+                });
+                selectAll.closest('.sf-display-chip').classList.toggle('sf-display-chip-selected', selectAll.checked);
+            });
+        }
     }
     
     /**
+     * Alusta playlist-painikkeet (view-sivulla)
+     */
     function initPlaylistButtons() {
         const btnRemove = document.getElementById('btnRemoveFromPlaylist');
         const btnRestore = document.getElementById('btnRestoreToPlaylist');

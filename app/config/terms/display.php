@@ -412,4 +412,11 @@ return [
         'it' => 'Sposta giù',
         'el' => 'Μετακίνηση κάτω',
     ],
+    'display_select_all' => [
+        'fi' => 'Valitse kaikki',
+        'sv' => 'Välj alla',
+        'en' => 'Select all',
+        'it' => 'Seleziona tutto',
+        'el' => 'Επιλογή όλων',
+    ],
 ];

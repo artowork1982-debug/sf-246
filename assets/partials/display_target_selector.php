@@ -54,6 +54,14 @@ foreach ($availableDisplays as $display) {
     <?php if (empty($availableDisplays)): ?>
         <p class="sf-help-text sf-help-text-muted">—</p>
     <?php else: ?>
+        <div class="sf-display-select-all">
+            <label class="sf-display-chip sf-display-chip-select-all">
+                <input type="checkbox" class="sf-display-chip-input" id="sfDisplaySelectAll">
+                <span class="sf-chip-label">
+                    <?= htmlspecialchars(sf_term('display_select_all', $currentUiLang) ?? 'Valitse kaikki', ENT_QUOTES, 'UTF-8') ?>
+                </span>
+            </label>
+        </div>
         <?php foreach ($grouped as $groupName => $displays): ?>
             <?php if ($groupName !== ''): ?>
                 <p class="sf-display-group-heading"><strong><?= htmlspecialchars($groupName, ENT_QUOTES, 'UTF-8') ?></strong></p>
