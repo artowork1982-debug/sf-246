@@ -316,8 +316,12 @@ async function doSubmit(form, isDraft, isInlineSave = false) {
                     ? (i18n.draft_saved || 'Luonnos tallennettu.')
                     : isInlineSave
                         ? (i18n.changes_saved || 'Muutokset tallennettu.')
-                        : (i18n.sending_for_review || 'Lähetetään tarkistettavaksi.'),
-                i18n.processing_continues || 'Käsittely jatkuu taustalla.'
+                        : isTranslationChild
+                            ? (i18n.translation_saved || 'Kieliversio tallennettu.')
+                            : (i18n.sending_for_review || 'Lähetetään tarkistettavaksi.'),
+                isTranslationChild
+                    ? (i18n.redirecting || 'Siirrytään...')
+                    : (i18n.processing_continues || 'Käsittely jatkuu taustalla.')
             );
             await sleep(1200); // <-- säädä tarvittaessa
             hideLoading();
@@ -330,7 +334,13 @@ async function doSubmit(form, isDraft, isInlineSave = false) {
             }
 
             const baseUrl = (window.SF_BASE_URL || '').replace(/\/$/, '');
-            window.location.href = `${baseUrl}/index.php?page=list&bg_process=${encodeURIComponent(result.flash_id)}`;
+
+            if (isTranslationChild) {
+                // Translation child: redirect to view page to show the result in context
+                window.location.href = `${baseUrl}/index.php?page=view&id=${encodeURIComponent(result.flash_id)}&notice=translation_saved`;
+            } else {
+                window.location.href = `${baseUrl}/index.php?page=list&bg_process=${encodeURIComponent(result.flash_id)}`;
+            }
             return;
         }
 
