@@ -233,49 +233,155 @@ window.SFImageEditor = (() => {
         draw();
     }
     function drawSafeZone(ctx, canvas) {
-        // Turva-alue:  neliö keskellä canvasia (1:1 aspect ratio)
-        // Tämä vastaa esikatselun kuva-aluetta yhden kuvan layoutissa
+        const cw = canvas.width;   // 1920
+        const ch = canvas.height;  // 1080
 
-        const cw = canvas.width;
-        const ch = canvas.height;
-
-        // Neliön koko = canvasin korkeus (pienempi dimensio)
-        const squareSize = Math.min(cw, ch);
-
-        // Neliö keskitetään
-        const squareX = (cw - squareSize) / 2;
-        const squareY = (ch - squareSize) / 2;
+        // === 1:1 Square safe zone (centered) ===
+        const squareSize = Math.min(cw, ch); // 1080
+        const squareX = (cw - squareSize) / 2; // 420
+        const squareY = (ch - squareSize) / 2; // 0
 
         ctx.save();
 
-        // Tummennettu alue neliön ULKOPUOLELLA
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        // --- Dark overlay outside square ---
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
 
-        // Vasen tummennettu alue
+        // Left
         if (squareX > 0) {
             ctx.fillRect(0, 0, squareX, ch);
         }
-
-        // Oikea tummennettu alue
+        // Right
         if (squareX > 0) {
             ctx.fillRect(squareX + squareSize, 0, cw - squareX - squareSize, ch);
         }
-
-        // Ylä tummennettu alue
+        // Top
         if (squareY > 0) {
             ctx.fillRect(squareX, 0, squareSize, squareY);
         }
-
-        // Ala tummennettu alue
+        // Bottom
         if (squareY > 0) {
             ctx.fillRect(squareX, squareY + squareSize, squareSize, ch - squareY - squareSize);
         }
 
-        // Katkoviiva neliön reunalla (turva-alueen raja)
+        // --- Corner marks (L-shaped) for 1:1 area ---
+        const cornerLen = 30;
+        const cornerWidth = 3;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+
+        // Top-left corner
+        ctx.fillRect(squareX, squareY, cornerLen, cornerWidth);
+        ctx.fillRect(squareX, squareY, cornerWidth, cornerLen);
+
+        // Top-right corner
+        ctx.fillRect(squareX + squareSize - cornerLen, squareY, cornerLen, cornerWidth);
+        ctx.fillRect(squareX + squareSize - cornerWidth, squareY, cornerWidth, cornerLen);
+
+        // Bottom-left corner
+        ctx.fillRect(squareX, squareY + squareSize - cornerWidth, cornerLen, cornerWidth);
+        ctx.fillRect(squareX, squareY + squareSize - cornerLen, cornerWidth, cornerLen);
+
+        // Bottom-right corner
+        ctx.fillRect(squareX + squareSize - cornerLen, squareY + squareSize - cornerWidth, cornerLen, cornerWidth);
+        ctx.fillRect(squareX + squareSize - cornerWidth, squareY + squareSize - cornerLen, cornerWidth, cornerLen);
+
+        // --- Dashed line with glow for 1:1 border ---
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+        ctx.shadowBlur = 8;
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([12, 6]);
+        ctx.lineWidth = 2;
+        ctx.setLineDash([10, 6]);
         ctx.strokeRect(squareX, squareY, squareSize, squareSize);
+
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+
+        // --- 1:1 Label pill (top-center of square) ---
+        const labelText = '1:1';
+        const labelFontSize = 18;
+        ctx.font = `600 ${labelFontSize}px system-ui, -apple-system, sans-serif`;
+        const labelMetrics = ctx.measureText(labelText);
+        const labelPadX = 12;
+        const labelPadY = 6;
+        const labelW = labelMetrics.width + labelPadX * 2;
+        const labelH = labelFontSize + labelPadY * 2;
+        const labelX = squareX + (squareSize - labelW) / 2;
+        const labelY = squareY + 12;
+
+        // Pill background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.beginPath();
+        const pillR = labelH / 2;
+        if (typeof ctx.roundRect === 'function') {
+            ctx.roundRect(labelX, labelY, labelW, labelH, pillR);
+        } else {
+            ctx.moveTo(labelX + pillR, labelY);
+            ctx.arcTo(labelX + labelW, labelY, labelX + labelW, labelY + labelH, pillR);
+            ctx.arcTo(labelX + labelW, labelY + labelH, labelX, labelY + labelH, pillR);
+            ctx.arcTo(labelX, labelY + labelH, labelX, labelY, pillR);
+            ctx.arcTo(labelX, labelY, labelX + labelW, labelY, pillR);
+            ctx.closePath();
+        }
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([]);
+        ctx.stroke();
+
+        // Pill text
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(labelText, labelX + labelW / 2, labelY + labelH / 2);
+
+        // === 16:9 Landscape label (top-left of canvas) ===
+        const landscapeText = '16:9';
+        const lFontSize = 16;
+        ctx.font = `600 ${lFontSize}px system-ui, -apple-system, sans-serif`;
+        const lMetrics = ctx.measureText(landscapeText);
+        const lPadX = 10;
+        const lPadY = 5;
+        const lW = lMetrics.width + lPadX * 2;
+        const lH = lFontSize + lPadY * 2;
+        const lX = 12;
+        const lY = 12;
+
+        // Landscape pill background
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+        ctx.beginPath();
+        const lPillR = lH / 2;
+        if (typeof ctx.roundRect === 'function') {
+            ctx.roundRect(lX, lY, lW, lH, lPillR);
+        } else {
+            ctx.moveTo(lX + lPillR, lY);
+            ctx.arcTo(lX + lW, lY, lX + lW, lY + lH, lPillR);
+            ctx.arcTo(lX + lW, lY + lH, lX, lY + lH, lPillR);
+            ctx.arcTo(lX, lY + lH, lX, lY, lPillR);
+            ctx.arcTo(lX, lY, lX + lW, lY, lPillR);
+            ctx.closePath();
+        }
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([]);
+        ctx.stroke();
+
+        // Landscape pill text
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.9)';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(landscapeText, lX + lW / 2, lY + lH / 2);
+
+        // === 16:9 border (full canvas edge) ===
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.strokeRect(2, 2, cw - 4, ch - 4);
+
+        // Reset
+        ctx.setLineDash([]);
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'alphabetic';
 
         ctx.restore();
     }
