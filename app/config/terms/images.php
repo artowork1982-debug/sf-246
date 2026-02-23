@@ -629,11 +629,11 @@ return [
     'el' => '{count} / {total} εικόνες μεταφορτώθηκαν',
 ],
 'crop_guide_text' => [
-    'fi' => 'Katkoviiva näyttää neliökuvissa (1:1) näkyvän alueen. Koko vaaka-alue näkyy vaakakuvissa. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
-    'sv' => 'Streckad linje visar synligt område i fyrkantiga bilder (1:1). Hela det horisontella området syns i liggande bilder. Flytta och zooma bilden så att inga vita ytor kvarstår.',
-    'en' => 'The dashed line shows the visible area in square images (1:1). The full landscape area is visible in landscape images. Move and zoom the image so no white areas remain.',
-    'it' => 'La linea tratteggiata mostra l\'area visibile nelle immagini quadrate (1:1). L\'intera area orizzontale è visibile nelle immagini orizzontali. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
-    'el' => 'Η διακεκομμένη γραμμή δείχνει την ορατή περιοχή σε τετράγωνες εικόνες (1:1). Ολόκληρη η οριζόντια περιοχή είναι ορατή σε οριζόντιες εικόνες. Μετακινήστε και κάντε ζουμ στην εικόνα ώστε να μην παραμείνουν λευκές περιοχές.',
+    'fi' => 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Jos kuva tulee vaakakuva-asetteluun, koko alue reunoineen tulee näkyviin — myös tummennettu alue. Voit lisätä merkintöjä ja tekstiä myös tummennetulle alueelle, jos tiedät kuvan päätyvän vaaka-asetteluun. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
+    'sv' => 'Streckad linje (1:1) visar det synliga området i kvadratiska bilder. Om bilden hamnar i ett liggande format blir hela ytan synlig — även det mörklagda området. Du kan lägga till markeringar även i det mörklagda området om du vet att bilden kommer att visas i liggande format. Flytta och zooma bilden så att inga vita ytor kvarstår.',
+    'en' => 'The dashed line (1:1) shows the visible area in square images. If the image will be used in a landscape layout, the entire area including the dimmed edges becomes visible. You can place annotations on the dimmed area too if the image will be in landscape format. Move and zoom the image so no white areas remain.',
+    'it' => 'La linea tratteggiata (1:1) mostra l\'area visibile nelle immagini quadrate. Se l\'immagine sarà usata in formato orizzontale, l\'intera area, incluse le zone oscurate, diventerà visibile. Puoi aggiungere annotazioni anche nell\'area oscurata se sai che l\'immagine sarà in formato orizzontale. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
+    'el' => 'Η διακεκομμένη γραμμή (1:1) δείχνει την ορατή περιοχή σε τετράγωνες εικόνες. Αν η εικόνα τοποθετηθεί σε οριζόντια διάταξη, ολόκληρη η περιοχή, συμπεριλαμβανομένων των σκοτεινών άκρων, γίνεται ορατή. Μπορείτε να προσθέσετε σημειώσεις και στη σκοτεινή περιοχή αν η εικόνα θα εμφανιστεί σε οριζόντιο σχήμα. Μετακινήστε και κάντε ζουμ ώστε να μην μείνουν λευκά κενά.',
 ],
 'crop_guide_label' => [
     'fi' => 'Rajausopas',
