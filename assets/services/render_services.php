@@ -276,9 +276,9 @@ function sf_get_flash_translations($db, int $translation_group_id): array
         $stmt = $db->prepare(
             'SELECT id, lang 
              FROM sf_flashes 
-             WHERE translation_group_id = :group_id'
+             WHERE translation_group_id = :group_id OR id = :group_id2'
         );
-        $stmt->execute(['group_id' => $translation_group_id]);
+        $stmt->execute(['group_id' => $translation_group_id, 'group_id2' => $translation_group_id]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($rows as $row) {
@@ -295,9 +295,9 @@ function sf_get_flash_translations($db, int $translation_group_id): array
         $stmt = $db->prepare(
             'SELECT id, lang 
              FROM sf_flashes 
-             WHERE translation_group_id = ?'
+             WHERE translation_group_id = ? OR id = ?'
         );
-        $stmt->bind_param('i', $translation_group_id);
+        $stmt->bind_param('ii', $translation_group_id, $translation_group_id);
         $stmt->execute();
         $res = $stmt->get_result();
 
