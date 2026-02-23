@@ -1414,8 +1414,8 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
           </svg>
           <div class="sf-edit-crop-guide-text">
             <strong><?= htmlspecialchars(sf_term('crop_guide_label', $uiLang) ?? 'Rajausopas', ENT_QUOTES, 'UTF-8') ?>:</strong>
-            <span class="sf-crop-guide-main"><?= htmlspecialchars(sf_term('crop_guide_text', $uiLang) ?? 'Katkoviiva näyttää neliökuvissa (1:1) näkyvän alueen. Koko vaaka-alue näkyy vaakakuvissa.', ENT_QUOTES, 'UTF-8') ?></span>
-            <span class="sf-crop-guide-hint">💡 <?= htmlspecialchars(sf_term('crop_guide_annotations_hint', $uiLang) ?? 'Merkintöjä voi lisätä myös tummennetulle alueelle — ne näkyvät vaaka-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
+            <span class="sf-crop-guide-main"><?= htmlspecialchars(sf_term('crop_guide_text', $uiLang) ?? 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Kevyesti tummennettu alue näkyy vaakakuva-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
+            <span class="sf-crop-guide-hint">💡 <?= htmlspecialchars(sf_term('crop_guide_annotations_hint', $uiLang) ?? 'Merkintöjä voi lisätä myös kevyesti tummennetulle alueelle — ne näkyvät vaaka-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
           </div>
           <button type="button" class="sf-edit-crop-guide-close" onclick="this.parentElement.classList.add('hidden')" aria-label="<?= htmlspecialchars(sf_term('btn_close', $uiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">×</button>
         </div>

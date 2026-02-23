@@ -629,11 +629,11 @@ return [
     'el' => '{count} / {total} εικόνες μεταφορτώθηκαν',
 ],
 'crop_guide_text' => [
-    'fi' => 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Jos kuva tulee vaakakuva-asetteluun, koko alue reunoineen tulee näkyviin — myös tummennettu alue. Voit lisätä merkintöjä ja tekstiä myös tummennetulle alueelle, jos tiedät kuvan päätyvän vaaka-asetteluun. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
-    'sv' => 'Streckad linje (1:1) visar det synliga området i kvadratiska bilder. Om bilden hamnar i ett liggande format blir hela ytan synlig — även det mörklagda området. Du kan lägga till markeringar även i det mörklagda området om du vet att bilden kommer att visas i liggande format. Flytta och zooma bilden så att inga vita ytor kvarstår.',
-    'en' => 'The dashed line (1:1) shows the visible area in square images. If the image will be used in a landscape layout, the entire area including the dimmed edges becomes visible. You can place annotations on the dimmed area too if the image will be in landscape format. Move and zoom the image so no white areas remain.',
-    'it' => 'La linea tratteggiata (1:1) mostra l\'area visibile nelle immagini quadrate. Se l\'immagine sarà usata in formato orizzontale, l\'intera area, incluse le zone oscurate, diventerà visibile. Puoi aggiungere annotazioni anche nell\'area oscurata se sai che l\'immagine sarà in formato orizzontale. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
-    'el' => 'Η διακεκομμένη γραμμή (1:1) δείχνει την ορατή περιοχή σε τετράγωνες εικόνες. Αν η εικόνα τοποθετηθεί σε οριζόντια διάταξη, ολόκληρη η περιοχή, συμπεριλαμβανομένων των σκοτεινών άκρων, γίνεται ορατή. Μπορείτε να προσθέσετε σημειώσεις και στη σκοτεινή περιοχή αν η εικόνα θα εμφανιστεί σε οριζόντιο σχήμα. Μετακινήστε και κάντε ζουμ ώστε να μην μείνουν λευκά κενά.',
+    'fi' => 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Jos kuva tulee vaakakuva-asetteluun, koko alue reunoineen tulee näkyviin — myös kevyesti tummennettu alue. Voit lisätä merkintöjä ja tekstiä myös tummennetulle alueelle, jos tiedät kuvan päätyvän vaaka-asetteluun. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
+    'sv' => 'Streckad linje (1:1) visar det synliga området i kvadratiska bilder. Om bilden hamnar i ett liggande format blir hela ytan synlig — även det lätt nedtonade området. Du kan lägga till markeringar även i det nedtonade området om du vet att bilden kommer att visas i liggande format. Flytta och zooma bilden så att inga vita ytor kvarstår.',
+    'en' => 'The dashed line (1:1) shows the visible area in square images. If the image will be used in a landscape layout, the entire area including the slightly dimmed edges becomes visible. You can place annotations on the dimmed area too if the image will be in landscape format. Move and zoom the image so no white areas remain.',
+    'it' => 'La linea tratteggiata (1:1) mostra l\'area visibile nelle immagini quadrate. Se l\'immagine sarà usata in formato orizzontale, l\'intera area, incluse le zone leggermente oscurate, diventerà visibile. Puoi aggiungere annotazioni anche nell\'area oscurata se sai che l\'immagine sarà in formato orizzontale. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
+    'el' => 'Η διακεκομμένη γραμμή (1:1) δείχνει την ορατή περιοχή σε τετράγωνες εικόνες. Αν η εικόνα τοποθετηθεί σε οριζόντια διάταξη, ολόκληρη η περιοχή, συμπεριλαμβανομένων των ελαφρώς σκοτεινών άκρων, γίνεται ορατή. Μπορείτε να προσθέσετε σημειώσεις και στη σκοτεινή περιοχή αν η εικόνα θα εμφανιστεί σε οριζόντιο σχήμα. Μετακινήστε και κάντε ζουμ ώστε να μην μείνουν λευκά κενά.',
 ],
 'crop_guide_label' => [
     'fi' => 'Rajausopas',
@@ -643,10 +643,10 @@ return [
     'el' => 'Οδηγός περικοπής',
 ],
 'crop_guide_annotations_hint' => [
-    'fi' => 'Merkintöjä voi lisätä myös tummennetulle alueelle — ne näkyvät vaaka-asettelussa.',
-    'sv' => 'Markeringar kan läggas till även på det mörka området — de syns i liggande layout.',
-    'en' => 'Annotations can also be placed on the darkened area — they will be visible in landscape layouts.',
-    'it' => 'Le annotazioni possono essere aggiunte anche nell\'area scurita — saranno visibili nel layout orizzontale.',
-    'el' => 'Οι σημειώσεις μπορούν να προστεθούν και στη σκοτεινή περιοχή — θα είναι ορατές στη οριζόντια διάταξη.',
+    'fi' => 'Merkintöjä voi lisätä myös kevyesti tummennetulle alueelle — ne näkyvät vaaka-asettelussa.',
+    'sv' => 'Markeringar kan läggas till även på det lätt nedtonade området — de syns i liggande layout.',
+    'en' => 'Annotations can also be placed on the slightly dimmed area — they will be visible in landscape layouts.',
+    'it' => 'Le annotazioni possono essere aggiunte anche nell\'area leggermente oscurata — saranno visibili nel layout orizzontale.',
+    'el' => 'Οι σημειώσεις μπορούν να προστεθούν και στην ελαφρώς σκοτεινή περιοχή — θα είναι ορατές στη οριζόντια διάταξη.',
 ],
 ];

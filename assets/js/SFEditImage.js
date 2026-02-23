@@ -243,6 +243,26 @@ window.SFImageEditor = (() => {
 
         ctx.save();
 
+        // --- Light dimming outside the 1:1 area ---
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+
+        // Left strip
+        if (squareX > 0) {
+            ctx.fillRect(0, 0, squareX, ch);
+        }
+        // Right strip
+        if (squareX + squareSize < cw) {
+            ctx.fillRect(squareX + squareSize, 0, cw - squareX - squareSize, ch);
+        }
+        // Top strip (if square doesn't start at top)
+        if (squareY > 0) {
+            ctx.fillRect(squareX, 0, squareSize, squareY);
+        }
+        // Bottom strip (if square doesn't end at bottom)
+        if (squareY + squareSize < ch) {
+            ctx.fillRect(squareX, squareY + squareSize, squareSize, ch - squareY - squareSize);
+        }
+
         // --- Corner marks (L-shaped) for 1:1 area ---
         const cornerLen = 30;
         const cornerWidth = 3;
@@ -264,17 +284,20 @@ window.SFImageEditor = (() => {
         ctx.fillRect(squareX + squareSize - cornerLen, squareY + squareSize - cornerWidth, cornerLen, cornerWidth);
         ctx.fillRect(squareX + squareSize - cornerWidth, squareY + squareSize - cornerLen, cornerWidth, cornerLen);
 
-        // --- Dashed line with glow for 1:1 border ---
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
-        ctx.shadowBlur = 8;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2;
+        // --- Dual-stroke dashed line for 1:1 border ---
+        // 1) Dark shadow stroke first (provides contrast on light images)
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 3;
         ctx.setLineDash([10, 6]);
         ctx.strokeRect(squareX, squareY, squareSize, squareSize);
 
-        // Reset shadow
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
+        // 2) White stroke on top (provides contrast on dark images)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([10, 6]);
+        ctx.strokeRect(squareX, squareY, squareSize, squareSize);
 
         // --- 1:1 Label pill (top-center of square) ---
         const labelText = '1:1';
@@ -289,7 +312,7 @@ window.SFImageEditor = (() => {
         const labelY = squareY + 12;
 
         // Pill background
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
         ctx.beginPath();
         const pillR = labelH / 2;
         if (typeof ctx.roundRect === 'function') {
@@ -303,13 +326,13 @@ window.SFImageEditor = (() => {
             ctx.closePath();
         }
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.lineWidth = 1;
         ctx.setLineDash([]);
         ctx.stroke();
 
         // Pill text
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillText(labelText, labelX + labelW / 2, labelY + labelH / 2);
