@@ -20,6 +20,29 @@
                 var val = this.value;
                 var navUrl = this.dataset.navUrl;
                 if (val && navUrl) {
+                    // Piilota kaikki modaalit
+                    document.querySelectorAll('.sf-modal').forEach(function(m) {
+                        m.style.display = 'none';
+                    });
+
+                    // Näytä loading overlay
+                    var wrap = document.getElementById('playlistManagerWrap');
+                    if (wrap) {
+                        var overlay = document.createElement('div');
+                        overlay.className = 'sf-pm-loading-overlay';
+                        overlay.innerHTML =
+                            '<div class="sf-pm-loading-spinner">' +
+                            '  <svg class="sf-pm-spinner-svg" viewBox="0 0 50 50">' +
+                            '    <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="90 150" stroke-dashoffset="0">' +
+                            '      <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/>' +
+                            '    </circle>' +
+                            '  </svg>' +
+                            '  <span class="sf-pm-loading-text">Ladataan...</span>' +
+                            '</div>';
+                        wrap.style.position = 'relative';
+                        wrap.appendChild(overlay);
+                    }
+
                     window.location.href = navUrl + encodeURIComponent(val);
                 }
             });
@@ -36,8 +59,8 @@
 
         // ── Up/Down arrow buttons ──────────────────────────────────────────
         list.addEventListener('click', function (e) {
-            var btn = e.target;
-            if (!btn || !btn.matches('.sf-pm-btn-up, .sf-pm-btn-down')) return;
+            var btn = e.target.closest('.sf-pm-btn-up, .sf-pm-btn-down');
+            if (!btn) return;
 
             var item = btn.closest('.sf-playlist-manager-item');
             if (!item) return;
@@ -99,6 +122,24 @@
                 if (upBtn)   upBtn.disabled   = (idx === 0);
                 if (downBtn) downBtn.disabled = (idx === items.length - 1);
             });
+            checkDirty();
+        }
+
+        // ── Dirty state (unsaved order changes) ────────────────────────────
+        var actionsBar = document.querySelector('.sf-playlist-manager-actions');
+        var originalOrder = getOrder();
+
+        function getOrder() {
+            return Array.from(list.querySelectorAll('.sf-playlist-manager-item'))
+                .map(function(item) { return item.dataset.flashId; })
+                .join(',');
+        }
+
+        function checkDirty() {
+            var isDirty = getOrder() !== originalOrder;
+            if (actionsBar) {
+                actionsBar.classList.toggle('sf-pm-dirty', isDirty);
+            }
         }
 
         // ── Save order ─────────────────────────────────────────────────────
@@ -130,6 +171,8 @@
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
                     if (data && data.ok) {
+                        originalOrder = getOrder();
+                        checkDirty();
                         if (saveMsg) {
                             saveMsg.style.display = '';
                             setTimeout(function () { saveMsg.style.display = 'none'; }, 3000);
