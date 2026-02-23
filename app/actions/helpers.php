@@ -39,19 +39,39 @@ function sf_update_state_all_languages(PDO $pdo, int $flashId, string $newState)
     // Determine group ID (parent or self)
     $groupId = $flash['translation_group_id'] ?: $flash['id'];
     
-    // Update all language versions
-    // KORJATTU: Käytä kahta eri parametria koska PDO ei salli samaa parametria kahdesti
-    $updateStmt = $pdo->prepare("
-        UPDATE sf_flashes 
-        SET state = :new_state, 
-            updated_at = NOW()
-        WHERE translation_group_id = :group_id1 OR id = :group_id2
-    ");
-    $updateStmt->execute([
-        ':new_state' => $newState,
-        ':group_id1' => $groupId,
-        ':group_id2' => $groupId
-    ]);
+    // Update all language versions.
+    // When moving to a terminal state (published/archived), update all versions.
+    // Otherwise, skip versions already in a terminal state so they aren't pulled back.
+    $terminalStates = ['published', 'archived'];
+    if (in_array($newState, $terminalStates, true)) {
+        $updateStmt = $pdo->prepare("
+            UPDATE sf_flashes 
+            SET state = :new_state, 
+                updated_at = NOW()
+            WHERE translation_group_id = :group_id1 OR id = :group_id2
+        ");
+        $updateStmt->execute([
+            ':new_state' => $newState,
+            ':group_id1' => $groupId,
+            ':group_id2' => $groupId
+        ]);
+    } else {
+        $placeholders = implode(', ', array_fill(0, count($terminalStates), '?'));
+        $updateStmt = $pdo->prepare("
+            UPDATE sf_flashes 
+            SET state = :new_state, 
+                updated_at = NOW()
+            WHERE (translation_group_id = :group_id1 OR id = :group_id2)
+              AND state NOT IN ($placeholders)
+        ");
+        $updateStmt->bindValue(':new_state', $newState);
+        $updateStmt->bindValue(':group_id1', $groupId);
+        $updateStmt->bindValue(':group_id2', $groupId);
+        foreach ($terminalStates as $i => $state) {
+            $updateStmt->bindValue($i + 1, $state);
+        }
+        $updateStmt->execute();
+    }
     
     return $updateStmt->rowCount();
 }
