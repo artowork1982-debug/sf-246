@@ -6255,3 +6255,75 @@ body.form-page {
 .sf-btn-warning:hover {
     background: #d97706;
 }
+/* Image Editor Crop Guide Banner */
+.sf-edit-crop-guide {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    margin: 0 0 8px 0;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.45;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    animation: sfCropGuideIn 0.3s ease-out;
+}
+
+.sf-edit-crop-guide.hidden {
+    display: none !important;
+}
+
+.sf-edit-crop-guide-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    opacity: 0.9;
+}
+
+.sf-edit-crop-guide-text {
+    flex: 1;
+}
+
+.sf-edit-crop-guide-text strong {
+    font-weight: 700;
+}
+
+.sf-edit-crop-guide-close {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: background 0.2s;
+    margin-top: -2px;
+}
+
+.sf-edit-crop-guide-close:hover {
+    background: rgba(255,255,255,0.35);
+}
+
+@keyframes sfCropGuideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .sf-edit-crop-guide {
+        font-size: 12px;
+        padding: 8px 12px;
+        gap: 8px;
+        border-radius: 10px;
+    }
+}

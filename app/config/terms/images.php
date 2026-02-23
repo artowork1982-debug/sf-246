@@ -628,4 +628,18 @@ return [
     'it' => '{count} / {total} immagini caricate',
     'el' => '{count} / {total} εικόνες μεταφορτώθηκαν',
 ],
+'crop_guide_text' => [
+    'fi' => 'Katkoviiva näyttää neliökuvissa (1:1) näkyvän alueen. Koko vaaka-alue näkyy vaakakuvissa. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
+    'sv' => 'Streckad linje visar synligt område i fyrkantiga bilder (1:1). Hela det horisontella området syns i liggande bilder. Flytta och zooma bilden så att inga vita ytor kvarstår.',
+    'en' => 'The dashed line shows the visible area in square images (1:1). The full landscape area is visible in landscape images. Move and zoom the image so no white areas remain.',
+    'it' => 'La linea tratteggiata mostra l\'area visibile nelle immagini quadrate (1:1). L\'intera area orizzontale è visibile nelle immagini orizzontali. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
+    'el' => 'Η διακεκομμένη γραμμή δείχνει την ορατή περιοχή σε τετράγωνες εικόνες (1:1). Ολόκληρη η οριζόντια περιοχή είναι ορατή σε οριζόντιες εικόνες. Μετακινήστε και κάντε ζουμ στην εικόνα ώστε να μην παραμείνουν λευκές περιοχές.',
+],
+'crop_guide_label' => [
+    'fi' => 'Rajausopas',
+    'sv' => 'Beskärningsguide',
+    'en' => 'Crop guide',
+    'it' => 'Guida al ritaglio',
+    'el' => 'Οδηγός περικοπής',
+],
 ];
