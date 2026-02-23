@@ -326,7 +326,7 @@ try {
 
     // Get current flash data to check state
     $stmtFlashData = $pdo->prepare("
-        SELECT id, state, type, preview_filename, translation_group_id 
+        SELECT id, state, type, lang, preview_filename, translation_group_id 
         FROM sf_flashes 
         WHERE id = ? 
         LIMIT 1
@@ -355,13 +355,14 @@ try {
                 // Use translation_group_id if available, otherwise flash_id
                 $groupId = $currentFlash['translation_group_id'] ?: $flash_id;
                 
-                // Check if snapshot already exists for this version type
+                // Check if snapshot already exists for this version type and lang
+                $snapshotLang = $currentFlash['lang'] ?? 'fi';
                 $stmtExisting = $pdo->prepare("
                     SELECT id, image_path FROM sf_flash_snapshots 
-                    WHERE flash_id = ? AND version_type = ?
+                    WHERE flash_id = ? AND version_type = ? AND lang = ?
                     LIMIT 1
                 ");
-                $stmtExisting->execute([$groupId, $versionType]);
+                $stmtExisting->execute([$groupId, $versionType, $snapshotLang]);
                 $existingSnapshot = $stmtExisting->fetch(PDO::FETCH_ASSOC);
                 
                 // Get user_id from job data if available
@@ -405,10 +406,10 @@ try {
                             
                             $stmtSnapshot = $pdo->prepare("
                                 INSERT INTO sf_flash_snapshots 
-                                (flash_id, version_type, version_number, image_path, published_at, published_by)
-                                VALUES (?, ?, ?, ?, NOW(), ?)
+                                (flash_id, version_type, lang, version_number, image_path, published_at, published_by)
+                                VALUES (?, ?, ?, ?, ?, NOW(), ?)
                             ");
-                            $stmtSnapshot->execute([$groupId, $versionType, $versionNumber, $relativeImagePath, $userId]);
+                            $stmtSnapshot->execute([$groupId, $versionType, $snapshotLang, $versionNumber, $relativeImagePath, $userId]);
                             sf_app_log("[Worker] Created new snapshot for flash {$groupId}, type: {$versionType}, version: {$versionNumber}");
                         } else {
                             sf_app_log("[Worker] Failed to create snapshot for flash {$groupId}", LOG_LEVEL_ERROR);

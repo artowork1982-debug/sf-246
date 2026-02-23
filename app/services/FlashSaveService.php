@@ -93,7 +93,7 @@ class FlashSaveService
         $preview2Length = isset($data['preview_image_data_2']) ? strlen($data['preview_image_data_2']) : 0;
         sf_app_log("[FlashSaveService] Creating worker job for flash {$flashId}: preview_image_data length: {$preview1Length}, preview_image_data_2 length: {$preview2Length}");
         
-        $this->createJobFile($flashId, $data);
+        $this->createJobFile($flashId, array_merge($data, ['user_id' => $user['id'] ?? null]));
         
         // 8. Trigger worker to process images
         $this->triggerWorker($flashId);

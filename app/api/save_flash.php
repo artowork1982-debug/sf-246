@@ -648,6 +648,7 @@ try {
     }
 
     $jobData = ['post' => $post, 'files' => []];
+    $jobData['post']['user_id'] = $_SESSION['user_id'] ?? null;
 
     foreach ($files as $key => $file) {
         if (isset($file['tmp_name']) && ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
