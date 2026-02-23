@@ -642,4 +642,11 @@ return [
     'it' => 'Guida al ritaglio',
     'el' => 'Οδηγός περικοπής',
 ],
+'crop_guide_annotations_hint' => [
+    'fi' => 'Merkintöjä voi lisätä myös tummennetulle alueelle — ne näkyvät vaaka-asettelussa.',
+    'sv' => 'Markeringar kan läggas till även på det mörka området — de syns i liggande layout.',
+    'en' => 'Annotations can also be placed on the darkened area — they will be visible in landscape layouts.',
+    'it' => 'Le annotazioni possono essere aggiunte anche nell\'area scurita — saranno visibili nel layout orizzontale.',
+    'el' => 'Οι σημειώσεις μπορούν να προστεθούν και στη σκοτεινή περιοχή — θα είναι ορατές στη οριζόντια διάταξη.',
+],
 ];
