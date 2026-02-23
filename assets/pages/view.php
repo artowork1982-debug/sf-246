@@ -1616,13 +1616,12 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                                                 <img src="<?= $base ?>/assets/img/icons/user.svg" alt="" class="sf-version-meta-icon">
                                                 <span class="sf-version-publisher"><?= htmlspecialchars($publisherName, ENT_QUOTES, 'UTF-8') ?></span>
                                             </div>
+                                            <button class="sf-version-view-btn" 
+                                                    onclick="openVersionModal('<?= htmlspecialchars($base . $snapshot['image_path'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($versionTypeLabel, ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($snapshot['published_at'], ENT_QUOTES, 'UTF-8') ?>')">
+                                                <img src="<?= $base ?>/assets/img/icons/eye_icon.svg" alt="" class="sf-btn-icon">
+                                                <?= htmlspecialchars(sf_term('version_view', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
                                         </div>
-                                        
-                                        <button class="sf-version-view-btn" 
-                                                onclick="openVersionModal('<?= htmlspecialchars($base . $snapshot['image_path'], ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($versionTypeLabel, ENT_QUOTES, 'UTF-8') ?>', '<?= htmlspecialchars($snapshot['published_at'], ENT_QUOTES, 'UTF-8') ?>')">
-                                            <img src="<?= $base ?>/assets/img/icons/eye_icon.svg" alt="" class="sf-btn-icon">
-                                            <?= htmlspecialchars(sf_term('version_view', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
-                                        </button>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
