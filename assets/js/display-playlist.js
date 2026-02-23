@@ -93,30 +93,113 @@
     }
     
     /**
-     * Alusta display chip valitsimet (julkaisumodaalissa)
+     * Alusta display chip valitsimet (julkaisumodaalissa ja display targets -modaalissa)
      */
     function initDisplayChips() {
-        document.querySelectorAll('.sf-display-chip').forEach(function(chip) {
-            var input = chip.querySelector('.sf-display-chip-input');
-            if (input) {
-                input.addEventListener('change', function() {
-                    chip.classList.toggle('sf-display-chip-selected', this.checked);
-                });
-            }
+        document.querySelectorAll('.sf-display-target-selector').forEach(function(container) {
+            initSingleDisplaySelector(container);
         });
+    }
 
-        // Select all toggle
-        var selectAll = document.getElementById('sfDisplaySelectAll');
-        if (selectAll) {
-            selectAll.addEventListener('change', function() {
-                var chips = document.querySelectorAll('.sf-display-chip-input:not(#sfDisplaySelectAll)');
-                chips.forEach(function(chip) {
-                    chip.checked = selectAll.checked;
-                    chip.closest('.sf-display-chip').classList.toggle('sf-display-chip-selected', selectAll.checked);
+    /**
+     * Alusta yksittäinen näyttövalitsin-kontti (maa/kielisiruilla + haulla)
+     */
+    function initSingleDisplaySelector(container) {
+        var langChips = container.querySelectorAll('.sf-dt-lang-chip');
+        var searchInput = container.querySelector('.sf-dt-search-input');
+        var searchResults = container.querySelector('.sf-dt-search-results');
+
+        if (!langChips.length && !searchInput) return;
+
+        function updateSelectionDisplay() {
+            var display = container.querySelector('.sf-dt-selection-display');
+            var tags = container.querySelector('.sf-dt-selection-tags');
+            if (!display || !tags) return;
+
+            tags.innerHTML = '';
+            var checked = container.querySelectorAll('.dt-display-chip-cb:checked');
+
+            checked.forEach(function(cb) {
+                var label = cb.getAttribute('data-label') || cb.value;
+                var tag = document.createElement('span');
+                tag.className = 'sf-dt-sel-tag';
+                var text = document.createTextNode(label + ' ');
+                var removeBtn = document.createElement('span');
+                removeBtn.className = 'sf-dt-sel-tag-remove';
+                removeBtn.textContent = '×';
+                removeBtn.addEventListener('click', function() {
+                    cb.checked = false;
+                    updateSelectionDisplay();
+                    updateLangChipStates();
                 });
-                selectAll.closest('.sf-display-chip').classList.toggle('sf-display-chip-selected', selectAll.checked);
+                tag.appendChild(text);
+                tag.appendChild(removeBtn);
+                tags.appendChild(tag);
+            });
+
+            display.classList.toggle('hidden', checked.length === 0);
+        }
+
+        function updateLangChipStates() {
+            langChips.forEach(function(chip) {
+                var lang = chip.getAttribute('data-lang');
+                var all = container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]');
+                var checkedCount = container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]:checked').length;
+                chip.classList.toggle('sf-dt-lang-chip-active', all.length > 0 && checkedCount === all.length);
             });
         }
+
+        // Alusta tilat
+        updateSelectionDisplay();
+        updateLangChipStates();
+
+        // Maa/kielisirujen klikkaukset
+        langChips.forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                var lang = this.getAttribute('data-lang');
+                var isActive = this.classList.contains('sf-dt-lang-chip-active');
+                container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]').forEach(function(cb) {
+                    cb.checked = !isActive;
+                });
+                updateLangChipStates();
+                updateSelectionDisplay();
+            });
+        });
+
+        // Hakukenttä
+        if (searchInput && searchResults) {
+            searchInput.addEventListener('input', function() {
+                var term = this.value.toLowerCase().trim();
+                var items = container.querySelectorAll('.sf-dt-result-item');
+                var hasVisible = false;
+
+                if (term.length === 0) {
+                    items.forEach(function(item) { item.classList.add('hidden'); });
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+
+                searchResults.classList.remove('hidden');
+                items.forEach(function(item) {
+                    var search = item.getAttribute('data-search') || '';
+                    var visible = search.includes(term);
+                    item.classList.toggle('hidden', !visible);
+                    if (visible) hasVisible = true;
+                });
+
+                if (!hasVisible) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+        }
+
+        // Checkboxien muutokset (tapahtumadelegointi)
+        container.addEventListener('change', function(e) {
+            if (e.target.classList.contains('dt-display-chip-cb')) {
+                updateSelectionDisplay();
+                updateLangChipStates();
+            }
+        });
     }
     
     /**

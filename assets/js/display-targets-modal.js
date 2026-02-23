@@ -103,7 +103,9 @@
                 csrf_token: window.SF_CSRF_TOKEN || ''
             };
 
+            var originalHtml = btn.innerHTML;
             btn.disabled = true;
+            btn.innerHTML = '<span class="sf-spinner" aria-hidden="true"></span>Tallennetaan...';
             clearStatus();
 
             var baseUrl = window.SF_BASE_URL || '';
@@ -119,20 +121,23 @@
                 return response.json();
             })
             .then(function (data) {
-                btn.disabled = false;
                 if (data && data.ok) {
-                    setStatus(data.message || 'Tallennettu!', false);
+                    btn.innerHTML = '✓ Tallennettu!';
+                    setStatus(data.message || '✓ Tallennettu!', false);
                     // Reload page after short delay to reflect changes
                     setTimeout(function () {
                         closeDisplayTargetsModal();
                         window.location.reload();
                     }, 800);
                 } else {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
                     setStatus((data && data.error) ? data.error : 'Tallentaminen epäonnistui.', true);
                 }
             })
             .catch(function () {
                 btn.disabled = false;
+                btn.innerHTML = originalHtml;
                 setStatus('Verkkovirhe. Yritä uudelleen.', true);
             });
         });

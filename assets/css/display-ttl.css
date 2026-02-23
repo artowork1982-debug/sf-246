@@ -839,6 +839,7 @@
 .sf-dt-modal-content {
     max-width: 600px;
     width: 100%;
+    overflow-x: hidden;
 }
 
 .sf-dt-section {
@@ -898,5 +899,154 @@
     .sf-dt-modal-content {
         border-radius: 12px;
     }
+}
+
+/* ============================================================================
+   Display Target Selector — Country Lang Chips + Search + Selection Tags
+   ========================================================================= */
+
+.sf-dt-lang-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.sf-dt-lang-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.875rem;
+    background: white;
+    border: 2px solid var(--sf-border, #dee2e6);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sf-text-primary, #212529);
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.sf-dt-lang-chip:hover {
+    border-color: var(--sf-primary, #0066cc);
+    background: rgba(0, 102, 204, 0.05);
+}
+
+.sf-dt-lang-chip.sf-dt-lang-chip-active {
+    background: var(--sf-primary, #0066cc);
+    border-color: var(--sf-primary, #0066cc);
+    color: white;
+}
+
+.sf-dt-lang-count {
+    font-size: 0.75rem;
+    opacity: 0.75;
+}
+
+.sf-dt-lang-chip.sf-dt-lang-chip-active .sf-dt-lang-count {
+    opacity: 0.9;
+}
+
+.sf-dt-search-row {
+    margin-bottom: 0.5rem;
+}
+
+.sf-dt-search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--sf-text-primary, #212529);
+    background: white;
+    box-sizing: border-box;
+}
+
+.sf-dt-search-input:focus {
+    outline: 2px solid var(--sf-primary, #0066cc);
+    outline-offset: 1px;
+    border-color: var(--sf-primary, #0066cc);
+}
+
+.sf-dt-search-hint {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.8125rem;
+    color: var(--sf-text-secondary, #6c757d);
+    font-style: italic;
+}
+
+.sf-dt-search-results {
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+}
+
+.sf-dt-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--sf-text-primary, #212529);
+    transition: background 0.15s ease;
+}
+
+.sf-dt-result-item:hover {
+    background: rgba(0, 102, 204, 0.05);
+}
+
+.sf-dt-result-item input[type="checkbox"] {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.sf-dt-selection-display {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--sf-bg-secondary, #f8f9fa);
+    border: 1px solid var(--sf-border, #dee2e6);
+    border-radius: 6px;
+}
+
+.sf-dt-selection-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--sf-text-secondary, #6c757d);
+    margin-bottom: 0.375rem;
+}
+
+.sf-dt-selection-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.sf-dt-sel-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    background: var(--sf-primary, #0066cc);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.sf-dt-sel-tag-remove {
+    cursor: pointer;
+    opacity: 0.8;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0 0.125rem;
+}
+
+.sf-dt-sel-tag-remove:hover {
+    opacity: 1;
 }
 

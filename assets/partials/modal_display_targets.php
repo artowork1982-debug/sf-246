@@ -39,28 +39,6 @@ try {
     // Silently ignore
 }
 
-// Hae kaikki aktiiviset näytöt
-$dtDisplays = [];
-try {
-    $stmtDtDisplays = $pdo->prepare("
-        SELECT id, site, site_group, label, sort_order
-        FROM sf_display_api_keys
-        WHERE is_active = 1
-        ORDER BY site_group ASC, sort_order ASC, label ASC
-    ");
-    $stmtDtDisplays->execute();
-    $dtDisplays = $stmtDtDisplays->fetchAll(PDO::FETCH_ASSOC);
-} catch (Throwable $eDt2) {
-    // Silently ignore
-}
-
-// Ryhmittele näytöt site_group-kentän mukaan
-$dtGrouped = [];
-foreach ($dtDisplays as $dtDisplay) {
-    $grp = $dtDisplay['site_group'] ?: '';
-    $dtGrouped[$grp][] = $dtDisplay;
-}
-
 // TTL-vaihtoehdot
 $dtTtlOptions = [
     0  => ['key' => 'ttl_no_limit',  'label' => 'Ei rajaa'],
@@ -144,7 +122,7 @@ $dtDurationOptions = [
                 </div>
             </div>
 
-            <!-- Työmaa-chipit -->
+            <!-- Näyttökohteet -->
             <div class="sf-dt-section">
                 <div class="sf-dt-displays-header">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--sf-primary,#0066cc);">
@@ -154,30 +132,16 @@ $dtDurationOptions = [
                     </svg>
                     <h4><?= htmlspecialchars(sf_term('display_targets_heading', $currentUiLang) ?? 'Infonäyttökohteet', ENT_QUOTES, 'UTF-8') ?></h4>
                 </div>
-                <div class="sf-display-target-selector" id="dtDisplaySelector">
-                    <?php if (empty($dtDisplays)): ?>
-                        <p class="sf-help-text sf-help-text-muted">—</p>
-                    <?php else: ?>
-                        <?php foreach ($dtGrouped as $groupName => $dtItems): ?>
-                            <?php if ($groupName !== ''): ?>
-                                <p class="sf-display-group-heading"><strong><?= htmlspecialchars($groupName, ENT_QUOTES, 'UTF-8') ?></strong></p>
-                            <?php endif; ?>
-                            <div class="sf-display-chips">
-                                <?php foreach ($dtItems as $dtItem): ?>
-                                    <?php $isChecked = in_array((string)$dtItem['id'], array_map('strval', $dtPreselectedIds), true); ?>
-                                    <label class="sf-display-chip <?= $isChecked ? 'sf-display-chip-selected' : '' ?>">
-                                        <input type="checkbox"
-                                               class="sf-display-chip-input dt-display-chip-cb"
-                                               name="dt_display_targets[]"
-                                               value="<?= (int)$dtItem['id'] ?>"
-                                               <?= $isChecked ? 'checked' : '' ?>>
-                                        <?= htmlspecialchars($dtItem['label'] ?? $dtItem['site'], ENT_QUOTES, 'UTF-8') ?>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
+                <?php
+                    // Käytä modaalin omaa esivalintakyselyä (is_active=1) display_target_selector-includeessa
+                    $preselectedIds = $dtPreselectedIds;
+                    $_dtOriginalFlash = $flash;
+                    $flash = ['id' => $dtFlashId];
+                    $context = 'safety_team';
+                    require __DIR__ . '/display_target_selector.php';
+                    $flash = $_dtOriginalFlash;
+                    unset($preselectedIds, $_dtOriginalFlash);
+                ?>
             </div>
 
             <div id="dtSaveStatus" class="sf-dt-status" role="status" aria-live="polite"></div>
