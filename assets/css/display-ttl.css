@@ -769,6 +769,11 @@
    Display Targets Modal
    ========================================================================= */
 
+/* Ensure modals open above the page header */
+.sf-modal {
+    z-index: 10000;
+}
+
 .sf-dt-modal-content {
     max-width: 600px;
     width: 100%;

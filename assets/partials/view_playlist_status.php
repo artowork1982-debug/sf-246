@@ -57,6 +57,8 @@ $canManage = $isAdmin || $isSafety || $isComms;
 // Hae työmaan API-avain ja label aktiivisista display-kohteista
 $worksiteApiKey = null;
 $worksiteLabel = null;
+$activeDisplayLabels = [];
+$allScreensForLang = false;
 if (isset($pdo) && $displayStatus === 'active') {
     try {
         $stmtApiKey = $pdo->prepare("
@@ -71,6 +73,27 @@ if (isset($pdo) && $displayStatus === 'active') {
         $keyRow = $stmtApiKey->fetch(PDO::FETCH_ASSOC);
         $worksiteApiKey = $keyRow ? ($keyRow['api_key'] ?? null) : null;
         $worksiteLabel = $keyRow ? ($keyRow['label'] ?? null) : null;
+
+        // Hae kaikki aktiiviset display-kohteet tälle flashille (vain tämän kielen näytöt)
+        $stmtLabels = $pdo->prepare("
+            SELECT k.label
+            FROM sf_flash_display_targets t
+            JOIN sf_display_api_keys k ON k.id = t.display_key_id
+            WHERE t.flash_id = ? AND t.is_active = 1 AND k.lang = ?
+        ");
+        $stmtLabels->execute([(int)$id, $flash['lang'] ?? 'fi']);
+        $activeDisplayLabels = $stmtLabels->fetchAll(PDO::FETCH_COLUMN);
+
+        // Hae kaikkien tämän kielen näyttöjen kokonaismäärä
+        $stmtTotal = $pdo->prepare("
+            SELECT COUNT(*) FROM sf_display_api_keys WHERE is_active = 1 AND lang = ?
+        ");
+        $stmtTotal->execute([$flash['lang'] ?? 'fi']);
+        $totalDisplaysForLang = (int)$stmtTotal->fetchColumn();
+
+        if ($totalDisplaysForLang > 0 && count($activeDisplayLabels) >= $totalDisplaysForLang) {
+            $allScreensForLang = true;
+        }
     } catch (Throwable $ek) {
         // Silently ignore — migration may not be applied yet
     }
@@ -99,7 +122,17 @@ if (isset($pdo) && $displayStatus === 'active') {
             <?php endif; ?>
         </h4>
     </div>
-    
+
+    <?php if ($displayStatus === 'active' && ($allScreensForLang || !empty($activeDisplayLabels))): ?>
+        <p class="sf-playlist-displays">
+            <?php if ($allScreensForLang): ?>
+                <?= htmlspecialchars(sf_term('display_all_screens', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?>
+            <?php else: ?>
+                <?= htmlspecialchars(implode(', ', $activeDisplayLabels), ENT_QUOTES, 'UTF-8') ?>
+            <?php endif; ?>
+        </p>
+    <?php endif; ?>
+
     <div class="sf-playlist-status-body">
         <?php if ($displayStatus === 'active'): ?>
             <?php if ($displayExpiresAt): ?>
@@ -174,6 +207,27 @@ if (isset($pdo) && $displayStatus === 'active') {
         </div>
     <?php endif; ?>
 </div>
+
+<?php if ($canManage && $displayStatus !== 'removed'): ?>
+<!-- Poista playlistasta -vahvistusmodaali -->
+<div class="sf-modal hidden" id="modalRemoveFromPlaylist" role="dialog" aria-modal="true" aria-labelledby="modalRemoveFromPlaylistTitle">
+    <div class="sf-modal-content sf-modal-confirm">
+        <div class="sf-modal-header">
+            <h3 id="modalRemoveFromPlaylistTitle">
+                <?= htmlspecialchars(sf_term('confirm_remove_playlist_title', $currentUiLang) ?? 'Poista playlistasta', ENT_QUOTES, 'UTF-8') ?>
+            </h3>
+            <button type="button" class="sf-modal-close" data-modal-close aria-label="<?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">✕</button>
+        </div>
+        <div class="sf-modal-body">
+            <p><?= htmlspecialchars(sf_term('confirm_remove_from_playlist', $currentUiLang) ?? 'Haluatko varmasti poistaa flashin infonäyttö-playlistasta?', ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
+        <div class="sf-modal-actions">
+            <button type="button" class="sf-btn sf-btn-secondary" data-modal-close><?= htmlspecialchars(sf_term('btn_cancel', $currentUiLang) ?? 'Peruuta', ENT_QUOTES, 'UTF-8') ?></button>
+            <button type="button" class="sf-btn sf-btn-danger" id="btnConfirmRemoveFromPlaylist" data-flash-id="<?= (int)$id ?>"><?= htmlspecialchars(sf_term('btn_remove_from_playlist', $currentUiLang) ?? 'Poista', ENT_QUOTES, 'UTF-8') ?></button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <?php if ($worksiteApiKey): ?>
 <!-- Katso ajolista -modaali -->

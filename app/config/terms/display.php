@@ -196,6 +196,13 @@ return [
         'it' => 'Sei sicuro di voler rimuovere il flash dalla playlist del display?',
         'el' => 'Είστε βέβαιοι ότι θέλετε να αφαιρέσετε το flash από τη λίστα αναπαραγωγής;',
     ],
+    'confirm_remove_playlist_title' => [
+        'fi' => 'Poista playlistasta',
+        'sv' => 'Ta bort från spellistan',
+        'en' => 'Remove from playlist',
+        'it' => 'Rimuovi dalla playlist',
+        'el' => 'Αφαίρεση από τη λίστα',
+    ],
     
     // Success Messages
     'msg_removed_from_playlist' => [
@@ -425,6 +432,13 @@ return [
         'en' => 'Select all',
         'it' => 'Seleziona tutto',
         'el' => 'Επιλογή όλων',
+    ],
+    'display_all_screens' => [
+        'fi' => 'Kaikki näytöt',
+        'sv' => 'Alla skärmar',
+        'en' => 'All screens',
+        'it' => 'Tutti gli schermi',
+        'el' => 'Όλες οι οθόνες',
     ],
 
     // Xibo integration code generator (Settings page)
