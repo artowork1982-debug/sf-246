@@ -1872,6 +1872,13 @@ body.sf-modal-open .view-footer-actions {
     display: none !important;
 }
 
+/* Kun modal on auki, piilota preview-painikkeet (Kopioi kuva, Lataa JPG) */
+body.sf-modal-open .preview-download-wrapper,
+body.sf-modal-open .preview-box .sf-copy-btn,
+body.sf-modal-open .sf-download-buttons {
+    display: none !important;
+}
+
 .view-footer-buttons-4col {
     display: flex !important;
     justify-content: center;
