@@ -120,6 +120,70 @@
     }
     
     /**
+     * Alusta ajolista-modaalin navigointipainikkeet (prev/next/pause/resume)
+     */
+    function initPlaylistNavigation() {
+        const modal = document.getElementById('modalKatsoAjolista');
+        if (!modal) return;
+
+        const iframe = modal.querySelector('.sf-pm-preview-iframe');
+        const btnPrev = document.getElementById('btnPlaylistPrev');
+        const btnNext = document.getElementById('btnPlaylistNext');
+        const btnPause = document.getElementById('btnPlaylistPause');
+        const counter = document.getElementById('sfPlaylistCounter');
+
+        if (!iframe) return;
+
+        function sendToIframe(action) {
+            if (iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ action: action }, window.location.origin);
+            }
+        }
+
+        if (btnPrev) {
+            btnPrev.addEventListener('click', function() { sendToIframe('prev'); });
+        }
+
+        if (btnNext) {
+            btnNext.addEventListener('click', function() { sendToIframe('next'); });
+        }
+
+        if (btnPause) {
+            btnPause.addEventListener('click', function() {
+                const isPaused = btnPause.getAttribute('aria-pressed') === 'true';
+                sendToIframe(isPaused ? 'resume' : 'pause');
+            });
+        }
+
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            if (!data || typeof data !== 'object') return;
+
+            if (data.type === 'sf-playlist-slide') {
+                if (counter && typeof data.current === 'number' && typeof data.total === 'number') {
+                    counter.textContent = (data.current + 1) + ' / ' + data.total;
+                }
+            } else if (data.type === 'sf-playlist-state') {
+                if (btnPause) {
+                    const isPaused = !!data.paused;
+                    btnPause.setAttribute('aria-pressed', isPaused ? 'true' : 'false');
+                    if (isPaused) {
+                        btnPause.textContent = '\u25B6';
+                        const labelResume = btnPause.getAttribute('data-label-resume') || 'Jatka';
+                        btnPause.title = labelResume;
+                        btnPause.setAttribute('aria-label', labelResume);
+                    } else {
+                        btnPause.textContent = '\u23F8';
+                        const labelPause = btnPause.getAttribute('data-label-pause') || 'Pysäytä';
+                        btnPause.title = labelPause;
+                        btnPause.setAttribute('aria-label', labelPause);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Alusta playlist-painikkeet (view-sivulla)
      */
     function initPlaylistButtons() {
@@ -253,6 +317,7 @@
         initTtlChips();
         initDisplayChips();
         initPlaylistButtons();
+        initPlaylistNavigation();
     });
     
 })();

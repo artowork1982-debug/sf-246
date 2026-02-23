@@ -175,7 +175,7 @@ if (isset($pdo) && $displayStatus === 'active') {
         <?php endif; ?>
     </div>
     
-    <?php if ($canManage): ?>
+    <?php if ($worksiteApiKey || $canManage): ?>
         <div class="sf-playlist-actions">
             <?php if ($worksiteApiKey): ?>
                 <button type="button"
@@ -185,24 +185,26 @@ if (isset($pdo) && $displayStatus === 'active') {
                     <?= htmlspecialchars(sf_term('btn_view_playlist', $currentUiLang) ?? 'Katso ajolista', ENT_QUOTES, 'UTF-8') ?>
                 </button>
             <?php endif; ?>
-            <?php if ($displayStatus !== 'removed'): ?>
-                <button 
-                    type="button" 
-                    id="btnRemoveFromPlaylist" 
-                    class="sf-btn-outline-danger"
-                    data-flash-id="<?= (int)$id ?>"
-                >
-                    <?= htmlspecialchars(sf_term('btn_remove_from_playlist', $currentUiLang) ?? 'Poista playlistasta', ENT_QUOTES, 'UTF-8') ?>
-                </button>
-            <?php else: ?>
-                <button 
-                    type="button" 
-                    id="btnRestoreToPlaylist" 
-                    class="sf-btn-outline-primary"
-                    data-flash-id="<?= (int)$id ?>"
-                >
-                    <?= htmlspecialchars(sf_term('btn_restore_to_playlist', $currentUiLang) ?? 'Palauta playlistaan', ENT_QUOTES, 'UTF-8') ?>
-                </button>
+            <?php if ($canManage): ?>
+                <?php if ($displayStatus !== 'removed'): ?>
+                    <button 
+                        type="button" 
+                        id="btnRemoveFromPlaylist" 
+                        class="sf-btn-outline-danger"
+                        data-flash-id="<?= (int)$id ?>"
+                    >
+                        <?= htmlspecialchars(sf_term('btn_remove_from_playlist', $currentUiLang) ?? 'Poista playlistasta', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                <?php else: ?>
+                    <button 
+                        type="button" 
+                        id="btnRestoreToPlaylist" 
+                        class="sf-btn-outline-primary"
+                        data-flash-id="<?= (int)$id ?>"
+                    >
+                        <?= htmlspecialchars(sf_term('btn_restore_to_playlist', $currentUiLang) ?? 'Palauta playlistaan', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -240,6 +242,21 @@ if (isset($pdo) && $displayStatus === 'active') {
                 <?php if ($worksiteLabel): ?> — <?= htmlspecialchars($worksiteLabel, ENT_QUOTES, 'UTF-8') ?><?php endif; ?>
             </h3>
             <button type="button" data-modal-close class="sf-modal-close" aria-label="<?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">✕</button>
+        </div>
+        <div class="sf-playlist-nav" id="sfPlaylistNav">
+            <button type="button" id="btnPlaylistPrev" class="sf-playlist-nav-btn"
+                title="<?= htmlspecialchars(sf_term('btn_playlist_prev', $currentUiLang) ?? 'Edellinen', ENT_QUOTES, 'UTF-8') ?>"
+                aria-label="<?= htmlspecialchars(sf_term('btn_playlist_prev', $currentUiLang) ?? 'Edellinen', ENT_QUOTES, 'UTF-8') ?>">&#9664;</button>
+            <span id="sfPlaylistCounter" class="sf-playlist-counter">&#x2013; / &#x2013;</span>
+            <button type="button" id="btnPlaylistPause" class="sf-playlist-nav-btn"
+                data-label-pause="<?= htmlspecialchars(sf_term('btn_playlist_pause', $currentUiLang) ?? 'Pysäytä', ENT_QUOTES, 'UTF-8') ?>"
+                data-label-resume="<?= htmlspecialchars(sf_term('btn_playlist_resume', $currentUiLang) ?? 'Jatka', ENT_QUOTES, 'UTF-8') ?>"
+                title="<?= htmlspecialchars(sf_term('btn_playlist_pause', $currentUiLang) ?? 'Pysäytä', ENT_QUOTES, 'UTF-8') ?>"
+                aria-label="<?= htmlspecialchars(sf_term('btn_playlist_pause', $currentUiLang) ?? 'Pysäytä', ENT_QUOTES, 'UTF-8') ?>"
+                aria-pressed="false">&#x23F8;</button>
+            <button type="button" id="btnPlaylistNext" class="sf-playlist-nav-btn"
+                title="<?= htmlspecialchars(sf_term('btn_playlist_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?>"
+                aria-label="<?= htmlspecialchars(sf_term('btn_playlist_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?>">&#9654;</button>
         </div>
         <div class="sf-pm-preview-body">
             <iframe src="<?= htmlspecialchars("{$base}/app/api/display_playlist.php?key={$worksiteApiKey}&format=html", ENT_QUOTES, 'UTF-8') ?>"
