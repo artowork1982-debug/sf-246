@@ -135,12 +135,12 @@ $dtDurationOptions = [
                 <?php
                     // Käytä modaalin omaa esivalintakyselyä (is_active=1) display_target_selector-includeessa
                     $preselectedIds = $dtPreselectedIds;
-                    $_dtOriginalFlash = $flash;
+                    $dtOriginalFlash = $flash;
                     $flash = ['id' => $dtFlashId];
                     $context = 'safety_team';
                     require __DIR__ . '/display_target_selector.php';
-                    $flash = $_dtOriginalFlash;
-                    unset($preselectedIds, $_dtOriginalFlash);
+                    $flash = $dtOriginalFlash;
+                    unset($preselectedIds, $dtOriginalFlash);
                 ?>
             </div>
 

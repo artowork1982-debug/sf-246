@@ -105,6 +105,7 @@
 
             var originalHtml = btn.innerHTML;
             btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
             btn.innerHTML = '<span class="sf-spinner" aria-hidden="true"></span>Tallennetaan...';
             clearStatus();
 
@@ -131,12 +132,14 @@
                     }, 800);
                 } else {
                     btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
                     btn.innerHTML = originalHtml;
                     setStatus((data && data.error) ? data.error : 'Tallentaminen epäonnistui.', true);
                 }
             })
             .catch(function () {
                 btn.disabled = false;
+                btn.removeAttribute('aria-busy');
                 btn.innerHTML = originalHtml;
                 setStatus('Verkkovirhe. Yritä uudelleen.', true);
             });

@@ -111,6 +111,14 @@
 
         if (!langChips.length && !searchInput) return;
 
+        // Kache: kielikoodi → vastaavat checkboxit
+        var cbByLang = {};
+        container.querySelectorAll('.dt-display-chip-cb').forEach(function(cb) {
+            var lang = cb.getAttribute('data-lang') || '';
+            if (!cbByLang[lang]) cbByLang[lang] = [];
+            cbByLang[lang].push(cb);
+        });
+
         function updateSelectionDisplay() {
             var display = container.querySelector('.sf-dt-selection-display');
             var tags = container.querySelector('.sf-dt-selection-tags');
@@ -143,9 +151,10 @@
         function updateLangChipStates() {
             langChips.forEach(function(chip) {
                 var lang = chip.getAttribute('data-lang');
-                var all = container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]');
-                var checkedCount = container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]:checked').length;
-                chip.classList.toggle('sf-dt-lang-chip-active', all.length > 0 && checkedCount === all.length);
+                var cbs = cbByLang[lang] || [];
+                var checkedCount = 0;
+                cbs.forEach(function(cb) { if (cb.checked) checkedCount++; });
+                chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
             });
         }
 
@@ -158,7 +167,7 @@
             chip.addEventListener('click', function() {
                 var lang = this.getAttribute('data-lang');
                 var isActive = this.classList.contains('sf-dt-lang-chip-active');
-                container.querySelectorAll('.dt-display-chip-cb[data-lang="' + lang + '"]').forEach(function(cb) {
+                (cbByLang[lang] || []).forEach(function(cb) {
                     cb.checked = !isActive;
                 });
                 updateLangChipStates();
