@@ -379,6 +379,8 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
   <?php endif; ?>
   <?php if ($isTranslationChild): ?>
     <input type="hidden" name="is_translation_child" value="1">
+    <input type="hidden" name="type" value="<?= htmlspecialchars($flash['type'] ?? 'yellow', ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="lang" value="<?= htmlspecialchars($flash['lang'] ?? 'fi', ENT_QUOTES, 'UTF-8') ?>">
   <?php endif; ?>
   <input type="hidden" id="initialStep" value="<?= (int) $initialStep ?>">
   
