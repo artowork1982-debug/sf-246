@@ -6315,12 +6315,56 @@ body.form-page {
     margin-bottom: 4px;
 }
 
-.sf-crop-guide-hint {
-    display: block;
-    font-style: italic;
-    opacity: 0.85;
+/* Crop guide expandable details */
+.sf-crop-guide-details {
+    margin-top: 6px;
+}
+
+.sf-crop-guide-details summary {
+    cursor: pointer;
+    font-size: 0.9em;
+    opacity: 0.9;
+    font-weight: 600;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+    transition: opacity 0.2s;
+}
+
+.sf-crop-guide-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.sf-crop-guide-details summary::before {
+    content: '▶';
+    font-size: 0.7em;
+    transition: transform 0.2s;
+}
+
+.sf-crop-guide-details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.sf-crop-guide-details summary:hover {
+    opacity: 1;
+}
+
+.sf-crop-guide-details ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
     font-size: 0.92em;
-    margin-top: 2px;
+    line-height: 1.5;
+    opacity: 0.92;
+}
+
+.sf-crop-guide-details ul li {
+    margin-bottom: 3px;
+}
+
+.sf-crop-guide-details ul li:last-child {
+    margin-bottom: 0;
 }
 
 .sf-edit-crop-guide-close {
@@ -6356,5 +6400,11 @@ body.form-page {
         padding: 8px 12px;
         gap: 8px;
         border-radius: 10px;
+    }
+    .sf-crop-guide-details summary {
+        font-size: 0.85em;
+    }
+    .sf-crop-guide-details ul {
+        font-size: 0.88em;
     }
 }

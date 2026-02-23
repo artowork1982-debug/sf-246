@@ -629,11 +629,11 @@ return [
     'el' => '{count} / {total} εικόνες μεταφορτώθηκαν',
 ],
 'crop_guide_text' => [
-    'fi' => 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Jos kuva tulee vaakakuva-asetteluun, koko alue reunoineen tulee näkyviin — myös kevyesti tummennettu alue. Voit lisätä merkintöjä ja tekstiä myös tummennetulle alueelle, jos tiedät kuvan päätyvän vaaka-asetteluun. Siirrä ja zoomaa kuvaa niin, ettei valkoisia alueita jää.',
-    'sv' => 'Streckad linje (1:1) visar det synliga området i kvadratiska bilder. Om bilden hamnar i ett liggande format blir hela ytan synlig — även det lätt nedtonade området. Du kan lägga till markeringar även i det nedtonade området om du vet att bilden kommer att visas i liggande format. Flytta och zooma bilden så att inga vita ytor kvarstår.',
-    'en' => 'The dashed line (1:1) shows the visible area in square images. If the image will be used in a landscape layout, the entire area including the slightly dimmed edges becomes visible. You can place annotations on the dimmed area too if the image will be in landscape format. Move and zoom the image so no white areas remain.',
-    'it' => 'La linea tratteggiata (1:1) mostra l\'area visibile nelle immagini quadrate. Se l\'immagine sarà usata in formato orizzontale, l\'intera area, incluse le zone leggermente oscurate, diventerà visibile. Puoi aggiungere annotazioni anche nell\'area oscurata se sai che l\'immagine sarà in formato orizzontale. Sposta e ingrandisci l\'immagine in modo che non rimangano aree bianche.',
-    'el' => 'Η διακεκομμένη γραμμή (1:1) δείχνει την ορατή περιοχή σε τετράγωνες εικόνες. Αν η εικόνα τοποθετηθεί σε οριζόντια διάταξη, ολόκληρη η περιοχή, συμπεριλαμβανομένων των ελαφρώς σκοτεινών άκρων, γίνεται ορατή. Μπορείτε να προσθέσετε σημειώσεις και στη σκοτεινή περιοχή αν η εικόνα θα εμφανιστεί σε οριζόντιο σχήμα. Μετακινήστε και κάντε ζουμ ώστε να μην μείνουν λευκά κενά.',
+    'fi' => 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Tummennettu reuna-alue näkyy 16:9-vaaka-asettelussa.',
+    'sv' => 'Den streckade linjen (1:1) visar det synliga området i kvadratiska bilder. Det nedtonade kantområdet syns i 16:9-liggande layout.',
+    'en' => 'The dashed line (1:1) shows the visible area in square images. The dimmed edge area is visible in 16:9 landscape layout.',
+    'it' => 'La linea tratteggiata (1:1) mostra l\'area visibile nelle immagini quadrate. L\'area oscurata ai bordi è visibile nel layout 16:9 orizzontale.',
+    'el' => 'Η διακεκομμένη γραμμή (1:1) δείχνει την ορατή περιοχή σε τετράγωνες εικόνες. Η σκοτεινή περιοχή στις άκρες είναι ορατή σε οριζόντια διάταξη 16:9.',
 ],
 'crop_guide_label' => [
     'fi' => 'Rajausopas',
@@ -648,5 +648,19 @@ return [
     'en' => 'Annotations can also be placed on the slightly dimmed area — they will be visible in landscape layouts.',
     'it' => 'Le annotazioni possono essere aggiunte anche nell\'area leggermente oscurata — saranno visibili nel layout orizzontale.',
     'el' => 'Οι σημειώσεις μπορούν να προστεθούν και στην ελαφρώς σκοτεινή περιοχή — θα είναι ορατές στη οριζόντια διάταξη.',
+],
+'crop_guide_show_more' => [
+    'fi' => 'Näytä lisäohjeet',
+    'sv' => 'Visa mer info',
+    'en' => 'Show more tips',
+    'it' => 'Mostra altri suggerimenti',
+    'el' => 'Εμφάνιση περισσότερων συμβουλών',
+],
+'crop_guide_details' => [
+    'fi' => 'Yksi kuva → asemoi kohde 1:1-neliön sisälle|Useampi kuva → kuvat näkyvät 16:9-alueella, asemoi koko alueelle|Merkintöjä voi lisätä myös tummennetulle alueelle|Palauta-painike asemoi kuvan automaattisesti reunasta reunaan|Tallenna, tarkista esikatselusta ja palaa tarvittaessa säätämään',
+    'sv' => 'En bild → placera motivet inom 1:1-rutan|Flera bilder → bilderna visas i 16:9-format, placera över hela ytan|Markeringar kan läggas till även i det nedtonade området|Återställ-knappen placerar bilden automatiskt från kant till kant|Spara, granska i förhandsgranskningen och återkom för justeringar',
+    'en' => 'One image → position the subject within the 1:1 square|Multiple images → images display in 16:9, position across the full area|Annotations can be placed on the dimmed area too|Reset button automatically fits the image edge to edge|Save, check the preview and return to adjust if needed',
+    'it' => 'Una immagine → posiziona il soggetto nel quadrato 1:1|Più immagini → le immagini vengono mostrate in 16:9, posiziona su tutta l\'area|Le annotazioni possono essere aggiunte anche nell\'area oscurata|Il pulsante Ripristina posiziona automaticamente l\'immagine da bordo a bordo|Salva, controlla l\'anteprima e torna per modificare se necessario',
+    'el' => 'Μία εικόνα → τοποθετήστε το θέμα εντός του τετραγώνου 1:1|Πολλές εικόνες → οι εικόνες εμφανίζονται σε 16:9, τοποθετήστε σε ολόκληρη την περιοχή|Σημειώσεις μπορούν να προστεθούν και στη σκοτεινή περιοχή|Το κουμπί Επαναφορά τοποθετεί αυτόματα την εικόνα από άκρη σε άκρη|Αποθηκεύστε, ελέγξτε την προεπισκόπηση και επιστρέψτε για ρυθμίσεις',
 ],
 ];

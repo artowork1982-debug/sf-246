@@ -1414,8 +1414,17 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
           </svg>
           <div class="sf-edit-crop-guide-text">
             <strong><?= htmlspecialchars(sf_term('crop_guide_label', $uiLang) ?? 'Rajausopas', ENT_QUOTES, 'UTF-8') ?>:</strong>
-            <span class="sf-crop-guide-main"><?= htmlspecialchars(sf_term('crop_guide_text', $uiLang) ?? 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Kevyesti tummennettu alue näkyy vaakakuva-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
-            <span class="sf-crop-guide-hint">💡 <?= htmlspecialchars(sf_term('crop_guide_annotations_hint', $uiLang) ?? 'Merkintöjä voi lisätä myös kevyesti tummennetulle alueelle — ne näkyvät vaaka-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
+            <span class="sf-crop-guide-main"><?= htmlspecialchars(sf_term('crop_guide_text', $uiLang) ?? 'Katkoviiva (1:1) näyttää neliökuvissa näkyvän alueen. Tummennettu reuna-alue näkyy 16:9-vaaka-asettelussa.', ENT_QUOTES, 'UTF-8') ?></span>
+            <details class="sf-crop-guide-details">
+              <summary><?= htmlspecialchars(sf_term('crop_guide_show_more', $uiLang) ?? 'Näytä lisäohjeet', ENT_QUOTES, 'UTF-8') ?></summary>
+              <ul>
+                <?php
+                  $detailItems = explode('|', sf_term('crop_guide_details', $uiLang) ?? 'Yksi kuva → asemoi kohde 1:1-neliön sisälle|Useampi kuva → kuvat näkyvät 16:9-alueella|Merkintöjä voi lisätä myös tummennetulle alueelle|Palauta-painike asemoi kuvan automaattisesti reunasta reunaan|Tallenna, tarkista esikatselusta ja palaa tarvittaessa säätämään');
+                  foreach ($detailItems as $item): ?>
+                    <li><?= htmlspecialchars(trim($item), ENT_QUOTES, 'UTF-8') ?></li>
+                <?php endforeach; ?>
+              </ul>
+            </details>
           </div>
           <button type="button" class="sf-edit-crop-guide-close" onclick="this.parentElement.classList.add('hidden')" aria-label="<?= htmlspecialchars(sf_term('btn_close', $uiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">×</button>
         </div>
