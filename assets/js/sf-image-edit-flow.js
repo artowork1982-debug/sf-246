@@ -367,7 +367,9 @@ filter: brightness(0) invert(1);
         const editWrap = document.getElementById('sfEditStep');
         if (editWrap) editWrap.classList.remove('hidden');
 
-        // Editor is a modal now (do not change steps here)
+        // Show crop guide banner when editor opens
+        const cropBanner = document.getElementById('sfCropGuide');
+        if (cropBanner) cropBanner.classList.remove('hidden');
 
         requestAnimationFrame(() => {
             if (window.SFImageEditor && typeof window.SFImageEditor.initCanvasEvents === 'function') {
@@ -529,6 +531,13 @@ filter: brightness(0) invert(1);
                 if (input) input.focus();
             });
         });
+        const infoBtn = document.getElementById('sf-edit-crop-info-btn');
+        if (infoBtn) {
+            infoBtn.addEventListener('click', () => {
+                const banner = document.getElementById('sfCropGuide');
+                if (banner) banner.classList.toggle('hidden');
+            });
+        }
         const closeBtn = document.getElementById('sf-edit-close');
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {

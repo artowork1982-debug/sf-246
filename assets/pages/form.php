@@ -1390,11 +1390,16 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
       <div class="sf-edit-header-left">
         <h2 data-sf-edit-title><?= htmlspecialchars(sf_term('img_edit_heading', $uiLang), ENT_QUOTES, 'UTF-8') ?></h2>
       </div>
-      <button type="button" id="sf-edit-close" class="sf-edit-close-compact" aria-label="<?= htmlspecialchars(sf_term('btn_close', $uiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
+      <div class="sf-edit-header-actions">
+        <button type="button" id="sf-edit-crop-info-btn" class="sf-edit-close-compact" aria-label="<?= htmlspecialchars(sf_term('crop_guide_label', $uiLang) ?? 'Rajausopas', ENT_QUOTES, 'UTF-8') ?>">
+          <img src="<?= $base ?>/assets/img/icons/info.svg" alt="">
+        </button>
+        <button type="button" id="sf-edit-close" class="sf-edit-close-compact" aria-label="<?= htmlspecialchars(sf_term('btn_close', $uiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Body: canvas + sivupaneeli samalla rivillä -->
