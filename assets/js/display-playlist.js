@@ -125,6 +125,7 @@
     function initPlaylistButtons() {
         const btnRemove = document.getElementById('btnRemoveFromPlaylist');
         const btnRestore = document.getElementById('btnRestoreToPlaylist');
+        const btnConfirm = document.getElementById('btnConfirmRemoveFromPlaylist');
         
         if (btnRemove) {
             btnRemove.addEventListener('click', handleRemoveFromPlaylist);
@@ -133,30 +134,46 @@
         if (btnRestore) {
             btnRestore.addEventListener('click', handleRestoreToPlaylist);
         }
+
+        if (btnConfirm) {
+            btnConfirm.addEventListener('click', handleConfirmRemoveFromPlaylist);
+        }
     }
     
     /**
-     * Poista flash playlistasta
+     * Poista flash playlistasta — avaa vahvistusmodaali
      */
     function handleRemoveFromPlaylist(event) {
+        const modal = document.getElementById('modalRemoveFromPlaylist');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.classList.add('sf-modal-open');
+        }
+    }
+
+    /**
+     * Vahvista poisto playlistasta
+     */
+    function handleConfirmRemoveFromPlaylist(event) {
         const btn = event.target;
         const flashId = btn.getAttribute('data-flash-id');
-        
+
         if (!flashId) {
             console.error('Flash ID not found');
             return;
         }
-        
-        // Vahvistus
-        const confirmMsg = window.SF_TERMS?.confirm_remove_from_playlist || 
-                          'Haluatko varmasti poistaa flashin infonäyttö-playlistasta?';
-        
-        if (!confirm(confirmMsg)) {
-            return;
+
+        // Sulje modaali
+        const modal = document.getElementById('modalRemoveFromPlaylist');
+        if (modal) {
+            modal.classList.add('hidden');
+            if (document.querySelectorAll('.sf-modal:not(.hidden), .sf-library-modal:not(.hidden)').length === 0) {
+                document.body.classList.remove('sf-modal-open');
+            }
         }
-        
+
         btn.disabled = true;
-        
+
         // Lähetä API-pyyntö
         sendPlaylistAction(flashId, 'remove')
             .then(response => {
