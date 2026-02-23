@@ -3278,6 +3278,24 @@ input[type="time"]:hover {
     color: #0f172a;
 }
 
+.sf-edit-header-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* Icon coloring for info button — matches the muted slate (#64748b) of the close button's default color */
+#sf-edit-crop-info-btn img {
+    width: 18px;
+    height: 18px;
+    display: block;
+    filter: brightness(0) saturate(100%) invert(40%) sepia(10%) saturate(400%) hue-rotate(190deg);
+}
+
+#sf-edit-crop-info-btn:hover img {
+    filter: brightness(0) saturate(100%) invert(10%);
+}
+
 /* Body */
 .sf-edit-modal-body-compact {
     display: grid;

@@ -243,26 +243,6 @@ window.SFImageEditor = (() => {
 
         ctx.save();
 
-        // --- Dark overlay outside square ---
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
-
-        // Left
-        if (squareX > 0) {
-            ctx.fillRect(0, 0, squareX, ch);
-        }
-        // Right
-        if (squareX > 0) {
-            ctx.fillRect(squareX + squareSize, 0, cw - squareX - squareSize, ch);
-        }
-        // Top
-        if (squareY > 0) {
-            ctx.fillRect(squareX, 0, squareSize, squareY);
-        }
-        // Bottom
-        if (squareY > 0) {
-            ctx.fillRect(squareX, squareY + squareSize, squareSize, ch - squareY - squareSize);
-        }
-
         // --- Corner marks (L-shaped) for 1:1 area ---
         const cornerLen = 30;
         const cornerWidth = 3;
