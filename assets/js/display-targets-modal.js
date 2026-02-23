@@ -56,18 +56,133 @@
         statusEl.className = 'sf-dt-status ' + (isError ? 'sf-dt-status-error' : 'sf-dt-status-ok');
     }
 
-    // Chip toggle for display target checkboxes (visual state)
-    function initChipToggles() {
-        var chips = document.querySelectorAll('#displayTargetsModal .sf-display-chip');
-        chips.forEach(function (chip) {
-            var cb = chip.querySelector('.sf-display-chip-input');
-            if (!cb) return;
-            chip.addEventListener('click', function (e) {
-                if (e.target === cb) return; // native checkbox handles itself
-                e.preventDefault();
-                cb.checked = !cb.checked;
-                chip.classList.toggle('sf-display-chip-selected', cb.checked);
+    // Returns the .sf-display-target-selector container inside the modal, or null
+    function getContainer() {
+        var modal = document.getElementById(modalId);
+        return modal ? modal.querySelector('.sf-display-target-selector') : null;
+    }
+
+    // Build lang→checkboxes map for a container
+    function buildCbByLang(container) {
+        var map = {};
+        container.querySelectorAll('.dt-display-chip-cb').forEach(function (cb) {
+            var lang = cb.getAttribute('data-lang') || '';
+            if (!map[lang]) map[lang] = [];
+            map[lang].push(cb);
+        });
+        return map;
+    }
+
+    // Update selection tags display
+    function initSelectionDisplay() {
+        var container = getContainer();
+        if (!container) return;
+        updateSelectionDisplay(container);
+        updateLangChipStates(container);
+
+        // Checkbox changes (delegated)
+        container.addEventListener('change', function (e) {
+            if (e.target.classList.contains('dt-display-chip-cb')) {
+                updateSelectionDisplay(container);
+                updateLangChipStates(container);
+            }
+        });
+    }
+
+    function updateSelectionDisplay(container) {
+        var display = container.querySelector('.sf-dt-selection-display');
+        var tags = container.querySelector('.sf-dt-selection-tags');
+        if (!display || !tags) return;
+
+        tags.innerHTML = '';
+        var checked = container.querySelectorAll('.dt-display-chip-cb:checked');
+
+        checked.forEach(function (cb) {
+            var label = cb.getAttribute('data-label') || cb.value;
+            var tag = document.createElement('span');
+            tag.className = 'sf-dt-sel-tag';
+            var text = document.createTextNode(label + ' ');
+            var removeBtn = document.createElement('span');
+            removeBtn.className = 'sf-dt-sel-tag-remove';
+            removeBtn.textContent = '×';
+            removeBtn.addEventListener('click', function () {
+                cb.checked = false;
+                updateSelectionDisplay(container);
+                updateLangChipStates(container);
             });
+            tag.appendChild(text);
+            tag.appendChild(removeBtn);
+            tags.appendChild(tag);
+        });
+
+        display.classList.toggle('hidden', checked.length === 0);
+    }
+
+    function updateLangChipStates(container) {
+        var cbByLang = buildCbByLang(container);
+        container.querySelectorAll('.sf-dt-lang-chip').forEach(function (chip) {
+            var lang = chip.getAttribute('data-lang');
+            var cbs = cbByLang[lang] || [];
+            var checkedCount = 0;
+            cbs.forEach(function (cb) { if (cb.checked) checkedCount++; });
+            chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
+        });
+    }
+
+    // Language chip toggles
+    function initLangChips() {
+        var container = getContainer();
+        if (!container) return;
+
+        container.querySelectorAll('.sf-dt-lang-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var lang = this.getAttribute('data-lang');
+                var isActive = this.classList.contains('sf-dt-lang-chip-active');
+                (buildCbByLang(container)[lang] || []).forEach(function (cb) {
+                    cb.checked = !isActive;
+                });
+                updateLangChipStates(container);
+                updateSelectionDisplay(container);
+            });
+        });
+    }
+
+    // Search filtering for worksite results
+    function initSearch() {
+        var container = getContainer();
+        if (!container) return;
+
+        var searchInput = container.querySelector('.sf-dt-search-input');
+        var searchResults = container.querySelector('.sf-dt-search-results');
+        if (!searchInput || !searchResults) return;
+
+        // Ensure all items are hidden initially
+        container.querySelectorAll('.sf-dt-result-item').forEach(function (item) {
+            item.classList.add('hidden');
+        });
+
+        searchInput.addEventListener('input', function () {
+            var term = this.value.toLowerCase().trim();
+            var items = container.querySelectorAll('.sf-dt-result-item');
+            var hasVisible = false;
+
+            if (term.length === 0) {
+                items.forEach(function (item) { item.classList.add('hidden'); });
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            searchResults.classList.remove('hidden');
+            items.forEach(function (item) {
+                var search = item.getAttribute('data-search') || '';
+                var visible = search.includes(term);
+                item.classList.toggle('hidden', !visible);
+                if (visible) hasVisible = true;
+            });
+
+            if (!hasVisible) {
+                searchResults.classList.add('hidden');
+            }
         });
     }
 
@@ -156,7 +271,9 @@
             openBtn.addEventListener('click', openDisplayTargetsModal);
         }
 
-        initChipToggles();
+        initSelectionDisplay();
+        initLangChips();
+        initSearch();
         initSaveButton();
     }
 

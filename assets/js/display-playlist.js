@@ -105,6 +105,8 @@
      * Alusta yksittäinen näyttövalitsin-kontti (maa/kielisiruilla + haulla)
      */
     function initSingleDisplaySelector(container) {
+        // #displayTargetsModal handles its own selector via display-targets-modal.js
+        if (container.closest('#displayTargetsModal')) return;
         var langChips = container.querySelectorAll('.sf-dt-lang-chip');
         var searchInput = container.querySelector('.sf-dt-search-input');
         var searchResults = container.querySelector('.sf-dt-search-results');
