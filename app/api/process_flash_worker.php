@@ -345,11 +345,12 @@ try {
             if (file_exists($previewPath)) {
                 // Determine version type based on flash type
                 $flashType = $currentFlash['type'] ?? 'yellow';
-                if ($flashType === 'green') {
-                    $versionType = 'tutkintatiedote';
-                } else {
-                    $versionType = 'ensitiedote';
-                }
+                $versionType = match($flashType) {
+                    'red' => 'ensitiedote',
+                    'yellow' => 'vaaratilanne',
+                    'green' => 'tutkintatiedote',
+                    default => 'vaaratilanne',
+                };
                 
                 // Use translation_group_id if available, otherwise flash_id
                 $groupId = $currentFlash['translation_group_id'] ?: $flash_id;
