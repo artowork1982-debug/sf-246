@@ -122,6 +122,21 @@ foreach ($allDisplays as $d) {
     </div>
 
     <?php if (count($allDisplays) > 1): ?>
+    <?php if (count($allDisplays) <= 6): ?>
+    <div class="sf-pm-nav-tabs" role="tablist">
+        <?php foreach ($allDisplays as $d): ?>
+            <a href="<?= htmlspecialchars("{$baseUrl}/index.php?page=playlist_manager&display_key_id=" . (int)$d['id'], ENT_QUOTES, 'UTF-8') ?>"
+               class="sf-pm-nav-tab <?= ((int)$d['id'] === $displayKeyId) ? 'sf-pm-nav-tab-active' : '' ?>"
+               role="tab"
+               aria-selected="<?= ((int)$d['id'] === $displayKeyId) ? 'true' : 'false' ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/>
+                </svg>
+                <?= htmlspecialchars($d['label'] ?? $d['site'], ENT_QUOTES, 'UTF-8') ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+    <?php else: ?>
     <div class="sf-pm-nav">
         <label for="sfPmDisplaySelect" class="sf-pm-nav-label">
             <?= htmlspecialchars(sf_term('playlist_nav_label', $currentUiLang) ?? 'Näyttö:', ENT_QUOTES, 'UTF-8') ?>
@@ -144,6 +159,7 @@ foreach ($allDisplays as $d) {
         </select>
     </div>
     <?php endif; ?>
+    <?php endif; ?>
 
     <?php if (empty($items)): ?>
         <div class="sf-empty-state">
@@ -153,6 +169,25 @@ foreach ($allDisplays as $d) {
     <?php else: ?>
         <div id="sfPlaylistSaveMsg" class="sf-notice sf-notice-success" style="display:none;">
             <?= htmlspecialchars(sf_term('playlist_reorder_saved', $currentUiLang) ?? 'Järjestys tallennettu', ENT_QUOTES, 'UTF-8') ?>
+        </div>
+
+        <div class="sf-pm-stats-card">
+            <div class="sf-pm-stat">
+                <span class="sf-pm-stat-value"><?= count($items) ?></span>
+                <span class="sf-pm-stat-label">Flashiä</span>
+            </div>
+            <div class="sf-pm-stat">
+                <span class="sf-pm-stat-value"><?= htmlspecialchars(strtoupper($displayKey['lang'] ?? '—'), ENT_QUOTES, 'UTF-8') ?></span>
+                <span class="sf-pm-stat-label">Kieli</span>
+            </div>
+            <div class="sf-pm-stat-divider"></div>
+            <span class="sf-pm-stat-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                    <path d="M12 16v-4"/><path d="M12 8h.01"/>
+                </svg>
+                Vedä tai käytä nuolia järjestyksen muuttamiseen
+            </span>
         </div>
 
         <ul id="sfPlaylistItems" class="sf-playlist-manager-list"
@@ -166,23 +201,43 @@ foreach ($allDisplays as $d) {
                     : htmlspecialchars("{$baseUrl}/assets/img/camera-placeholder.png", ENT_QUOTES, 'UTF-8');
                 ?>
                 <li class="sf-playlist-manager-item" data-flash-id="<?= (int)$item['id'] ?>">
-                    <span class="sf-pm-drag-handle" title="Vedä siirtääksesi" aria-hidden="true">⠿</span>
+                    <span class="sf-pm-drag-handle" title="Vedä siirtääksesi" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/>
+                            <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
+                            <circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/>
+                        </svg>
+                    </span>
+                    <span class="sf-pm-item-index"><?= $i + 1 ?></span>
                     <img src="<?= $previewUrl ?>"
                          alt=""
                          class="sf-pm-thumb"
                          loading="lazy">
-                    <span class="sf-pm-title"><?= htmlspecialchars($item['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                    <div class="sf-pm-item-content">
+                        <span class="sf-pm-title"><?= htmlspecialchars($item['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                        <?php if (!empty($item['type'])): ?>
+                        <span class="sf-pm-type-badge"><?= htmlspecialchars($item['type'], ENT_QUOTES, 'UTF-8') ?></span>
+                        <?php endif; ?>
+                    </div>
                     <span class="sf-pm-order-btns">
                         <button type="button"
                                 class="sf-pm-btn-up"
                                 title="<?= htmlspecialchars(sf_term('playlist_move_up', $currentUiLang) ?? 'Siirrä ylös', ENT_QUOTES, 'UTF-8') ?>"
                                 aria-label="<?= htmlspecialchars(sf_term('playlist_move_up', $currentUiLang) ?? 'Siirrä ylös', ENT_QUOTES, 'UTF-8') ?>"
-                                <?= ($i === 0) ? 'disabled' : '' ?>>▲</button>
+                                <?= ($i === 0) ? 'disabled' : '' ?>>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                        </button>
                         <button type="button"
                                 class="sf-pm-btn-down"
                                 title="<?= htmlspecialchars(sf_term('playlist_move_down', $currentUiLang) ?? 'Siirrä alas', ENT_QUOTES, 'UTF-8') ?>"
                                 aria-label="<?= htmlspecialchars(sf_term('playlist_move_down', $currentUiLang) ?? 'Siirrä alas', ENT_QUOTES, 'UTF-8') ?>"
-                                <?= ($i === count($items) - 1) ? 'disabled' : '' ?>>▼</button>
+                                <?= ($i === count($items) - 1) ? 'disabled' : '' ?>>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
                     </span>
                 </li>
             <?php endforeach; ?>

@@ -640,13 +640,18 @@
 }
 
 .sf-pm-thumb {
-    width: 64px;
-    height: 40px;
+    width: 80px;
+    height: 50px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
     flex-shrink: 0;
     background: #f0f0f0;
     border: 1px solid var(--sf-border, #e9ecef);
+    transition: transform 0.2s ease;
+}
+
+.sf-playlist-manager-item:hover .sf-pm-thumb {
+    transform: scale(1.05);
 }
 
 .sf-pm-title {
@@ -698,7 +703,24 @@
 }
 
 .sf-playlist-manager-actions {
-    margin-top: 0.5rem;
+    position: sticky;
+    bottom: 0;
+    margin: 0 -1.5rem -1.5rem;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--sf-border, #dee2e6);
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.sf-playlist-manager-actions.sf-pm-dirty {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .sf-playlist-manager-actions .sf-btn-primary {
@@ -1136,4 +1158,192 @@
 
 .sf-dt-sel-tag-remove:hover {
     opacity: 1;
+}
+
+/* ============================================================================
+   Playlist Manager — Modernization
+   ========================================================================= */
+
+/* Prevent modal flash on page load */
+.sf-modal.hidden {
+    display: none !important;
+}
+
+/* Loading overlay during display navigation */
+.sf-pm-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: sfPmFadeIn 0.2s ease;
+}
+
+@keyframes sfPmFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.sf-pm-loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sf-pm-spinner-svg {
+    width: 40px;
+    height: 40px;
+    color: #fee000;
+}
+
+.sf-pm-loading-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.02em;
+}
+
+/* Tab navigation */
+.sf-pm-nav-tabs {
+    display: flex;
+    gap: 0.375rem;
+    margin-bottom: 1.5rem;
+    padding: 0.375rem;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.sf-pm-nav-tabs::-webkit-scrollbar { display: none; }
+
+.sf-pm-nav-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.sf-pm-nav-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sf-pm-nav-tab-active {
+    background: #fee000;
+    color: #000;
+    border-color: #fee000;
+    box-shadow: 0 2px 8px rgba(254, 224, 0, 0.3);
+}
+
+.sf-pm-nav-tab-active:hover {
+    background: #fee000;
+    color: #000;
+}
+
+.sf-pm-nav-tab svg { opacity: 0.7; flex-shrink: 0; }
+.sf-pm-nav-tab-active svg { opacity: 1; }
+
+/* List item index number */
+.sf-pm-item-index {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(0, 102, 204, 0.1);
+    color: var(--sf-primary, #0066cc);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Item content wrapper */
+.sf-pm-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+/* Type badge */
+.sf-pm-type-badge {
+    display: inline-flex;
+    padding: 0.125rem 0.5rem;
+    background: rgba(0, 102, 204, 0.08);
+    color: var(--sf-primary, #0066cc);
+    border-radius: 6px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    width: fit-content;
+}
+
+/* Stats card */
+.sf-pm-stats-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 1px solid var(--sf-border, #e9ecef);
+    border-radius: 14px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.sf-pm-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+}
+
+.sf-pm-stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--sf-primary, #0066cc);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.sf-pm-stat-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--sf-text-secondary, #6c757d);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sf-pm-stat-divider {
+    width: 1px;
+    height: 2rem;
+    background: var(--sf-border, #e9ecef);
+}
+
+.sf-pm-stat-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--sf-text-secondary, #6c757d);
+    margin-left: auto;
 }
