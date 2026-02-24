@@ -99,7 +99,7 @@ if ($pass !== '') {
              SET first_name = ?, last_name = ?, email = ?, role_id = ?, ui_lang = ?, home_worksite_id = ?, password_hash = ?, email_notifications_enabled = ? 
              WHERE id = ?'
         );
-        $stmt->bind_param('sssisissii', $first, $last, $email, $role, $uiLang, $homeWorksiteId, $hash, $emailNotificationsEnabled, $id);
+        $stmt->bind_param('sssisisii', $first, $last, $email, $role, $uiLang, $homeWorksiteId, $hash, $emailNotificationsEnabled, $id);
     }
 } else {
     if ($homeWorksiteId === null) {
@@ -115,7 +115,7 @@ if ($pass !== '') {
              SET first_name = ?, last_name = ?, email = ?, role_id = ?, ui_lang = ?, home_worksite_id = ?, email_notifications_enabled = ?  
              WHERE id = ?'
         );
-        $stmt->bind_param('sssisiiii', $first, $last, $email, $role, $uiLang, $homeWorksiteId, $emailNotificationsEnabled, $id);
+        $stmt->bind_param('sssisiii', $first, $last, $email, $role, $uiLang, $homeWorksiteId, $emailNotificationsEnabled, $id);
     }
 }
 
