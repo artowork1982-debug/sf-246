@@ -179,6 +179,26 @@ action="app/actions/worksites_save.php"
     </button>
 </form>
 
+<?php if (!empty($worksites)): ?>
+<div class="sf-export-bar">
+    <span class="sf-export-label">
+        📥 <?= htmlspecialchars(sf_term('btn_export_worksites', $currentUiLang) ?? 'Vie työmaat', ENT_QUOTES, 'UTF-8') ?>
+    </span>
+    <div class="sf-export-buttons">
+        <a href="<?= htmlspecialchars($baseUrl . '/app/api/export_worksites.php?format=csv', ENT_QUOTES, 'UTF-8') ?>"
+           class="sf-btn sf-btn-sm sf-btn-outline-primary sf-export-btn"
+           download>
+            📄 <?= htmlspecialchars(sf_term('btn_export_csv', $currentUiLang) ?? 'Lataa CSV', ENT_QUOTES, 'UTF-8') ?>
+        </a>
+        <a href="<?= htmlspecialchars($baseUrl . '/app/api/export_worksites.php?format=json', ENT_QUOTES, 'UTF-8') ?>"
+           class="sf-btn sf-btn-sm sf-btn-outline-primary sf-export-btn"
+           download>
+            { } <?= htmlspecialchars(sf_term('btn_export_json', $currentUiLang) ?? 'Lataa JSON', ENT_QUOTES, 'UTF-8') ?>
+        </a>
+    </div>
+</div>
+<?php endif; ?>
+
 <?php if (empty($worksites)): ?>
     <p class="sf-notice sf-notice-info">
         <?= htmlspecialchars(

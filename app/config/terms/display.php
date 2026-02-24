@@ -656,4 +656,27 @@ return [
         'it' => 'Nessuna chiave',
         'el' => 'Χωρίς κλειδί',
     ],
+
+    // Export worksites
+    'btn_export_worksites' => [
+        'fi' => 'Vie työmaat',
+        'sv' => 'Exportera arbetsplatser',
+        'en' => 'Export worksites',
+        'it' => 'Esporta cantieri',
+        'el' => 'Εξαγωγή εργοταξίων',
+    ],
+    'btn_export_csv' => [
+        'fi' => 'Lataa CSV',
+        'sv' => 'Ladda ner CSV',
+        'en' => 'Download CSV',
+        'it' => 'Scarica CSV',
+        'el' => 'Λήψη CSV',
+    ],
+    'btn_export_json' => [
+        'fi' => 'Lataa JSON',
+        'sv' => 'Ladda ner JSON',
+        'en' => 'Download JSON',
+        'it' => 'Scarica JSON',
+        'el' => 'Λήψη JSON',
+    ],
 ];
