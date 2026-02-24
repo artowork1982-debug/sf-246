@@ -236,7 +236,11 @@ action="app/actions/worksites_save.php"
                 ) ?>
             </th>
             <th>
-                🔑 API-avain
+                🔑 <?= htmlspecialchars(
+                    sf_term('settings_worksites_col_api_key', $currentUiLang) ?? 'API-avain',
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>
             </th>
         </tr>
     </thead>
@@ -293,7 +297,7 @@ action="app/actions/worksites_save.php"
                         ) ?>"
                            class="sf-btn sf-btn-outline-primary sf-btn-sm">
                             <img src="<?= $baseUrl ?>/assets/img/icons/playlist.svg" alt="" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;">
-                            <?= htmlspecialchars(sf_term('playlist_manager_heading', $currentUiLang) ?? 'Hallinnoi', ENT_QUOTES, 'UTF-8') ?>
+                            <?= htmlspecialchars(sf_term('settings_worksites_col_playlist', $currentUiLang) ?? 'Ajolista', ENT_QUOTES, 'UTF-8') ?>
                         </a>
                         <?php endif; ?>
                     <?php endif; ?>
@@ -310,21 +314,35 @@ action="app/actions/worksites_save.php"
                 <!-- API-avain pikakopiointi -->
                 <td>
                     <?php if (!empty($ws['display_api_key'])): ?>
-                        <div style="display:flex;gap:0.4rem;align-items:center;">
-                            <code id="apiKey<?= (int)$ws['id'] ?>" style="font-size:0.75rem;background:var(--sf-bg-secondary,#f5f5f5);padding:0.25rem 0.5rem;border-radius:3px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?>">
-                                <?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?>
+                        <div class="sf-api-key-cell">
+                            <code class="sf-api-key-code"
+                                  id="apiKey<?= (int)$ws['id'] ?>"
+                                  title="<?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= htmlspecialchars(
+                                    mb_strlen($ws['display_api_key']) > 14
+                                        ? mb_substr($ws['display_api_key'], 0, 12) . '…'
+                                        : $ws['display_api_key'],
+                                    ENT_QUOTES, 'UTF-8'
+                                ) ?>
                             </code>
                             <button type="button"
-                                class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn"
-                                data-copy-target="apiKey<?= (int)$ws['id'] ?>"
+                                class="sf-api-key-copy-btn sf-xibo-copy-btn"
+                                data-copy-target="apiKeyFull<?= (int)$ws['id'] ?>"
                                 data-ws-id="<?= (int)$ws['id'] ?>-apikey"
-                                title="Kopioi API-avain">
-                                📋
+                                <?php $copyLabel = htmlspecialchars(sf_term('btn_copy_api_key', $currentUiLang) ?? 'Kopioi', ENT_QUOTES, 'UTF-8') ?>
+                                title="<?= $copyLabel ?>">
+                                📋 <?= $copyLabel ?>
                             </button>
-                            <span id="xiboCopied<?= (int)$ws['id'] ?>-apikey" style="display:none;color:green;font-size:0.8rem;">✅</span>
+                            <!-- Hidden full key for copy -->
+                            <span id="apiKeyFull<?= (int)$ws['id'] ?>" style="display:none;"><?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <span class="sf-api-key-copied" id="xiboCopied<?= (int)$ws['id'] ?>-apikey">
+                                ✅ <?= htmlspecialchars(sf_term('xibo_copied', $currentUiLang) ?? 'Kopioitu!', ENT_QUOTES, 'UTF-8') ?>
+                            </span>
                         </div>
                     <?php else: ?>
-                        <span style="color:#94a3b8;font-size:0.85rem;">—</span>
+                        <span class="sf-api-key-none">
+                            <?= htmlspecialchars(sf_term('settings_worksites_no_api_key', $currentUiLang) ?? 'Ei avainta', ENT_QUOTES, 'UTF-8') ?>
+                        </span>
                     <?php endif; ?>
                 </td>
             </tr>

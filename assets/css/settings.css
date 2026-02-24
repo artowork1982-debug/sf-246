@@ -3520,3 +3520,106 @@
         grid-template-columns: 1fr;
     }
 }
+/* ===== API KEY COLUMN STYLES ===== */
+.sf-api-key-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.sf-api-key-code {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    background: #f1f5f9;
+    color: #334155;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+}
+
+.sf-api-key-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.sf-api-key-copy-btn:hover {
+    background: #e0f2fe;
+    border-color: #7dd3fc;
+    color: #0369a1;
+}
+
+.sf-api-key-copy-btn:active {
+    transform: scale(0.96);
+}
+
+.sf-api-key-copied {
+    display: none;
+    color: #16a34a;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: sf-fade-in 0.2s ease;
+}
+
+@keyframes sf-fade-in {
+    from { opacity: 0; transform: translateY(-2px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sf-api-key-none {
+    color: #94a3b8;
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+/* ===== WORKSITE TABLE IMPROVEMENTS ===== */
+.sf-table-worksites {
+    --sf-table-min-width: 950px;
+}
+
+.sf-table-worksites th {
+    font-size: 0.75rem;
+    padding: 0.7rem 0.75rem;
+}
+
+.sf-table-worksites td {
+    padding: 0.65rem 0.75rem;
+}
+
+/* Compact buttons in table */
+.sf-table-worksites .sf-btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .sf-api-key-cell {
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .sf-api-key-code {
+        max-width: 100%;
+        font-size: 0.75rem;
+    }
+}
