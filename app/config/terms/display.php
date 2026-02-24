@@ -633,4 +633,27 @@ return [
         'it' => 'Nessuna immagine di fallback impostata',
         'el' => 'Δεν έχει οριστεί εφεδρική εικόνα',
     ],
+
+    // Worksite API key column (Settings page)
+    'settings_worksites_col_api_key' => [
+        'fi' => 'API-avain',
+        'sv' => 'API-nyckel',
+        'en' => 'API key',
+        'it' => 'Chiave API',
+        'el' => 'Κλειδί API',
+    ],
+    'btn_copy_api_key' => [
+        'fi' => 'Kopioi',
+        'sv' => 'Kopiera',
+        'en' => 'Copy',
+        'it' => 'Copia',
+        'el' => 'Αντιγραφή',
+    ],
+    'settings_worksites_no_api_key' => [
+        'fi' => 'Ei avainta',
+        'sv' => 'Ingen nyckel',
+        'en' => 'No key',
+        'it' => 'Nessuna chiave',
+        'el' => 'Χωρίς κλειδί',
+    ],
 ];
