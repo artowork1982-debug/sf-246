@@ -3623,3 +3623,74 @@
         font-size: 0.75rem;
     }
 }
+
+/* ===== EXPORT BAR ===== */
+.sf-export-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1rem;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+}
+
+.sf-export-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0369a1;
+    white-space: nowrap;
+}
+
+.sf-export-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.sf-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0369a1;
+    background: #ffffff;
+    border: 1px solid #7dd3fc;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.sf-export-btn:hover {
+    background: #e0f2fe;
+    border-color: #38bdf8;
+    color: #075985;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(3, 105, 161, 0.12);
+}
+
+.sf-export-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+    .sf-export-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .sf-export-buttons {
+        flex-direction: column;
+    }
+
+    .sf-export-btn {
+        justify-content: center;
+        width: 100%;
+    }
+}
