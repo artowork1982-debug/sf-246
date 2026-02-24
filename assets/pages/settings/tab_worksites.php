@@ -235,6 +235,9 @@ action="app/actions/worksites_save.php"
                     'UTF-8'
                 ) ?>
             </th>
+            <th>
+                🔑 API-avain
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -302,6 +305,26 @@ action="app/actions/worksites_save.php"
                             data-modal-open="#xiboModal<?= (int)$ws['id'] ?>">
                             📋 <?= htmlspecialchars(sf_term('xibo_col_heading', $currentUiLang) ?? 'Xibo-koodi', ENT_QUOTES, 'UTF-8') ?>
                         </button>
+                    <?php endif; ?>
+                </td>
+                <!-- API-avain pikakopiointi -->
+                <td>
+                    <?php if (!empty($ws['display_api_key'])): ?>
+                        <div style="display:flex;gap:0.4rem;align-items:center;">
+                            <code id="apiKey<?= (int)$ws['id'] ?>" style="font-size:0.75rem;background:var(--sf-bg-secondary,#f5f5f5);padding:0.25rem 0.5rem;border-radius:3px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= htmlspecialchars($ws['display_api_key'], ENT_QUOTES, 'UTF-8') ?>
+                            </code>
+                            <button type="button"
+                                class="sf-btn sf-btn-sm sf-btn-outline-primary sf-xibo-copy-btn"
+                                data-copy-target="apiKey<?= (int)$ws['id'] ?>"
+                                data-ws-id="<?= (int)$ws['id'] ?>-apikey"
+                                title="Kopioi API-avain">
+                                📋
+                            </button>
+                            <span id="xiboCopied<?= (int)$ws['id'] ?>-apikey" style="display:none;color:green;font-size:0.8rem;">✅</span>
+                        </div>
+                    <?php else: ?>
+                        <span style="color:#94a3b8;font-size:0.85rem;">—</span>
                     <?php endif; ?>
                 </td>
             </tr>
