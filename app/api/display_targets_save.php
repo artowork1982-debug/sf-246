@@ -120,12 +120,17 @@ try {
     // This simplifies partial updates and ensures the stored state always matches the user's choices.
     $pdo->prepare("DELETE FROM sf_flash_display_targets WHERE flash_id = ? AND is_active = 1")->execute([$flashId]);
 
-    // Insert new active targets
+    // Insert new active targets — use UPSERT to handle existing inactive entries
     if (!empty($displayTargets)) {
         $stmtInsert = $pdo->prepare("
             INSERT INTO sf_flash_display_targets
             (flash_id, display_key_id, is_active, selected_by, selected_at, activated_at)
             VALUES (?, ?, 1, ?, NOW(), NOW())
+            ON DUPLICATE KEY UPDATE
+                is_active = 1,
+                selected_by = VALUES(selected_by),
+                selected_at = NOW(),
+                activated_at = NOW()
         ");
         foreach ($displayTargets as $displayKeyId) {
             $stmtInsert->execute([$flashId, $displayKeyId, $userId]);
