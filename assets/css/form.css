@@ -1403,7 +1403,7 @@ input[type="time"]:hover {
     gap: 16px;
     margin-top: 18px;
     justify-content: flex-end;
-    max-width: 768px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
@@ -1897,6 +1897,24 @@ input[type="time"]:hover {
 
     .sf-preview-actions .sf-btn {
         width: 100%;
+    }
+
+    .sf-step6-footer {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 16px auto 100px;
+    }
+
+    .sf-step6-footer-right {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .sf-step6-footer-right .sf-btn {
+        flex: 1;
+        min-width: 120px;
     }
 
     .sf-grid-selector {
@@ -4859,8 +4877,8 @@ body.form-page {
     padding: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     border: 1px solid #e5e7eb;
-    margin: 16px auto;
-    max-width: 768px;
+    margin: 32px auto 0;
+    max-width: 600px;
 }
 
 .sf-supervisor-title {
@@ -6675,7 +6693,7 @@ body.form-page .sf-form-progress__steps::before {
 /* ── Step 6: Constrain action buttons to match supervisor section width ── */
 @media (min-width: 769px) {
     .sf-step-content[data-step="6"] .sf-step-actions-bottom {
-        max-width: 768px;
+        max-width: 600px;
         margin-left: auto;
         margin-right: auto;
         justify-content: flex-end;
@@ -6685,6 +6703,30 @@ body.form-page .sf-form-progress__steps::before {
         width: auto;
         padding: 12px 24px;
     }
+}
+
+/* ── Step 6 footer: compact, centred row with Prev left and action buttons right ── */
+.sf-step6-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 32px auto;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sf-step6-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sf-step6-footer .sf-btn {
+    width: auto;
+    padding: 12px 24px;
+    min-width: 120px;
 }
 
 /* ── Type classes: keep dark background only, no static border-top stripe ── */
