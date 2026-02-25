@@ -39,9 +39,9 @@ $fontRegularPath = $fontDir . '/OpenSans-Regular.ttf';
 $fontBoldPath = $fontDir . '/OpenSans-Bold.ttf';
 
 $labels = [
-    'fi' => ['report_title' => 'Tutkintatiedote', 'site' => 'Työmaa', 'date' => 'Tapahtumapäivä', 'short_description' => 'Tiivistelmä', 'description' => 'Tapahtumakuvaus', 'images' => 'Kuvat', 'root_causes' => 'Juurisyyanalyysi', 'actions' => 'Korjaavat toimenpiteet', 'author' => 'Laatija', 'approver' => 'Hyväksyjä', 'original_flash' => 'Alkuperäinen SafetyFlash'],
-    'sv' => ['report_title' => 'Undersökningsrapport', 'site' => 'Arbetsplats', 'date' => 'Händelsedatum', 'short_description' => 'Sammanfattning', 'description' => 'Händelsebeskrivning', 'images' => 'Bilder', 'root_causes' => 'Grundorsaksanalys', 'actions' => 'Korrigerande åtgärder', 'author' => 'Författare', 'approver' => 'Godkännare', 'original_flash' => 'Ursprunglig SafetyFlash'],
-    'en' => ['report_title' => 'Investigation Report', 'site' => 'Worksite', 'date' => 'Incident Date', 'short_description' => 'Executive Summary', 'description' => 'Incident Description', 'images' => 'Images', 'root_causes' => 'Root Cause Analysis', 'actions' => 'Corrective Actions', 'author' => 'Author', 'approver' => 'Approved by', 'original_flash' => 'Original SafetyFlash'],
+    'fi' => ['report_title' => 'Tutkintatiedote', 'site' => 'Työmaa', 'date' => 'Tapahtumapäivä', 'short_description' => 'Tiivistelmä', 'description' => 'Tapahtumakuvaus', 'images' => 'Kuvat', 'root_causes' => 'Juurisyyanalyysi', 'actions' => 'Korjaavat toimenpiteet', 'author' => 'Laatija', 'approver' => 'Hyväksyjä', 'safetyflash_card' => 'SafetyFlash-kortti', 'original_flash' => 'Alkuperäinen SafetyFlash'],
+    'sv' => ['report_title' => 'Undersökningsrapport', 'site' => 'Arbetsplats', 'date' => 'Händelsedatum', 'short_description' => 'Sammanfattning', 'description' => 'Händelsebeskrivning', 'images' => 'Bilder', 'root_causes' => 'Grundorsaksanalys', 'actions' => 'Korrigerande åtgärder', 'author' => 'Författare', 'approver' => 'Godkännare', 'safetyflash_card' => 'SafetyFlash-kort', 'original_flash' => 'Ursprunglig SafetyFlash'],
+    'en' => ['report_title' => 'Investigation Report', 'site' => 'Worksite', 'date' => 'Incident Date', 'short_description' => 'Executive Summary', 'description' => 'Incident Description', 'images' => 'Images', 'root_causes' => 'Root Cause Analysis', 'actions' => 'Corrective Actions', 'author' => 'Author', 'approver' => 'Approved by', 'safetyflash_card' => 'SafetyFlash Card', 'original_flash' => 'Original SafetyFlash'],
 ];
 $lang = $flash['lang'] ?? 'fi';
 $l = $labels[$lang] ?? $labels['fi'];
@@ -100,6 +100,26 @@ foreach ($extraImages as $ei) {
 
 $hasAnyImages = !empty($allImages);
 
+// SafetyFlash card preview images (generated 1920x1080 cards)
+$previewCard1Path = null;
+$previewCard2Path = null;
+
+if (!empty($flash['preview_filename'])) {
+    $candidatePath = $uploadsDir . '/previews/' . basename($flash['preview_filename']);
+    if (file_exists($candidatePath)) {
+        $previewCard1Path = $candidatePath;
+    }
+}
+
+if (!empty($flash['preview_filename_2'])) {
+    $candidatePath = $uploadsDir . '/previews/' . basename($flash['preview_filename_2']);
+    if (file_exists($candidatePath)) {
+        $previewCard2Path = $candidatePath;
+    }
+}
+
+$hasPreviewCards = ($previewCard1Path !== null);
+
 // Check for original flash preview (display_snapshot_preview)
 $originalPreviewPath = null;
 if (!empty($flash['display_snapshot_preview'])) {
@@ -110,9 +130,10 @@ if (!empty($flash['display_snapshot_preview'])) {
 }
 
 // Calculate total pages
-$totalPages = 2;
-if ($hasAnyImages) $totalPages = 3;
-if ($originalPreviewPath) $totalPages++;
+$totalPages = 2; // Cover + Content always
+if ($hasPreviewCards) $totalPages++; // SafetyFlash card page
+if ($hasAnyImages) $totalPages++;    // Uploaded images page
+if ($originalPreviewPath) $totalPages++; // Original flash page
 
 // Footer info
 $siteInfo = trim((string)($flash['site'] ?? ''));
@@ -473,13 +494,43 @@ if (!empty($gridBitmap)):
 </div>
 <?php endif; endif; ?>
 
-<!-- PAGE 2: Content -->
+<?php if ($hasPreviewCards): ?>
+<!-- PAGE: SafetyFlash Card(s) -->
 <div class="page-break"></div>
 
 <div class="footer">
     <table>
         <tr>
             <td class="footer-left">2 / <?= $totalPages ?></td>
+            <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
+            <td class="footer-right"><span class="footer-brand"></span></td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-header"><?= htmlspecialchars($l['safetyflash_card']) ?></div>
+    <div class="section-content" style="text-align: center; padding: 10px 0;">
+        <img src="<?= htmlspecialchars($previewCard1Path) ?>"
+             style="max-width: 100%; height: auto; display: block; margin: 0 auto 15px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+             alt="SafetyFlash Card 1">
+        <?php if ($previewCard2Path): ?>
+        <img src="<?= htmlspecialchars($previewCard2Path) ?>"
+             style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+             alt="SafetyFlash Card 2">
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php $contentPageNum = 2 + ($hasPreviewCards ? 1 : 0); ?>
+<!-- PAGE: Content -->
+<div class="page-break"></div>
+
+<div class="footer">
+    <table>
+        <tr>
+            <td class="footer-left"><?= $contentPageNum ?> / <?= $totalPages ?></td>
             <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
             <td class="footer-right"><span class="footer-brand"></span></td>
         </tr>
@@ -518,14 +569,15 @@ if (!empty($gridBitmap)):
 </div>
 <?php endif; ?>
 
-<!-- PAGE 3: All Images -->
+<!-- PAGE: All Images -->
 <?php if ($hasAnyImages): ?>
+<?php $imagesPageNum = $contentPageNum + 1; ?>
 <div class="page-break"></div>
 
 <div class="footer">
     <table>
         <tr>
-            <td class="footer-left">3 / <?= $totalPages ?></td>
+            <td class="footer-left"><?= $imagesPageNum ?> / <?= $totalPages ?></td>
             <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
             <td class="footer-right"><span class="footer-brand"></span></td>
         </tr>
@@ -560,7 +612,7 @@ if (!empty($gridBitmap)):
 <div class="footer">
     <table>
         <tr>
-            <td class="footer-left"><?= $hasAnyImages ? 4 : 3 ?> / <?= $totalPages ?></td>
+            <td class="footer-left"><?= $totalPages ?> / <?= $totalPages ?></td>
             <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
             <td class="footer-right"><span class="footer-brand"></span></td>
         </tr>
