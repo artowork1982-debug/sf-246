@@ -6536,7 +6536,7 @@ body.form-page .sf-form-progress {
 .sf-form-progress__close {
     position: absolute;
     top: 50%;
-    right: 12px;
+    right: 16px;
     transform: translateY(-50%);
     width: 32px;
     height: 32px;
@@ -6730,14 +6730,14 @@ body.form-page .sf-form-progress__number {
 }
 
 body.form-page .sf-form-progress__step.sf-form-progress__step--locked .sf-form-progress__number {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: rgba(255, 255, 255, 0.3) !important;
+    background: transparent !important;
+    border: 2px solid #4b5563 !important;
+    color: #d1d5db !important;
     box-shadow: none !important;
 }
 
 body.form-page .sf-form-progress__step.sf-form-progress__step--locked .sf-form-progress__label {
-    color: rgba(255, 255, 255, 0.3) !important;
+    color: #9ca3af !important;
 }
 
 body.form-page .sf-form-progress__step.sf-form-progress__step--accessible:not(.sf-form-progress__step--active):not(.sf-form-progress__step--completed) .sf-form-progress__number {
@@ -6751,5 +6751,24 @@ body.form-page .sf-form-progress__step.sf-form-progress__step--accessible:not(.s
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Active step stays bright/accent-coloured — no override needed for that. */
-/* Completed step (green checkmark) also unchanged. */
+/* ── Dark-theme label colour overrides ──────────────────────────────────────
+   The default stylesheet sets label colours for a light background.  On the
+   fixed dark (#0f172a) progress bar every label must be visible against the
+   dark backdrop, so we re-declare them here with !important.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Base: all step labels → muted light grey */
+body.form-page .sf-form-progress__label {
+    color: #9ca3af !important;
+}
+
+/* Active step → bright white */
+body.form-page .sf-form-progress__step.sf-form-progress__step--active .sf-form-progress__label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Completed step → light grey (not green, which disappears on dark bg) */
+body.form-page .sf-form-progress__step.sf-form-progress__step--completed .sf-form-progress__label {
+    color: #d1d5db !important;
+}
