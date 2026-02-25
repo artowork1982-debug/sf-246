@@ -58,6 +58,23 @@ $supportedLangs = [
 $langLabel = $supportedLangs[$newLang] ?? strtoupper($newLang);
 ?>
 
+<!-- Fixed top bar with close button (full-screen form mode) -->
+<div class="sf-form-topbar">
+    <span class="sf-form-topbar__title">
+        <?php
+        $closeTitle = isset($uiLang) ? (sf_term('form_language_label', $uiLang) ?: 'Kieliversio') : 'Kieliversio';
+        echo htmlspecialchars($closeTitle, ENT_QUOTES, 'UTF-8');
+        ?>: <strong><?php echo htmlspecialchars($langLabel); ?></strong>
+    </span>
+    <button type="button" id="sfFormLangCloseBtn" class="sf-form-progress__close"
+            aria-label="<?php echo htmlspecialchars(isset($uiLang) ? (sf_term('btn_close_form', $uiLang) ?: 'Sulje lomake') : 'Sulje lomake', ENT_QUOTES, 'UTF-8'); ?>">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="4.5" y1="4.5" x2="13.5" y2="13.5"/>
+            <line x1="13.5" y1="4.5" x2="4.5" y2="13.5"/>
+        </svg>
+    </button>
+</div>
+
 <!-- === VAIHE 2: PREVIEW (modaalissa) === -->
 <div class="sf-translation-preview-wrapper">
     <div id="sfTranslationPreviewContainer">
@@ -235,4 +252,89 @@ window.SF_SUPPORTED_LANGS = {
     'it': { label: 'IT', icon: 'italian-flag.png' },
     'el': { label: 'EL', icon: 'greece-flag.png' }
 };
+</script>
+
+<!-- Close-form confirmation modal (form_language) -->
+<?php
+$_flCloseTitle = isset($uiLang) ? (sf_term('form_close_confirm_title', $uiLang) ?: 'Poistu lomakkeelta?') : 'Poistu lomakkeelta?';
+$_flCloseText  = isset($uiLang) ? (sf_term('form_close_confirm_text', $uiLang) ?: 'Haluatko varmasti poistua? Tallentamattomat muutokset menetetään.') : 'Haluatko varmasti poistua? Tallentamattomat muutokset menetetään.';
+$_flLeave      = isset($uiLang) ? (sf_term('form_close_confirm_leave', $uiLang) ?: 'Poistu') : 'Poistu';
+$_flCancel     = isset($uiLang) ? (sf_term('btn_cancel', $uiLang) ?: 'Peruuta') : 'Peruuta';
+$_flBtnClose   = isset($uiLang) ? (sf_term('btn_close', $uiLang) ?: 'Sulje') : 'Sulje';
+$_flBase       = rtrim($config['base_url'] ?? '/', '/');
+?>
+<div id="sfCloseConfirmModal" class="sf-modal hidden sf-modal-small sf-modal-centered" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="sfCloseConfirmTitle">
+  <div class="sf-modal-content">
+    <div class="sf-modal-header">
+      <h3 id="sfCloseConfirmTitle"><?= htmlspecialchars($_flCloseTitle, ENT_QUOTES, 'UTF-8') ?></h3>
+      <button type="button" class="sf-modal-close-btn" id="sfCloseConfirmDismiss" aria-label="<?= htmlspecialchars($_flBtnClose, ENT_QUOTES, 'UTF-8') ?>">×</button>
+    </div>
+    <div class="sf-modal-body">
+      <p><?= htmlspecialchars($_flCloseText, ENT_QUOTES, 'UTF-8') ?></p>
+    </div>
+    <div class="sf-modal-actions">
+      <button type="button" class="sf-btn sf-btn-secondary" id="sfCloseConfirmCancel">
+        <?= htmlspecialchars($_flCancel, ENT_QUOTES, 'UTF-8') ?>
+      </button>
+      <button type="button" class="sf-btn sf-btn-danger" id="sfCloseConfirmLeave">
+        <?= htmlspecialchars($_flLeave, ENT_QUOTES, 'UTF-8') ?>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+    var isFormDirty = false;
+    var listUrl = <?= json_encode($_flBase . '/index.php?page=list', JSON_UNESCAPED_SLASHES) ?>;
+
+    var sfForm = document.querySelector('.sf-form-language .sf-form, form.sf-form');
+    if (sfForm) {
+        sfForm.addEventListener('change', function () { isFormDirty = true; }, { passive: true });
+        sfForm.addEventListener('input', function () { isFormDirty = true; }, { passive: true });
+    }
+
+    function openCloseModal() {
+        var modal = document.getElementById('sfCloseConfirmModal');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+    function closeCloseModal() {
+        var modal = document.getElementById('sfCloseConfirmModal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+    function handleClose() {
+        if (!isFormDirty) {
+            window.location.href = listUrl;
+        } else {
+            openCloseModal();
+        }
+    }
+
+    var closeBtn = document.getElementById('sfFormLangCloseBtn');
+    if (closeBtn) closeBtn.addEventListener('click', handleClose);
+
+    var cancelBtn = document.getElementById('sfCloseConfirmCancel');
+    var dismissBtn = document.getElementById('sfCloseConfirmDismiss');
+    if (cancelBtn) cancelBtn.addEventListener('click', closeCloseModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeCloseModal);
+
+    var leaveBtn = document.getElementById('sfCloseConfirmLeave');
+    if (leaveBtn) {
+        leaveBtn.addEventListener('click', function () {
+            window.location.href = listUrl;
+        });
+    }
+
+    var modal = document.getElementById('sfCloseConfirmModal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeCloseModal();
+        });
+    }
+})();
 </script>

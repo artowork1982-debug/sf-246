@@ -6459,3 +6459,178 @@ body.form-page {
         padding: 8px 12px;
     }
 }
+
+/* =============================================================================
+   FULL-SCREEN FORM EXPERIENCE
+   Hides the site navigation and anchors the progress bar at the top of the
+   viewport on every device (mobile, tablet, desktop).
+   ============================================================================= */
+
+/* Hide the top nav and bottom nav on form pages */
+body.form-page .sf-nav {
+    display: none !important;
+}
+body.form-page .sf-bottom-nav {
+    display: none !important;
+}
+
+/* Reset body padding that was compensating for the sticky nav */
+body.form-page {
+    padding-top: env(safe-area-inset-top, 0px) !important;
+}
+
+/* Progress bar: always fixed at the very top on every screen size */
+body.form-page .sf-form-progress {
+    position: fixed !important;
+    top: env(safe-area-inset-top, 0px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1100 !important;
+    background: #0f172a !important;
+    margin: 0 !important;
+    padding: 10px 16px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    flex: none !important;
+}
+
+/* Desktop: wider padding and form margin-top to clear the fixed bar */
+@media (min-width: 769px) {
+    body.form-page .sf-form-progress {
+        padding: 14px 60px 14px 24px !important;
+    }
+    body.form-page .sf-form {
+        margin-top: 100px !important;
+    }
+    body.form-page .sf-form-progress__label {
+        display: block;
+    }
+    body.form-page .sf-form-progress__track {
+        display: block !important;
+    }
+}
+
+/* Tablet */
+@media (min-width: 480px) and (max-width: 768px) {
+    body.form-page .sf-form-progress {
+        padding: 10px 52px 10px 16px !important;
+    }
+    body.form-page .sf-form {
+        margin-top: 68px !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 479px) {
+    body.form-page .sf-form-progress {
+        padding: 8px 48px 8px 12px !important;
+    }
+    body.form-page .sf-form {
+        margin-top: 60px !important;
+    }
+}
+
+/* ── Close button inside the progress bar ── */
+.sf-form-progress {
+    position: relative;
+}
+
+.sf-form-progress__close {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+}
+
+.sf-form-progress__close:hover,
+.sf-form-progress__close:focus-visible {
+    background: rgba(239, 68, 68, 0.85);
+    border-color: transparent;
+    outline: none;
+}
+
+.sf-form-progress__close:active {
+    transform: translateY(-50%) scale(0.93);
+}
+
+.sf-form-progress__close svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+/* Nudge step buttons away from the close button */
+body.form-page .sf-form-progress .sf-form-progress__steps {
+    padding-right: 44px;
+}
+
+/* ── Close-confirmation modal ── */
+#sfCloseConfirmModal .sf-modal-content {
+    max-width: 400px;
+}
+
+/* ── Form-language top bar (fixed header replacement) ── */
+.sf-form-topbar {
+    display: none; /* hidden by default; shown only on form pages */
+}
+
+body.form-page .sf-form-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed !important;
+    top: env(safe-area-inset-top, 0px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1100 !important;
+    background: #0f172a !important;
+    padding: 10px 16px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.sf-form-topbar__title {
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 12px;
+}
+
+.sf-form-topbar__title strong {
+    color: #fff;
+}
+
+body.form-page .sf-form-container.sf-form-language {
+    margin-top: 0;
+}
+
+body.form-page .sf-translation-preview-wrapper {
+    margin-top: 58px;
+}
+
+@media (min-width: 769px) {
+    body.form-page .sf-form-topbar {
+        padding: 14px 24px !important;
+    }
+    body.form-page .sf-translation-preview-wrapper {
+        margin-top: 68px;
+    }
+}
