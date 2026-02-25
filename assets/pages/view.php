@@ -1820,6 +1820,9 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
 <div class="sf-modal hidden" id="modalToComms" role="dialog" aria-modal="true" aria-labelledby="modalToCommsTitle">
     <div class="sf-modal-content sf-modal-comms">
         
+        <form id="commsForm">
+        <?= sf_csrf_field() ?>
+
         <!-- STEP 1: Language Versions -->
         <div class="sf-comms-step" id="commsStep1">
             <h2 id="modalToCommsTitle">
@@ -1836,9 +1839,6 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 <span class="sf-step">4</span>
             </div>
 
-            <form id="commsForm">
-                <?= sf_csrf_field() ?>
-                
                 <div class="sf-field">
                     <label class="sf-label">
                         <?= htmlspecialchars(sf_term('comms_step1_languages', $currentUiLang) ?? 'Valitse kieliversiot', ENT_QUOTES, 'UTF-8') ?>
@@ -1865,7 +1865,6 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                         <?php endforeach; ?>
                     </div>
                 </div>
-            </form>
 
             <div class="sf-modal-actions">
                 <button type="button" class="sf-btn sf-btn-secondary" data-modal-close="modalToComms">
@@ -1877,7 +1876,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             </div>
         </div>
 
-        <!-- STEP 2: Xibo Screens - COMPACT VERSION -->
+        <!-- STEP 2: Xibo Screens -->
         <div class="sf-comms-step hidden" id="commsStep2">
             <div class="sf-comms-header-row">
                 <h2><?= htmlspecialchars(sf_term('modal_to_comms_title', $currentUiLang) ?? 'Lähetä viestintään', ENT_QUOTES, 'UTF-8') ?></h2>
@@ -1895,111 +1894,44 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             <div class="sf-field">
                 <label class="sf-label"><?= htmlspecialchars(sf_term('comms_step2_screens', $currentUiLang) ?? 'Xibo-näytöt', ENT_QUOTES, 'UTF-8') ?></label>
                 <p class="sf-help-text"><?= htmlspecialchars(sf_term('comms_step2_screens_help', $currentUiLang) ?? 'Valitse työmaanäytöt jossa SafetyFlash esitetään', ENT_QUOTES, 'UTF-8') ?></p>
-                
+
                 <!-- Inline radio options -->
                 <div class="sf-radio-options-inline">
                     <label class="sf-radio-pill">
                         <input type="radio" name="screens_option" value="all" id="screensAll" checked>
-                        <span>Kaikki näytöt</span>
+                        <span><?= htmlspecialchars(sf_term('comms_screens_all', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?></span>
                     </label>
                     <label class="sf-radio-pill">
                         <input type="radio" name="screens_option" value="selected" id="screensSelected">
-                        <span>Valitse</span>
+                        <span><?= htmlspecialchars(sf_term('comms_screens_select', $currentUiLang) ?? 'Valitse', ENT_QUOTES, 'UTF-8') ?></span>
                     </label>
                 </div>
-                
-                <!-- Compact selection panel -->
-                <div id="commsScreensSelection" class="sf-compact-selection hidden">
-                    <!-- Header with clear button -->
-                    <div class="sf-selection-header">
-                        <span class="sf-selection-title"><?= htmlspecialchars(sf_term('comms_select_targets', $currentUiLang) ?? 'Valitse kohteet', ENT_QUOTES, 'UTF-8') ?></span>
-                        <button type="button" id="btnClearSelections" class="sf-btn-text-small">
-                            <?= htmlspecialchars(sf_term('btn_clear_selections', $currentUiLang) ?? 'Tyhjennä valinnat', ENT_QUOTES, 'UTF-8') ?>
-                        </button>
-                    </div>
-                    
-                    <!-- Country chips in one row -->
-                    <div class="sf-country-row">
-                        <?php
-                        // Fetch worksites from sf_worksites grouped by country
-                        try {
-                            $countryStmt = Database::getInstance()->prepare("
-                                SELECT country, COUNT(*) as count 
-                                FROM sf_worksites 
-                                WHERE is_active = 1 
-                                GROUP BY country
-                            ");
-                            $countryStmt->execute();
-                            $countryCounts = $countryStmt->fetchAll(PDO::FETCH_KEY_PAIR);
-                        } catch (Exception $e) {
-                            $countryCounts = ['fi' => 0];
-                        }
-                        
-                        $countries = [
-                            'fi' => ['flag' => '🇫🇮', 'name' => 'Suomi'],
-                            'it' => ['flag' => '🇮🇹', 'name' => 'Italia'],
-                            'el' => ['flag' => '🇬🇷', 'name' => 'Kreikka'],
-                        ];
-                        
-                        foreach ($countries as $code => $data):
-                            $count = $countryCounts[$code] ?? 0;
-                            if ($count === 0) continue;
-                        ?>
-                            <label class="sf-country-chip-compact" data-country="<?= $code ?>">
-                                <input type="checkbox" name="countries[]" value="<?= $code ?>">
-                                <span class="sf-cc-flag"><?= $data['flag'] ?></span>
-                                <span class="sf-cc-name"><?= $data['name'] ?></span>
-                                <span class="sf-cc-count">(<?= $count ?>)</span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                    
-                    <!-- Search row -->
-                    <div class="sf-search-row">
-                        <input type="text" 
-                               id="worksiteSearchInput" 
-                               class="sf-search-compact" 
-                               placeholder="🔍 Hae työmaata...">
-                    </div>
-                    
-                    <!-- Search results (HIDDEN by default) -->
-                    <div id="worksiteSearchResults" class="sf-search-results hidden">
-                        <?php
-                        try {
-                            $wsStmt = Database::getInstance()->prepare("
-                                SELECT id, name, country 
-                                FROM sf_worksites 
-                                WHERE is_active = 1 
-                                ORDER BY name ASC
-                            ");
-                            $wsStmt->execute();
-                            while ($ws = $wsStmt->fetch(PDO::FETCH_ASSOC)):
-                                $flag = $countries[$ws['country']]['flag'] ?? '🏳️';
-                        ?>
-                            <label class="sf-ws-result hidden" data-search="<?= htmlspecialchars(strtolower($ws['name'])) ?>">
-                                <input type="checkbox" name="worksites[]" value="<?= (int)$ws['id'] ?>">
-                                <span class="sf-ws-name"><?= htmlspecialchars($ws['name']) ?></span>
-                                <span class="sf-ws-flag"><?= $flag ?></span>
-                            </label>
-                        <?php 
-                            endwhile;
-                        } catch (Exception $e) {
-                            error_log('Error loading worksites: ' . $e->getMessage());
-                        }
-                        ?>
-                    </div>
-                    
-                    <!-- Current selection (only shows when something selected) -->
-                    <div id="selectionDisplay" class="sf-selection-display hidden">
-                        <span class="sf-sel-label">Valittu:</span>
-                        <div id="selectionTags" class="sf-sel-tags"></div>
-                    </div>
+
+                <!-- Display target selector (shown when "Valitse" is chosen) -->
+                <div id="commsScreensSelection" class="hidden">
+                    <?php
+                    $commsOriginalFlash = $flash;
+                    $stmtCommsVersions = $pdo->prepare("
+                        SELECT id, lang, title FROM sf_flashes
+                        WHERE id = :gid OR translation_group_id = :gid2
+                        ORDER BY FIELD(lang, 'fi', 'sv', 'en', 'it', 'el')
+                    ");
+                    $stmtCommsVersions->execute([':gid' => $translationGroupId, ':gid2' => $translationGroupId]);
+                    $commsLangVersions = $stmtCommsVersions->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($commsLangVersions as $commsVer):
+                        $flash = $commsVer;
+                        $context = 'safety_team';
+                        unset($preselectedIds);
+                        require __DIR__ . '/../partials/display_target_selector.php';
+                    endforeach;
+                    $flash = $commsOriginalFlash;
+                    ?>
                 </div>
             </div>
 
             <div class="sf-modal-actions">
-                <button type="button" class="sf-btn sf-btn-secondary" id="btnCommsStep2Back">← Takaisin</button>
-                <button type="button" class="sf-btn sf-btn-primary" id="btnCommsStep2Next">Seuraava →</button>
+                <button type="button" class="sf-btn sf-btn-secondary" id="btnCommsStep2Back">← <?= htmlspecialchars(sf_term('btn_back', $currentUiLang) ?? 'Takaisin', ENT_QUOTES, 'UTF-8') ?></button>
+                <button type="button" class="sf-btn sf-btn-primary" id="btnCommsStep2Next"><?= htmlspecialchars(sf_term('btn_next', $currentUiLang) ?? 'Seuraava', ENT_QUOTES, 'UTF-8') ?> →</button>
             </div>
         </div>
 
@@ -2117,11 +2049,11 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             </div>
         </div>
 
+        </form>
     </div>
 </div>
 
 <!-- Modal: Send to Safety Team (from Supervisor) -->
-<div class="sf-modal hidden" id="modalSendSafety" role="dialog" aria-modal="true" aria-labelledby="modalSendSafetyTitle">
     <div class="sf-modal-content">
         <h2 id="modalSendSafetyTitle">
             <?= htmlspecialchars(sf_term('modal_send_safety_title', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>

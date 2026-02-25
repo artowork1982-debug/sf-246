@@ -144,27 +144,15 @@
                 langsSummary.textContent = selectedLangs.length > 0 ? selectedLangs.join(', ') : getTerm('comms_summary_none', 'Ei valintoja');
             }
 
-            // Screens/worksites summary - UPDATED TO SHOW COUNTRY NAMES
+            // Screens summary - show count of selected display targets
             var screensSummary = document.getElementById('commsSummaryScreens');
             if (screensSummary) {
                 if (screensAll && screensAll.checked) {
-                    screensSummary.textContent = getTerm('comms_all_countries', 'Kaikki maat');
+                    screensSummary.textContent = getTerm('comms_screens_all', 'Kaikki näytöt');
                 } else {
-                    var parts = [];
-
-                    // Add country names with flags
-                    selectedCountries.forEach(function (code) {
-                        var data = countryNames[code];
-                        parts.push(data.flag + ' ' + data.name);
-                    });
-
-                    // Add individual worksite names
-                    selectedWorksites.forEach(function (name) {
-                        parts.push(name);
-                    });
-
-                    if (parts.length > 0) {
-                        screensSummary.textContent = parts.join(', ');
+                    var checkedDisplays = qsa('#commsStep2 .dt-display-chip-cb:checked').length;
+                    if (checkedDisplays > 0) {
+                        screensSummary.textContent = checkedDisplays + ' ' + getTerm('comms_summary_displays', 'näyttöä');
                     } else {
                         screensSummary.textContent = getTerm('comms_summary_none', 'Ei valintoja');
                     }
@@ -233,52 +221,11 @@
                 var form = document.getElementById('commsForm');
                 if (!form) return;
 
+                // FormData now captures all fields from the form (all steps)
                 var formData = new FormData(form);
-
-                // Add message from step 4
-                var message = document.getElementById('commsMessage');
-                if (message) {
-                    formData.append('message', message.value);
-                }
-
-                // Add screens option
-                var screensOption = qsa('input[name="screens_option"]:checked')[0];
-                if (screensOption) {
-                    formData.append('screens_option', screensOption.value);
-                }
-
-                // EXPLICITLY add selected countries
-                qsa('.sf-country-chip-compact input[type="checkbox"]:checked').forEach(function (cb) {
-                    formData.append('countries[]', cb.value);
-                });
-
-                // EXPLICITLY add selected worksites
-                qsa('#worksiteSearchResults input[type="checkbox"]:checked').forEach(function (cb) {
-                    formData.append('worksites[]', cb.value);
-                });
-
-                // Add wider distribution toggle
-                var widerDist = document.getElementById('widerDistribution');
-                if (widerDist && widerDist.checked) {
-                    formData.append('wider_distribution', '1');
-                }
 
                 // Debug log
                 console.log('=== DEBUG: Form submission ===');
-                console.log('screens_option:', screensOption ? screensOption.value : 'none');
-
-                var countryCbs = qsa('.sf-country-chip-compact input:checked');
-                console.log('Selected countries:', countryCbs.length);
-                countryCbs.forEach(function (cb) {
-                    console.log('  - Country:', cb.value);
-                });
-
-                var worksiteCbs = qsa('#worksiteSearchResults input:checked');
-                console.log('Selected worksites:', worksiteCbs.length);
-                worksiteCbs.forEach(function (cb) {
-                    console.log('  - Worksite ID:', cb.value);
-                });
-
                 console.log('Form data being sent:');
                 for (var pair of formData.entries()) {
                     console.log(pair[0] + ': ' + pair[1]);
@@ -334,210 +281,6 @@
                         btnCommsSend.disabled = false;
                         btnCommsSend.textContent = getTerm('btn_send_comms', 'Lähetä viestintään');
                     });
-            });
-        }
-
-        // Worksite chip grid functionality - REPLACED WITH COUNTRY-BASED SELECTION
-        // Country and worksite selection - COMPACT VERSION
-        var countryChips = qsa('.sf-country-chip-compact');
-        var worksiteSearch = document.getElementById('worksiteSearchInput');
-        var worksiteResults = document.getElementById('worksiteSearchResults');
-        var selectionDisplay = document.getElementById('selectionDisplay');
-        var selectionTags = document.getElementById('selectionTags');
-
-        // Country data for summary
-        var countryNames = {
-            'fi': { flag: '🇫🇮', name: getTerm('country_finland', 'Suomi') },
-            'it': { flag: '🇮🇹', name: getTerm('country_italy', 'Italia') },
-            'el': { flag: '🇬🇷', name: getTerm('country_greece', 'Kreikka') }
-        };
-
-        // Track selections
-        var selectedCountries = new Set();
-        var selectedWorksites = new Map(); // id -> name
-
-        // Country chip toggle - FIXED: Listen to change event, not click
-        countryChips.forEach(function (chip) {
-            var checkbox = chip.querySelector('input[type="checkbox"]');
-            if (!checkbox) return;
-
-            // Listen to change event (triggered by native label behavior)
-            checkbox.addEventListener('change', function () {
-                // Update visual state
-                chip.classList.toggle('selected', this.checked);
-                updateSelectionDisplay();
-            });
-
-            // Initialize state
-            chip.classList.toggle('selected', checkbox.checked);
-        });
-
-        // Worksite search - ONLY show results when typing
-        if (worksiteSearch && worksiteResults) {
-            // Ensure all results are hidden initially
-            var allResults = worksiteResults.querySelectorAll('.sf-ws-result');
-            allResults.forEach(function (r) {
-                r.classList.add('hidden');
-            });
-
-            worksiteSearch.addEventListener('input', function () {
-                var term = this.value.toLowerCase().trim();
-                var results = worksiteResults.querySelectorAll('.sf-ws-result');
-                var hasVisible = false;
-
-                if (term.length === 0) {
-                    // HIDE all results when search is empty
-                    results.forEach(function (r) {
-                        r.classList.add('hidden');
-                    });
-                    worksiteResults.classList.add('hidden');
-                    return;
-                }
-
-                // Show results container and filter
-                worksiteResults.classList.remove('hidden');
-
-                results.forEach(function (result) {
-                    var searchText = result.getAttribute('data-search') || '';
-                    if (searchText.includes(term)) {
-                        result.classList.remove('hidden');
-                        hasVisible = true;
-                    } else {
-                        result.classList.add('hidden');
-                    }
-                });
-
-                // Hide container if no matches
-                if (!hasVisible) {
-                    worksiteResults.classList.add('hidden');
-                }
-            });
-        }
-
-        // Worksite checkbox change handler
-        if (worksiteResults) {
-            worksiteResults.addEventListener('change', function (e) {
-                if (e.target.type !== 'checkbox') return;
-
-                var label = e.target.closest('.sf-ws-result');
-                var id = e.target.value;
-                var name = label.querySelector('.sf-ws-name').textContent;
-
-                if (e.target.checked) {
-                    selectedWorksites.set(id, name);
-                } else {
-                    selectedWorksites.delete(id);
-                }
-
-                updateSelectionDisplay();
-            });
-        }
-
-        // Clear selections button
-        var btnClearSelections = document.getElementById('btnClearSelections');
-        if (btnClearSelections) {
-            btnClearSelections.addEventListener('click', function () {
-                // Clear country selections
-                qsa('.sf-country-chip-compact').forEach(function (chip) {
-                    chip.classList.remove('selected');
-                    var cb = chip.querySelector('input[type="checkbox"]');
-                    if (cb) cb.checked = false;
-                });
-
-                // Clear worksite selections
-                qsa('#worksiteSearchResults input[type="checkbox"]').forEach(function (cb) {
-                    cb.checked = false;
-                });
-
-                // Clear search field
-                var searchInput = document.getElementById('worksiteSearchInput');
-                if (searchInput) {
-                    searchInput.value = '';
-                    // Hide search results
-                    var results = document.getElementById('worksiteSearchResults');
-                    if (results) {
-                        results.querySelectorAll('.sf-ws-result').forEach(function (r) {
-                            r.classList.add('hidden');
-                        });
-                        results.classList.add('hidden');
-                    }
-                }
-
-                // Explicitly clear data structures for clarity
-                selectedCountries.clear();
-                selectedWorksites.clear();
-
-                // Update display (also rebuilds data structures from checkboxes)
-                updateSelectionDisplay();
-            });
-        }
-
-        // Update selection display
-        function updateSelectionDisplay() {
-            if (!selectionDisplay || !selectionTags) return;
-
-            selectionTags.innerHTML = '';
-            var hasSelection = false;
-
-            // Clear and rebuild selectedCountries and selectedWorksites
-            selectedCountries.clear();
-            selectedWorksites.clear();
-
-            // Add country tags
-            qsa('.sf-country-chip-compact input:checked').forEach(function (cb) {
-                hasSelection = true;
-                var chip = cb.closest('.sf-country-chip-compact');
-                var flag = chip.querySelector('.sf-cc-flag').textContent;
-                var name = chip.querySelector('.sf-cc-name').textContent;
-                var country = chip.getAttribute('data-country');
-
-                // Update selectedCountries for summary
-                selectedCountries.add(country);
-
-                var tag = document.createElement('span');
-                tag.className = 'sf-sel-tag';
-                tag.innerHTML = flag + ' ' + name + ' <span class="sf-sel-tag-remove" data-type="country" data-value="' + country + '">×</span>';
-                selectionTags.appendChild(tag);
-            });
-
-            // Add worksite tags
-            qsa('#worksiteSearchResults input:checked').forEach(function (cb) {
-                hasSelection = true;
-                var label = cb.closest('.sf-ws-result');
-                var name = label.querySelector('.sf-ws-name').textContent;
-                var id = cb.value;
-
-                // Update selectedWorksites for summary
-                selectedWorksites.set(id, name);
-
-                var tag = document.createElement('span');
-                tag.className = 'sf-sel-tag';
-                tag.innerHTML = name + ' <span class="sf-sel-tag-remove" data-type="worksite" data-value="' + id + '">×</span>';
-                selectionTags.appendChild(tag);
-            });
-
-            // Show/hide display
-            selectionDisplay.classList.toggle('hidden', !hasSelection);
-
-            // Add remove handlers
-            selectionTags.querySelectorAll('.sf-sel-tag-remove').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var type = this.getAttribute('data-type');
-                    var value = this.getAttribute('data-value');
-
-                    if (type === 'country') {
-                        var chip = document.querySelector('.sf-country-chip-compact[data-country="' + value + '"]');
-                        if (chip) {
-                            chip.querySelector('input').checked = false;
-                            chip.classList.remove('selected');
-                        }
-                    } else {
-                        var cb = document.querySelector('#worksiteSearchResults input[value="' + value + '"]');
-                        if (cb) cb.checked = false;
-                    }
-
-                    updateSelectionDisplay();
-                });
             });
         }
 

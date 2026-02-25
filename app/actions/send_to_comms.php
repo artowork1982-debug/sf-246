@@ -280,7 +280,16 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
     // Save display target preselections (is_active=0 = preselected by safety team, not yet published)
     try {
         $allDisplayTargets = $_POST['display_targets'] ?? [];
-        if (!empty($allDisplayTargets)) {
+
+        // When screens_option=all, fetch all active display IDs to use as preselections
+        $allActiveDisplayIds = [];
+        if ($screensOption === 'all') {
+            $stmtAllDisplays = $pdo->prepare("SELECT id FROM sf_display_api_keys WHERE is_active = 1");
+            $stmtAllDisplays->execute();
+            $allActiveDisplayIds = $stmtAllDisplays->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        if (!empty($allDisplayTargets) || !empty($allActiveDisplayIds)) {
             $groupId = !empty($flash['translation_group_id'])
                 ? (int) $flash['translation_group_id']
                 : (int) $flash['id'];
@@ -301,7 +310,12 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
 
             foreach ($allVersionIds as $verId) {
                 $verId = (int) $verId;
-                $targetsForThis = $allDisplayTargets[$verId] ?? [];
+                // When screens_option=all, use all active display IDs; otherwise use per-flash POST data
+                if ($screensOption === 'all') {
+                    $targetsForThis = $allActiveDisplayIds ?? [];
+                } else {
+                    $targetsForThis = $allDisplayTargets[$verId] ?? [];
+                }
                 $stmtDelete->execute([$verId]);
 
                 if (!empty($targetsForThis)) {
