@@ -224,6 +224,11 @@
                 // FormData now captures all fields from the form (all steps)
                 var formData = new FormData(form);
 
+                // Ensure screens_option=all is explicitly included when "All screens" is selected
+                if (screensAll && screensAll.checked) {
+                    formData.set('screens_option', 'all');
+                }
+
                 // Debug log
                 console.log('=== DEBUG: Form submission ===');
                 console.log('Form data being sent:');
