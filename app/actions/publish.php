@@ -78,6 +78,10 @@ if ($publishMode === 'single') {
         ':distribution' => $sendToDistribution ? 1 : 0,
     ]);
 
+    // Clear display snapshot so the new published preview takes over on Xibo displays.
+    $pdo->prepare("UPDATE sf_flashes SET display_snapshot_active = 0, display_snapshot_preview = NULL WHERE id = ?")
+        ->execute([$id]);
+
     sf_app_log("publish.php: Single language version published: flash_id={$id}");
 
     // Display targets — vain tälle kieliversiolle
@@ -155,6 +159,11 @@ if ($publishMode === 'single') {
             $publishedVersionIds
         );
         $updateStmt->execute($params);
+
+        // Clear display snapshot so the new published preview takes over on Xibo displays.
+        $clearPlaceholders = implode(',', array_fill(0, count($publishedVersionIds), '?'));
+        $pdo->prepare("UPDATE sf_flashes SET display_snapshot_active = 0, display_snapshot_preview = NULL WHERE id IN ({$clearPlaceholders})")
+            ->execute($publishedVersionIds);
 
         sf_app_log("publish.php: Published " . count($publishedVersionIds) . " versions: " . implode(',', $publishedVersionIds));
     }
