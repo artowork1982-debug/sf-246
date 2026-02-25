@@ -132,19 +132,23 @@ try {
         }
     }
 
-    // Update TTL on flash
-    if ($ttlDays > 0) {
-        $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
-        $pdo->prepare("UPDATE sf_flashes SET display_expires_at = ?, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
-            ->execute([$expiresAt, $flashId]);
-    } else {
-        $pdo->prepare("UPDATE sf_flashes SET display_expires_at = NULL, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
-            ->execute([$flashId]);
-    }
+    // Update TTL and duration on flash — wrapped in try/catch so a missing column
+    // (migration not yet run) does not block the main display-target save operation.
+    try {
+        if ($ttlDays > 0) {
+            $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlDays} days"));
+            $pdo->prepare("UPDATE sf_flashes SET display_expires_at = ?, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+                ->execute([$expiresAt, $flashId]);
+        } else {
+            $pdo->prepare("UPDATE sf_flashes SET display_expires_at = NULL, display_removed_at = NULL, display_removed_by = NULL WHERE id = ?")
+                ->execute([$flashId]);
+        }
 
-    // Update duration on flash
-    $pdo->prepare("UPDATE sf_flashes SET display_duration_seconds = ? WHERE id = ?")
-        ->execute([$durationSeconds, $flashId]);
+        $pdo->prepare("UPDATE sf_flashes SET display_duration_seconds = ? WHERE id = ?")
+            ->execute([$durationSeconds, $flashId]);
+    } catch (Throwable $colErr) {
+        error_log('display_targets_save.php: column update skipped (migration pending?): ' . $colErr->getMessage());
+    }
 
     $pdo->commit();
 

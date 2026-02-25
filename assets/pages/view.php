@@ -2454,12 +2454,18 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
             summaryDur.textContent = durLabel ? durLabel.textContent.trim() : (durInput ? durInput.value + 's' : '—');
         }
 
-        // Display targets
+        // Display targets — use data-label attribute or parent .sf-dt-result-item text
         var selectedDisplays = [];
-        document.querySelectorAll('#publishForm .sf-display-chip-input:checked').forEach(function (cb) {
-            var chip = cb.closest('.sf-display-chip');
-            if (chip) {
-                selectedDisplays.push(chip.textContent.trim());
+        document.querySelectorAll('#publishForm .sf-display-chip-input:checked, #publishForm .dt-display-chip-cb:checked').forEach(function (cb) {
+            var label = cb.getAttribute('data-label');
+            if (!label) {
+                var parent = cb.closest('.sf-dt-result-item') || cb.closest('.sf-display-chip');
+                if (parent) {
+                    label = parent.textContent.trim();
+                }
+            }
+            if (label) {
+                selectedDisplays.push(label);
             }
         });
         var summaryDisplays = document.getElementById('summaryDisplays');
