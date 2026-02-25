@@ -87,6 +87,18 @@
                 updateLangChipStates(container);
             }
         });
+
+        // Clear all button
+        var clearAllBtn = container.querySelector('.sf-dt-clear-all-btn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', function () {
+                container.querySelectorAll('.dt-display-chip-cb').forEach(function (cb) {
+                    cb.checked = false;
+                });
+                updateSelectionDisplay(container);
+                updateLangChipStates(container);
+            });
+        }
     }
 
     function updateSelectionDisplay(container) {
@@ -182,6 +194,19 @@
 
             if (!hasVisible) {
                 searchResults.classList.add('hidden');
+            }
+        });
+
+        // Auto-clear search after selecting a result
+        searchResults.addEventListener('click', function (e) {
+            var resultItem = e.target.closest('.sf-dt-result-item');
+            if (resultItem) {
+                searchInput.value = '';
+                container.querySelectorAll('.sf-dt-result-item').forEach(function (item) {
+                    item.classList.add('hidden');
+                });
+                searchResults.classList.add('hidden');
+                searchInput.focus();
             }
         });
     }

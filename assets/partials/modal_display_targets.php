@@ -74,6 +74,9 @@ $dtDurationOptions = [
 
         <div class="sf-modal-body">
 
+            <!-- TTL + Duration valitsimet vierekkäin -->
+            <div class="sf-dt-compact-row">
+
             <!-- TTL valitsin -->
             <div class="sf-dt-section">
                 <div class="sf-ttl-header">
@@ -121,6 +124,8 @@ $dtDurationOptions = [
                     <?php endforeach; ?>
                 </div>
             </div>
+
+            </div><!-- /.sf-dt-compact-row -->
 
             <!-- Näyttökohteet -->
             <div class="sf-dt-section">
