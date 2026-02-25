@@ -255,7 +255,9 @@
                                 return { ok: true };
                             });
                         }
-                        return response.json();
+                        return response.json().catch(function () {
+                            return { ok: false, message: getTerm('error_sending', 'Virhe lähetyksessä') };
+                        });
                     })
                     .then(function (data) {
                         if (data && data.ok === true) {
