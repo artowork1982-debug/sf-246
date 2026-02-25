@@ -48,6 +48,7 @@ try {
             occurred_at, created_at, grid_bitmap,
             image_main, image_2, image_3,
             image1_caption, image2_caption, image3_caption,
+            preview_filename, preview_filename_2,
             display_snapshot_preview, original_type, translation_group_id
         FROM sf_flashes 
         WHERE id = ?
