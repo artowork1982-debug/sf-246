@@ -6506,9 +6506,6 @@ body.form-page .sf-form-progress {
         display: block;
         color: #9ca3af;
     }
-    body.form-page .sf-form-progress__track {
-        display: block !important;
-    }
 }
 
 /* Tablet */
@@ -6576,6 +6573,7 @@ body.form-page .sf-form-progress {
 /* Nudge step buttons away from the close button */
 body.form-page .sf-form-progress .sf-form-progress__steps {
     padding-right: 44px;
+    margin-top: 0;
 }
 
 /* ── Close-confirmation modal ── */
@@ -6636,28 +6634,71 @@ body.form-page .sf-translation-preview-wrapper {
     }
 }
 
-/* ── Type-colored progress bar ────────────────────────────────────────────────
-   When a type (red/yellow/green) is selected the progress bar keeps its dark
-   background and displays a bold type-coloured border along the top edge.
+/* ── Progress track repositioned to the very top edge of the bar ─────────────
+   The thin track/fill strip sits flush at the top (position absolute) so there
+   is only one visual line above the step circles.  The fill colour reflects the
+   selected Safetyflash type (red / yellow / green).
    ────────────────────────────────────────────────────────────────────────── */
+
+body.form-page .sf-form-progress__track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    display: block !important;
+}
+
+body.form-page .sf-form-progress__fill {
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.form-page .sf-form-progress__fill::after {
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
+}
+
+body.form-page .sf-form-progress.type-red .sf-form-progress__fill {
+    background: #ef4444;
+}
+
+body.form-page .sf-form-progress.type-yellow .sf-form-progress__fill {
+    background: #eab308;
+}
+
+body.form-page .sf-form-progress.type-green .sf-form-progress__fill {
+    background: #22c55e;
+}
+
+/* Remove the horizontal connector line drawn between step circles */
+body.form-page .sf-form-progress__steps::before {
+    display: none !important;
+}
+
+/* ── Type classes: keep dark background only, no static border-top stripe ── */
 
 body.form-page .sf-form-progress.type-red {
     background: #0f172a !important;
-    border-top: 8px solid #ef4444 !important;
+    border-top: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
 
 body.form-page .sf-form-progress.type-yellow {
     background: #0f172a !important;
-    border-top: 8px solid #eab308 !important;
+    border-top: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
 
 body.form-page .sf-form-progress.type-green {
     background: #0f172a !important;
-    border-top: 8px solid #22c55e !important;
+    border-top: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
