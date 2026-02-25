@@ -123,6 +123,7 @@ $lang_val = $flash['lang'] ?? 'fi';
                 </span>
                 <span class="sf-btn-label"><?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?></span>
             </button>
+            <?php if (!empty($sfPreviewControlsSlot)) echo $sfPreviewControlsSlot; ?>
         </div>
     </div>
 </div>
