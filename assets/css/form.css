@@ -6645,7 +6645,7 @@ body.form-page .sf-form-progress__track {
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 4px;
     background: rgba(255, 255, 255, 0.12);
     border-radius: 0;
     box-shadow: none;
@@ -6702,3 +6702,54 @@ body.form-page .sf-form-progress.type-green {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
+
+/* ── Issue 1: Remove thick type-colored border-top from the white form when the
+   progress bar is visible — the color lives in the progress track only. ── */
+body.form-page .sf-form {
+    border-top-width: 1px !important;
+    border-top-color: #e5e7eb !important;
+}
+
+/* ── Issue 2: Give step circles enough breathing room below the 4px track ── */
+@media (max-width: 768px) {
+    body.form-page .sf-form-progress .sf-form-progress__steps {
+        padding-top: 8px;
+    }
+}
+
+/* ── Issue 3: Step circle colors for dark-background progress bar ─────────────
+   On body.form-page the progress bar sits on a dark #0f172a background, so the
+   default light-grey and blue circles for locked / accessible steps look wrong.
+   Override them to semi-transparent dark tones with light text.
+   ────────────────────────────────────────────────────────────────────────── */
+body.form-page .sf-form-progress__number {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    box-shadow: none !important;
+}
+
+body.form-page .sf-form-progress__step.sf-form-progress__step--locked .sf-form-progress__number {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: none !important;
+}
+
+body.form-page .sf-form-progress__step.sf-form-progress__step--locked .sf-form-progress__label {
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+body.form-page .sf-form-progress__step.sf-form-progress__step--accessible:not(.sf-form-progress__step--active):not(.sf-form-progress__step--completed) .sf-form-progress__number {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.form-page .sf-form-progress__step.sf-form-progress__step--accessible:not(.sf-form-progress__step--active):not(.sf-form-progress__step--completed) .sf-form-progress__label {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Active step stays bright/accent-coloured — no override needed for that. */
+/* Completed step (green checkmark) also unchanged. */
