@@ -6619,7 +6619,7 @@ body.form-page .sf-form-topbar {
 }
 
 body.form-page .sf-form-container.sf-form-language {
-    margin-top: 60px;
+    margin-top: 0;
 }
 
 body.form-page .sf-translation-preview-wrapper {
@@ -6629,9 +6629,6 @@ body.form-page .sf-translation-preview-wrapper {
 @media (min-width: 769px) {
     body.form-page .sf-form-topbar {
         padding: 14px 24px !important;
-    }
-    body.form-page .sf-form-container.sf-form-language {
-        margin-top: 0;
     }
     body.form-page .sf-translation-preview-wrapper {
         margin-top: 68px;
