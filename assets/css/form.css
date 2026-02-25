@@ -4296,8 +4296,8 @@ input[type="time"]:hover {
 @media (max-width: 768px) {
     .sf-form-progress {
         position: fixed !important;
-        top: calc(var(--sf-nav-height-mobile) + -10px) !important;
-        /* Below nav with spacing */
+        top: var(--sf-nav-height-mobile) !important;
+        /* Exactly below nav */
         left: 0 !important;
         right: 0 !important;
         z-index: 1000 !important;
@@ -4366,8 +4366,8 @@ input[type="time"]:hover {
 
 @media (max-width: 480px) {
     .sf-form-progress {
-        top: calc(var(--sf-nav-height-small) + 15px) !important;
-        /* Below nav with spacing */
+        top: var(--sf-nav-height-small) !important;
+        /* Exactly below nav */
         padding: 10px 12px !important;
         /* Slightly less padding on smaller screens */
     }
@@ -5711,8 +5711,7 @@ body.form-page {
 
     .sf-step-content {
         padding: 1rem;
-        padding-bottom: 140px;
-        /* Space for fixed button + bottom nav */
+        padding-bottom: 24px;
     }
 
     /* Step heading */
@@ -6394,5 +6393,68 @@ body.form-page {
     }
     .sf-crop-guide-details ul {
         font-size: 0.88em;
+    }
+}
+
+/* ===== IMAGE EDITOR COMPACT - FULLSCREEN ON MOBILE ===== */
+@media (max-width: 768px) {
+    /* Make compact editor card fill the whole screen */
+    .sf-edit-modal-card.sf-edit-compact {
+        border-radius: 0;
+        height: 100vh;
+        max-height: 100vh;
+        width: 100vw;
+        max-width: 100vw;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Minimize header - hide title, keep action buttons */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-modal-header-compact {
+        padding: 6px 12px;
+        flex-shrink: 0;
+    }
+
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-header-left h2 {
+        display: none;
+    }
+
+    /* Body fills remaining space as flex column */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-modal-body-compact {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Canvas area grows to fill body */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-canvas-area {
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Remove max-height constraint on canvas wrap - let it fill canvas area */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-canvas-wrap {
+        max-height: none;
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Sidebar - compact, hide hints to save space */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-sidebar {
+        flex-shrink: 0;
+    }
+
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-sidebar-title,
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-sidebar-hint {
+        display: none;
+    }
+
+    /* Footer - less padding to save space */
+    .sf-edit-modal-card.sf-edit-compact .sf-edit-modal-footer-compact {
+        flex-shrink: 0;
+        padding: 8px 12px;
     }
 }
