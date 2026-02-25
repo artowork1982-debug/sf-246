@@ -450,7 +450,16 @@ try {
         if ($originalTypeValue === null && $oldType !== 'green') {
             $originalTypeValue = $oldType;
         }
-        
+
+        // Snapshot the current preview so Xibo displays remain uninterrupted during the
+        // investigation workflow (the flash leaves 'published' state but must stay visible).
+        $snapshotPreview = null;
+        $snapshotActive = 0;
+        if ($oldState === 'published' && !empty($origFlash['preview_filename'])) {
+            $snapshotPreview = $origFlash['preview_filename'];
+            $snapshotActive = 1;
+        }
+
         $sql = "UPDATE sf_flashes SET
             type = 'green',
             original_type = :original_type,
@@ -466,6 +475,8 @@ try {
             preview_status = 'pending',
             preview_filename = NULL,
             preview_filename_2 = NULL,
+            display_snapshot_preview = :display_snapshot_preview,
+            display_snapshot_active = :display_snapshot_active,
             font_size_override = :font_size_override,
             updated_at = NOW()
             WHERE id = :id";
@@ -480,6 +491,8 @@ try {
             ':root_causes' => trim((string) ($post['root_causes'] ?? '')),
             ':actions'     => trim((string) ($post['actions'] ?? '')),
             ':state'       => $newState,
+            ':display_snapshot_preview' => $snapshotPreview,
+            ':display_snapshot_active'  => $snapshotActive,
             ':font_size_override' => !empty($post['font_size_override']) ? trim((string) $post['font_size_override']) : null,
             ':id'          => $relatedFlashId,
         ]);

@@ -175,13 +175,24 @@ try {
     // Get display key id for JOIN
     $displayKeyId = (int)$keyData['id'];
 
-    // Fetch active flashes for this specific display (via sf_flash_display_targets)
+    // Fetch active flashes for this specific display (via sf_flash_display_targets).
+    // Also include flashes whose display snapshot is active — these are flashes that were
+    // published but are currently being converted to an investigation report. The snapshot
+    // preserves the original preview image so Xibo displays remain uninterrupted.
     $stmt = $pdo->prepare("
         SELECT
             f.id,
             f.title,
-            f.preview_filename,
-            f.type,
+            CASE
+                WHEN f.display_snapshot_active = 1 AND f.display_snapshot_preview IS NOT NULL
+                    THEN f.display_snapshot_preview
+                ELSE f.preview_filename
+            END AS preview_filename,
+            CASE
+                WHEN f.display_snapshot_active = 1 AND f.original_type IS NOT NULL
+                    THEN f.original_type
+                ELSE f.type
+            END AS type,
             f.published_at,
             f.created_at,
             f.display_duration_seconds,
@@ -190,7 +201,10 @@ try {
         INNER JOIN sf_flash_display_targets t ON t.flash_id = f.id
         WHERE t.display_key_id = :display_key_id
           AND t.is_active = 1
-          AND f.state = 'published'
+          AND (
+              f.state = 'published'
+              OR (f.display_snapshot_active = 1 AND f.display_snapshot_preview IS NOT NULL)
+          )
           AND f.lang = :lang
           AND (f.display_expires_at IS NULL OR f.display_expires_at > NOW())
           AND f.display_removed_at IS NULL
