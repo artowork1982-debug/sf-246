@@ -2054,6 +2054,7 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
 </div>
 
 <!-- Modal: Send to Safety Team (from Supervisor) -->
+<div class="sf-modal hidden" id="modalSendSafety" role="dialog" aria-modal="true" aria-labelledby="modalSendSafetyTitle">
     <div class="sf-modal-content">
         <h2 id="modalSendSafetyTitle">
             <?= htmlspecialchars(sf_term('modal_send_safety_title', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
