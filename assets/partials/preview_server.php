@@ -15,33 +15,62 @@ $lang_val = $flash['lang'] ?? 'fi';
 
 <div class="sf-preview-section" id="sfServerPreviewSection">
     <h2 class="sf-preview-step-title">Esikatselu</h2>
-    
-    <!-- Font Size Selector - Available for all types -->
-    <div id="sfFontSizeSelector" class="sf-font-size-selector">
-        <label class="sf-label"><?= htmlspecialchars(sf_term('font_size_label', $uiLang) ?? 'Text size', ENT_QUOTES, 'UTF-8') ?></label>
-        <div class="sf-font-size-options">
-            <label class="sf-font-size-option selected" data-size="auto">
-                <input type="radio" name="font_size" value="auto" checked>
-                <span class="sf-font-size-btn">Auto</span>
-            </label>
-            <label class="sf-font-size-option" data-size="S">
-                <input type="radio" name="font_size" value="S">
-                <span class="sf-font-size-btn">S</span>
-            </label>
-            <label class="sf-font-size-option" data-size="M">
-                <input type="radio" name="font_size" value="M">
-                <span class="sf-font-size-btn">M</span>
-            </label>
-            <label class="sf-font-size-option" data-size="L">
-                <input type="radio" name="font_size" value="L">
-                <span class="sf-font-size-btn">L</span>
-            </label>
-            <label class="sf-font-size-option" data-size="XL">
-                <input type="radio" name="font_size" value="XL">
-                <span class="sf-font-size-btn">XL</span>
-            </label>
+
+    <!-- Controls row: Font Size Selector + Refresh button -->
+    <div class="sf-preview-controls-row">
+        <!-- Font Size Selector - Available for all types -->
+        <div id="sfFontSizeSelector" class="sf-font-size-selector">
+            <label class="sf-label"><?= htmlspecialchars(sf_term('font_size_label', $uiLang) ?? 'Text size', ENT_QUOTES, 'UTF-8') ?></label>
+            <div class="sf-font-size-options">
+                <label class="sf-font-size-option selected" data-size="auto">
+                    <input type="radio" name="font_size" value="auto" checked>
+                    <span class="sf-font-size-btn">Auto</span>
+                </label>
+                <label class="sf-font-size-option" data-size="S">
+                    <input type="radio" name="font_size" value="S">
+                    <span class="sf-font-size-btn">S</span>
+                </label>
+                <label class="sf-font-size-option" data-size="M">
+                    <input type="radio" name="font_size" value="M">
+                    <span class="sf-font-size-btn">M</span>
+                </label>
+                <label class="sf-font-size-option" data-size="L">
+                    <input type="radio" name="font_size" value="L">
+                    <span class="sf-font-size-btn">L</span>
+                </label>
+                <label class="sf-font-size-option" data-size="XL">
+                    <input type="radio" name="font_size" value="XL">
+                    <span class="sf-font-size-btn">XL</span>
+                </label>
+            </div>
+            <input type="hidden" name="font_size_override" id="sfFontSizeOverride" value="">
         </div>
-        <input type="hidden" name="font_size_override" id="sfFontSizeOverride" value="">
+
+        <!-- Refresh preview button -->
+        <button
+            type="button"
+            class="sf-refresh-btn"
+            id="sfRefreshPreviewBtn"
+            data-label="<?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?>"
+            data-loading-label="<?= htmlspecialchars($lblRefreshing, ENT_QUOTES, 'UTF-8') ?>"
+            aria-busy="false"
+            title="<?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?>"
+        >
+            <span class="sf-btn-spinner" aria-hidden="true" style="display:none;">
+                <svg width="16" height="16" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="90 35">
+                        <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </span>
+            <span class="sf-btn-icon" aria-hidden="true" style="display:inline-flex;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="sf-btn-label"><?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?></span>
+        </button>
     </div>
     
     <!-- Preview tabs for green type (investigation reports) -->
@@ -63,7 +92,7 @@ $lang_val = $flash['lang'] ?? 'fi';
                 src="" 
                 alt="Esikatselu"
                 class="sf-preview-img"
-                style="width: 100%; max-width: 960px; height: auto; display: none;"
+                style="display: none;"
             >
         </div>
         
@@ -74,7 +103,7 @@ $lang_val = $flash['lang'] ?? 'fi';
                 src="" 
                 alt="Esikatselu kortti 2"
                 class="sf-preview-img"
-                style="width: 100%; max-width: 960px; height: auto; display: none;"
+                style="display: none;"
             >
         </div>
         
@@ -166,23 +195,61 @@ $lang_val = $flash['lang'] ?? 'fi';
 }
 
 /* Moderni refresh-nappi */
-.sf-icon-btn#sfRefreshPreviewBtn {
-    width: 40px;
+.sf-refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
     height: 40px;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    background: #2563eb;
+    border: none;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+    align-self: flex-end;
 }
 
-.sf-icon-btn#sfRefreshPreviewBtn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    transform: rotate(15deg);
+.sf-refresh-btn:hover {
+    background: #1d4ed8;
 }
 
-.sf-icon-btn#sfRefreshPreviewBtn:active {
-    transform: rotate(0deg) scale(0.95);
+.sf-refresh-btn:active {
+    background: #1e40af;
+    transform: scale(0.98);
+}
+
+.sf-refresh-btn[disabled] {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Controls row: font size selector + refresh button side-by-side */
+.sf-preview-controls-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.sf-preview-controls-row .sf-font-size-selector {
+    margin-bottom: 0;
+    flex: 1 1 auto;
+}
+
+/* Preview image: large and centred */
+.sf-preview-img,
+#sfPreviewImage1,
+#sfPreviewImage2 {
+    width: 100%;
+    max-width: 850px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .sf-preview-card-container {
