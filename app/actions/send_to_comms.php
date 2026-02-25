@@ -131,7 +131,7 @@ if (!$isAdmin && !$isSafety) {
 }
 
 // sallitaan lähetys viestintään vain järkevistä tiloista
-if (!in_array($oldState, ['pending_review', 'pending_supervisor'], true)) {
+if (!in_array($oldState, ['pending_review', 'pending_supervisor', 'reviewed'], true)) {
     sf_app_log("send_to_comms.php: Invalid state '{$oldState}' for sending to comms (id={$id})");
     
     $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
@@ -409,10 +409,10 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
         http_response_code(500);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode([
-            'ok'    => false,
-            'error' => $e->getMessage(),
-            'debug' => $e->getFile() . ':' . $e->getLine(),
-            'trace' => array_slice(explode("\n", $e->getTraceAsString()), 0, 3),
+            'ok'      => false,
+            'message' => $e->getMessage(),
+            'debug'   => $e->getFile() . ':' . $e->getLine(),
+            'trace'   => array_slice(explode("\n", $e->getTraceAsString()), 0, 3),
         ]);
         exit;
     }

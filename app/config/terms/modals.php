@@ -243,6 +243,13 @@ return [
     'it' => 'Invia a tutti gli schermi Xibo',
     'el' => 'Αποστολή σε όλες τις οθόνες Xibo',
 ],
+'comms_screens_select' => [
+    'fi' => 'Valitse',
+    'sv' => 'Välj',
+    'en' => 'Select',
+    'it' => 'Seleziona',
+    'el' => 'Επιλέξτε',
+],
 'comms_screens_selected' => [
     'fi' => 'Valitut työmaat',
     'sv' => 'Valda arbetsplatser',
