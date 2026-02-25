@@ -56,7 +56,17 @@ function sf_update_state_all_languages(PDO $pdo, int $flashId, string $newState)
             ':group_id2' => $groupId
         ]);
     } else {
-        $placeholders = implode(', ', array_fill(0, count($terminalStates), '?'));
+        // Build named placeholders for terminal states to avoid mixing
+        // named (:param) and positional (?) parameters, which PDO forbids
+        $terminalPlaceholders = [];
+        $terminalParams = [];
+        foreach ($terminalStates as $i => $state) {
+            $key = ':terminal_' . $i;
+            $terminalPlaceholders[] = $key;
+            $terminalParams[$key] = $state;
+        }
+        $placeholders = implode(', ', $terminalPlaceholders);
+
         $updateStmt = $pdo->prepare("
             UPDATE sf_flashes 
             SET state = :new_state, 
@@ -64,13 +74,11 @@ function sf_update_state_all_languages(PDO $pdo, int $flashId, string $newState)
             WHERE (translation_group_id = :group_id1 OR id = :group_id2)
               AND state NOT IN ($placeholders)
         ");
-        $updateStmt->bindValue(':new_state', $newState);
-        $updateStmt->bindValue(':group_id1', $groupId);
-        $updateStmt->bindValue(':group_id2', $groupId);
-        foreach ($terminalStates as $i => $state) {
-            $updateStmt->bindValue($i + 1, $state);
-        }
-        $updateStmt->execute();
+        $updateStmt->execute(array_merge([
+            ':new_state'  => $newState,
+            ':group_id1'  => $groupId,
+            ':group_id2'  => $groupId,
+        ], $terminalParams));
     }
     
     return $updateStmt->rowCount();
