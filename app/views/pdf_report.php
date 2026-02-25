@@ -129,6 +129,35 @@ if (!empty($flash['display_snapshot_preview'])) {
     }
 }
 
+// Fallback: if display_snapshot_preview is empty, try sf_flash_snapshots table
+if ($originalPreviewPath === null && isset($pdo)) {
+    $logFlashId = $flashId;
+    if (!empty($flash['translation_group_id'])) {
+        $logFlashId = (int)$flash['translation_group_id'];
+    }
+
+    // Look for the original flash snapshot (ensitiedote or vaaratilanne = original type before investigation)
+    try {
+        $stmtSnap = $pdo->prepare("
+            SELECT image_path FROM sf_flash_snapshots 
+            WHERE flash_id = ? AND version_type IN ('ensitiedote', 'vaaratilanne')
+            ORDER BY published_at ASC 
+            LIMIT 1
+        ");
+        $stmtSnap->execute([$logFlashId]);
+        $snapRow = $stmtSnap->fetch(PDO::FETCH_ASSOC);
+
+        if ($snapRow && !empty($snapRow['image_path'])) {
+            $snapFullPath = dirname(__DIR__, 2) . $snapRow['image_path'];
+            if (file_exists($snapFullPath)) {
+                $originalPreviewPath = $snapFullPath;
+            }
+        }
+    } catch (Throwable $e) {
+        error_log('PDF Report - Snapshot fallback query error: ' . $e->getMessage());
+    }
+}
+
 // Calculate total pages
 $totalPages = 2; // Cover + Content always
 if ($hasPreviewCards) $totalPages++; // SafetyFlash card + original flash page
