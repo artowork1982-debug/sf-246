@@ -1126,67 +1126,6 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
     ][$uiLang] ?? 'Refreshing…';
   ?>
 
-<style>
-  .sf-preview-toolbar{
-    display:flex;
-    justify-content:flex-end;
-    margin-bottom:12px;
-  }
-  .sf-icon-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:40px;
-    height:40px;
-    border-radius:12px;
-    border:1px solid rgba(0,0,0,.12);
-    background:#fff;
-    cursor:pointer;
-    position:relative;
-  }
-  .sf-icon-btn:active{ transform:scale(.98); }
-  .sf-icon-btn[disabled]{ opacity:.65; cursor:not-allowed; }
-  .sf-sr-only{
-    position:absolute;
-    width:1px; height:1px;
-    padding:0; margin:-1px;
-    overflow:hidden;
-    clip:rect(0,0,0,0);
-    white-space:nowrap;
-    border:0;
-  }
-</style>
-
-<div class="sf-preview-toolbar">
-  <button
-    type="button"
-    class="sf-icon-btn"
-    id="sfRefreshPreviewBtn"
-    data-label="<?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?>"
-    data-loading-label="<?= htmlspecialchars($lblRefreshing, ENT_QUOTES, 'UTF-8') ?>"
-    aria-busy="false"
-    title="<?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?>"
-  >
-    <span class="sf-btn-spinner" aria-hidden="true" style="display:none;">
-      <svg width="18" height="18" viewBox="0 0 50 50">
-        <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="90 35">
-          <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/>
-        </circle>
-      </svg>
-    </span>
-
-    <span class="sf-btn-icon" aria-hidden="true" style="display:inline-flex;">
-      <!-- refresh icon -->
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </span>
-
-    <span class="sf-btn-label sf-sr-only"><?= htmlspecialchars($lblRefresh, ENT_QUOTES, 'UTF-8') ?></span>
-  </button>
-</div>
-
   <?php require __DIR__ . '/../partials/preview_server.php'; ?>
 </div>
     
