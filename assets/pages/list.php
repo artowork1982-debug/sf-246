@@ -918,7 +918,9 @@ $allTranslations = sf_get_all_translations($pdo, array_values($allGroupIds));
     
     $thumb = $r['preview_filename']
         ? "$baseUrl/uploads/previews/" . $r['preview_filename']
-        : "$baseUrl/assets/img/camera-placeholder.png";
+        : (!empty($r['display_snapshot_preview'])
+            ? "$baseUrl/uploads/previews/" . $r['display_snapshot_preview']
+            : "$baseUrl/assets/img/camera-placeholder.png");
 
     $title = trim((string)($r['title'] ?? ''));
     if ($title === '') {

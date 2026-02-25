@@ -39,9 +39,9 @@ $fontRegularPath = $fontDir . '/OpenSans-Regular.ttf';
 $fontBoldPath = $fontDir . '/OpenSans-Bold.ttf';
 
 $labels = [
-    'fi' => ['report_title' => 'Tutkintatiedote', 'site' => 'Työmaa', 'date' => 'Tapahtumapäivä', 'short_description' => 'Tiivistelmä', 'description' => 'Tapahtumakuvaus', 'images' => 'Kuvat', 'root_causes' => 'Juurisyyanalyysi', 'actions' => 'Korjaavat toimenpiteet', 'author' => 'Laatija', 'approver' => 'Hyväksyjä'],
-    'sv' => ['report_title' => 'Undersökningsrapport', 'site' => 'Arbetsplats', 'date' => 'Händelsedatum', 'short_description' => 'Sammanfattning', 'description' => 'Händelsebeskrivning', 'images' => 'Bilder', 'root_causes' => 'Grundorsaksanalys', 'actions' => 'Korrigerande åtgärder', 'author' => 'Författare', 'approver' => 'Godkännare'],
-    'en' => ['report_title' => 'Investigation Report', 'site' => 'Worksite', 'date' => 'Incident Date', 'short_description' => 'Executive Summary', 'description' => 'Incident Description', 'images' => 'Images', 'root_causes' => 'Root Cause Analysis', 'actions' => 'Corrective Actions', 'author' => 'Author', 'approver' => 'Approved by'],
+    'fi' => ['report_title' => 'Tutkintatiedote', 'site' => 'Työmaa', 'date' => 'Tapahtumapäivä', 'short_description' => 'Tiivistelmä', 'description' => 'Tapahtumakuvaus', 'images' => 'Kuvat', 'root_causes' => 'Juurisyyanalyysi', 'actions' => 'Korjaavat toimenpiteet', 'author' => 'Laatija', 'approver' => 'Hyväksyjä', 'original_flash' => 'Alkuperäinen SafetyFlash'],
+    'sv' => ['report_title' => 'Undersökningsrapport', 'site' => 'Arbetsplats', 'date' => 'Händelsedatum', 'short_description' => 'Sammanfattning', 'description' => 'Händelsebeskrivning', 'images' => 'Bilder', 'root_causes' => 'Grundorsaksanalys', 'actions' => 'Korrigerande åtgärder', 'author' => 'Författare', 'approver' => 'Godkännare', 'original_flash' => 'Ursprunglig SafetyFlash'],
+    'en' => ['report_title' => 'Investigation Report', 'site' => 'Worksite', 'date' => 'Incident Date', 'short_description' => 'Executive Summary', 'description' => 'Incident Description', 'images' => 'Images', 'root_causes' => 'Root Cause Analysis', 'actions' => 'Corrective Actions', 'author' => 'Author', 'approver' => 'Approved by', 'original_flash' => 'Original SafetyFlash'],
 ];
 $lang = $flash['lang'] ?? 'fi';
 $l = $labels[$lang] ?? $labels['fi'];
@@ -100,9 +100,19 @@ foreach ($extraImages as $ei) {
 
 $hasAnyImages = !empty($allImages);
 
+// Check for original flash preview (display_snapshot_preview)
+$originalPreviewPath = null;
+if (!empty($flash['display_snapshot_preview'])) {
+    $candidatePath = $uploadsDir . '/previews/' . basename($flash['display_snapshot_preview']);
+    if (file_exists($candidatePath)) {
+        $originalPreviewPath = $candidatePath;
+    }
+}
+
 // Calculate total pages
 $totalPages = 2;
 if ($hasAnyImages) $totalPages = 3;
+if ($originalPreviewPath) $totalPages++;
 
 // Footer info
 $siteInfo = trim((string)($flash['site'] ?? ''));
@@ -541,6 +551,34 @@ if (!empty($gridBitmap)):
         </tr>
         <?php endforeach; ?>
     </table>
+</div>
+<?php endif; ?>
+
+<?php if ($originalPreviewPath): ?>
+<div class="page-break"></div>
+
+<div class="footer">
+    <table>
+        <tr>
+            <td class="footer-left"><?= $hasAnyImages ? 4 : 3 ?> / <?= $totalPages ?></td>
+            <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
+            <td class="footer-right"><span class="footer-brand"></span></td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-header"><?= htmlspecialchars($l['original_flash']) ?></div>
+    <div class="section-content" style="text-align: center; padding: 15px 0;">
+        <img src="<?= htmlspecialchars($originalPreviewPath) ?>"
+             style="max-width: 100%; max-height: 220mm; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+             alt="Original SafetyFlash">
+        <?php if (!empty($flash['original_type'])): ?>
+        <div style="margin-top: 10px; font-size: 9pt; color: #666;">
+            <?= htmlspecialchars(ucfirst($flash['original_type'])) ?> → Tutkintatiedote
+        </div>
+        <?php endif; ?>
+    </div>
 </div>
 <?php endif; ?>
 
