@@ -86,8 +86,7 @@ body {
         padding: 16px;
         /* Form starts below progress bar (80px) */
         margin-top: var(--sf-form-margin-top-mobile);
-        /* Bottom: actions (52px) + footer (70px) + spacing (16px) = 138px */
-        padding-bottom: calc(var(--sf-actions-height-mobile) + var(--sf-footer-height-mobile) + 16px);
+        padding-bottom: 16px;
         border-radius: 0;
         border-left: none;
         border-right: none;
@@ -100,8 +99,7 @@ body {
 
     .sf-step-content {
         padding: 0;
-        /* Bottom: actions (52px) + footer (70px) + spacing (26px) = 148px */
-        padding-bottom: calc(var(--sf-actions-height-mobile) + var(--sf-footer-height-mobile) + 26px);
+        padding-bottom: 16px;
     }
 
     /* Progress bar - outside form on dark background */
@@ -160,25 +158,18 @@ body {
         font-size: 13px;
     }
 
-    /* Mobile action buttons - edge to edge above footer */
+    /* Mobile action buttons - natural flow at bottom of content */
     .sf-step-actions,
     .sf-step-actions-bottom {
-        position: fixed;
-        bottom: 0;
-        /* Changed from var(--sf-footer-height-mobile) */
-        /* Footer height */
-        left: 0;
-        right: 0;
-        margin: 0;
+        position: static;
+        margin: 16px 0 0 0;
         padding: 0;
         background: transparent;
         display: flex;
-        gap: 0;
-        /* No gap - edge to edge */
+        gap: 12px;
         border: none;
         box-shadow: none;
         border-radius: 0;
-        z-index: 9999;
     }
 
     /* All buttons in action bar */
@@ -187,12 +178,11 @@ body {
     .sf-step-actions button,
     .sf-step-actions-bottom button {
         flex: 1;
-        border-radius: 0;
+        border-radius: 8px;
         margin: 0;
         min-height: 52px;
         font-size: 15px;
         font-weight: 600;
-        border: none !important;
     }
 
     /* Remove active transform animation on mobile for cleaner touch interaction */
@@ -258,8 +248,7 @@ body {
     .sf-form {
         /* Form starts below progress bar */
         margin-top: var(--sf-form-margin-top-small);
-        /* Bottom: actions (50px) + footer (70px) + spacing (15px) = 135px */
-        padding-bottom: calc(var(--sf-actions-height-small) + var(--sf-footer-height-small) + 15px);
+        padding-bottom: 16px;
     }
 }
 
@@ -1758,7 +1747,7 @@ input[type="time"]:hover {
     .sf-select,
     .sf-textarea {
         padding: 16px;
-        font-size: 16px;
+        font-size: 16px !important;
         border-radius: 12px;
         border: 1px solid #d1d5db;
         background: #fff;
@@ -1939,10 +1928,9 @@ input[type="time"]:hover {
         overflow-x: hidden;
     }
 
-    /* Problem 5: Ensure step actions bottom is fixed on step 5 */
+    /* Problem 5: Ensure step actions bottom is visible on step 5 */
     .sf-step-content[data-step="5"] .sf-step-actions-bottom {
-        position: fixed;
-        bottom: 0;
+        position: static;
     }
 
     /* Problem 6: Reduce spacing between progress bar and preview content (step 6) */
@@ -2033,7 +2021,7 @@ input[type="time"]:hover {
 
     /* Napit alhaalla */
     .sf-step-actions-bottom {
-        gap: 0;
+        gap: 8px;
         border-top: none;
     }
 
