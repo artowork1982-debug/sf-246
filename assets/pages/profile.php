@@ -40,6 +40,7 @@ $roleName = $roleResult->fetch_assoc()['name'] ?? '–';
 
     <div class="sf-profile-card">
         <form id="sfProfileForm" class="sf-profile-form">
+            <?= sf_csrf_field() ?>
             <input type="hidden" name="id" value="<?= (int)$user['id'] ?>">
 
             <div class="sf-profile-section">
@@ -172,6 +173,7 @@ $roleName = $roleResult->fetch_assoc()['name'] ?? '–';
         <h2><?= htmlspecialchars(sf_term('profile_password_heading', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></h2>
 
         <form id="sfPasswordForm" class="sf-profile-form">
+            <?= sf_csrf_field() ?>
             <div class="sf-field">
                 <label for="sfCurrentPassword">
                     <?= htmlspecialchars(sf_term('profile_current_password', $currentUiLang), ENT_QUOTES, 'UTF-8') ?>
