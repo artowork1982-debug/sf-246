@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../includes/log_app.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/protect.php';
+require_once __DIR__ . '/../../assets/services/email_services.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -52,4 +53,26 @@ $logPost = $_POST;
 unset($logPost['password']); // Varmistetaan ettei mitään salasanakenttää lokiteta
 sf_app_log("users_reset_password: Salasana vaihdettu, user_id=$id", LOG_LEVEL_INFO, $logPost);
 
-echo json_encode(['ok' => true, 'password' => $newPass]);
+// Lähetä sähköposti uudella salasanalla
+$emailSent = false;
+try {
+    $pdo = new PDO(
+        "mysql:host={$config['db']['host']};dbname={$config['db']['name']};charset={$config['db']['charset']}",
+        $config['db']['user'],
+        $config['db']['pass'],
+        [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]
+    );
+    $emailSent = sf_mail_welcome_new_user($pdo, $id, $newPass);
+    if ($emailSent) {
+        sf_app_log("users_reset_password: Salasana-sähköposti lähetetty, user_id=$id", LOG_LEVEL_INFO);
+    } else {
+        sf_app_log("users_reset_password: Sähköpostin lähetys epäonnistui, user_id=$id", LOG_LEVEL_WARNING);
+    }
+} catch (Throwable $e) {
+    sf_app_log("users_reset_password: Email exception: " . $e->getMessage(), LOG_LEVEL_ERROR);
+}
+
+echo json_encode(['ok' => true, 'password' => $newPass, 'email_sent' => $emailSent]);
