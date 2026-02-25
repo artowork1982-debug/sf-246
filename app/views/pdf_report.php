@@ -131,9 +131,8 @@ if (!empty($flash['display_snapshot_preview'])) {
 
 // Calculate total pages
 $totalPages = 2; // Cover + Content always
-if ($hasPreviewCards) $totalPages++; // SafetyFlash card page
+if ($hasPreviewCards) $totalPages++; // SafetyFlash card + original flash page
 if ($hasAnyImages) $totalPages++;    // Uploaded images page
-if ($originalPreviewPath) $totalPages++; // Original flash page
 
 // Footer info
 $siteInfo = trim((string)($flash['site'] ?? ''));
@@ -495,7 +494,7 @@ if (!empty($gridBitmap)):
 <?php endif; endif; ?>
 
 <?php if ($hasPreviewCards): ?>
-<!-- PAGE: SafetyFlash Card(s) -->
+<!-- PAGE: SafetyFlash Card(s) + Original Flash -->
 <div class="page-break"></div>
 
 <div class="footer">
@@ -510,17 +509,36 @@ if (!empty($gridBitmap)):
 
 <div class="section">
     <div class="section-header"><?= htmlspecialchars($l['safetyflash_card']) ?></div>
-    <div class="section-content" style="text-align: center; padding: 10px 0;">
+    <div class="section-content" style="text-align: center; padding: 5px 0;">
+        <!-- Tutkintatiedotteen kortti (Card 1) -->
         <img src="<?= htmlspecialchars($previewCard1Path) ?>"
-             style="max-width: 100%; height: auto; display: block; margin: 0 auto 15px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
-             alt="SafetyFlash Card 1">
-        <?php if ($previewCard2Path): ?>
-        <img src="<?= htmlspecialchars($previewCard2Path) ?>"
              style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
-             alt="SafetyFlash Card 2">
+             alt="SafetyFlash Card">
+    </div>
+</div>
+
+<?php if ($originalPreviewPath): ?>
+<div class="section" style="margin-top: 8px;">
+    <div class="section-header"><?= htmlspecialchars($l['original_flash']) ?></div>
+    <div class="section-content" style="text-align: center; padding: 5px 0;">
+        <img src="<?= htmlspecialchars($originalPreviewPath) ?>"
+             style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+             alt="Original SafetyFlash">
+        <?php
+        $originalTypeLabels = [
+            'red' => ['fi' => 'Ensitiedote', 'sv' => 'Första meddelande', 'en' => 'First Release'],
+            'yellow' => ['fi' => 'Vaaratilanne', 'sv' => 'Farlig situation', 'en' => 'Dangerous Situation'],
+        ];
+        $origType = $flash['original_type'] ?? '';
+        $origLabel = $originalTypeLabels[$origType][$lang] ?? '';
+        if ($origLabel): ?>
+        <div style="margin-top: 6px; font-size: 9pt; color: #666;">
+            <?= htmlspecialchars($origLabel) ?> → <?= htmlspecialchars($l['report_title']) ?>
+        </div>
         <?php endif; ?>
     </div>
 </div>
+<?php endif; ?>
 <?php endif; ?>
 
 <?php $contentPageNum = 2 + ($hasPreviewCards ? 1 : 0); ?>
@@ -536,6 +554,13 @@ if (!empty($gridBitmap)):
         </tr>
     </table>
 </div>
+<?php if ($previewCard2Path): ?>
+<div style="text-align: center; margin-bottom: 15px;">
+    <img src="<?= htmlspecialchars($previewCard2Path) ?>"
+         style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+         alt="SafetyFlash Card 2">
+</div>
+<?php endif; ?>
     <?php 
     $shortDesc = trim((string)($flash['title_short'] ?? $flash['summary'] ?? ''));
     if (!empty($shortDesc) && $shortDesc !== ($flash['title'] ?? '')): 
@@ -603,34 +628,6 @@ if (!empty($gridBitmap)):
         </tr>
         <?php endforeach; ?>
     </table>
-</div>
-<?php endif; ?>
-
-<?php if ($originalPreviewPath): ?>
-<div class="page-break"></div>
-
-<div class="footer">
-    <table>
-        <tr>
-            <td class="footer-left"><?= $totalPages ?> / <?= $totalPages ?></td>
-            <td class="footer-center">ID: <?= $flashId ?> | <?= htmlspecialchars($footerSite) ?> | <?= $footerDate ?></td>
-            <td class="footer-right"><span class="footer-brand"></span></td>
-        </tr>
-    </table>
-</div>
-
-<div class="section">
-    <div class="section-header"><?= htmlspecialchars($l['original_flash']) ?></div>
-    <div class="section-content" style="text-align: center; padding: 15px 0;">
-        <img src="<?= htmlspecialchars($originalPreviewPath) ?>"
-             style="max-width: 100%; max-height: 220mm; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
-             alt="Original SafetyFlash">
-        <?php if (!empty($flash['original_type'])): ?>
-        <div style="margin-top: 10px; font-size: 9pt; color: #666;">
-            <?= htmlspecialchars(ucfirst($flash['original_type'])) ?> → Tutkintatiedote
-        </div>
-        <?php endif; ?>
-    </div>
 </div>
 <?php endif; ?>
 
