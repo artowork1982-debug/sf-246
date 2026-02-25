@@ -121,6 +121,12 @@ function bindDocumentDelegationOnce() {
                 formEl.classList.add('type-' + state.selectedType);
             }
 
+            const progressEl = qs('.sf-form-progress');
+            if (progressEl) {
+                progressEl.classList.remove('type-red', 'type-yellow', 'type-green');
+                progressEl.classList.add('type-' + state.selectedType);
+            }
+
             handleConditionalFields();
             updatePreview();
             updateStep1NextButton();
@@ -329,6 +335,12 @@ function initSelectionsFromDOM() {
         if (formEl) {
             formEl.classList.remove('type-red', 'type-yellow', 'type-green');
             formEl.classList.add('type-' + state.selectedType);
+        }
+
+        const progressEl = qs('.sf-form-progress');
+        if (progressEl) {
+            progressEl.classList.remove('type-red', 'type-yellow', 'type-green');
+            progressEl.classList.add('type-' + state.selectedType);
         }
     }
 
@@ -562,6 +574,12 @@ function initTranslationMode() {
         if (formEl) {
             formEl.classList.remove('type-red', 'type-yellow', 'type-green');
             formEl.classList.add('type-' + checkedType.value);
+        }
+
+        const progressEl = qs('.sf-form-progress');
+        if (progressEl) {
+            progressEl.classList.remove('type-red', 'type-yellow', 'type-green');
+            progressEl.classList.add('type-' + checkedType.value);
         }
     }
 
