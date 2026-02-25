@@ -4877,24 +4877,9 @@ body.form-page {
     padding: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     border: 1px solid #e5e7eb;
-    margin: 32px auto 0;
-    max-width: 600px;
-}
-
-/* Supervisor section inside preview controls column: full-width, no centering margin */
-.sf-preview-controls-col .sf-supervisor-section {
-    flex-basis: 100%;
-    margin: 16px 0 0;
-}
-
-/* On desktop, supervisor section fills the right column fully */
-@media (min-width: 992px) {
-    .sf-preview-controls-col .sf-supervisor-section {
-        flex-basis: auto;
-        margin: 0;
-        max-width: none;
-        width: 100%;
-    }
+    margin: 32px 0 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .sf-supervisor-title {
@@ -5057,6 +5042,13 @@ body.form-page {
 /* Search results container */
 .sf-supervisor-search-results {
     margin-top: 12px;
+}
+
+/* Safe grid for search result chips — prevents overflow in any container width */
+.sf-supervisor-search-results .sf-supervisor-chips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
 }
 
 /* Selected Counter */
@@ -6728,7 +6720,7 @@ body.form-page .sf-form-progress__steps::before {
     justify-content: space-between;
     gap: 12px;
     margin: 32px auto;
-    max-width: 600px;
+    max-width: none;
     width: 100%;
     box-sizing: border-box;
 }
@@ -6736,7 +6728,6 @@ body.form-page .sf-form-progress__steps::before {
 /* On desktop, footer spans full width below the 2-column preview layout */
 @media (min-width: 992px) {
     .sf-step-content[data-step="6"] .sf-step6-footer {
-        max-width: none;
         margin: 32px 0;
     }
 }
