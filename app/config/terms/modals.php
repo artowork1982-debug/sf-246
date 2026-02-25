@@ -604,4 +604,25 @@ return [
     'it' => 'Creazione in corso...',
     'el' => 'Δημιουργία...',
 ],
+'form_close_confirm_title' => [
+    'fi' => 'Poistu lomakkeelta?',
+    'sv' => 'Lämna formuläret?',
+    'en' => 'Leave form?',
+    'it' => 'Uscire dal modulo?',
+    'el' => 'Έξοδος από τη φόρμα;',
+],
+'form_close_confirm_text' => [
+    'fi' => 'Haluatko varmasti poistua? Tallentamattomat muutokset menetetään.',
+    'sv' => 'Är du säker på att du vill lämna? Osparade ändringar går förlorade.',
+    'en' => 'Are you sure you want to leave? Unsaved changes will be lost.',
+    'it' => 'Sei sicuro di voler uscire? Le modifiche non salvate andranno perse.',
+    'el' => 'Είστε σίγουροι ότι θέλετε να φύγετε; Οι μη αποθηκευμένες αλλαγές θα χαθούν.',
+],
+'form_close_confirm_leave' => [
+    'fi' => 'Poistu',
+    'sv' => 'Lämna',
+    'en' => 'Leave',
+    'it' => 'Esci',
+    'el' => 'Έξοδος',
+],
 ];

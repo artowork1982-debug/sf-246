@@ -364,15 +364,6 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
   enctype="multipart/form-data"
   novalidate
 >
-  <!-- Mobile close button (only visible on mobile) -->
-  <a href="<?= htmlspecialchars($base, ENT_QUOTES, 'UTF-8') ?>/index.php?page=list" 
-     class="sf-form-close-mobile"
-     aria-label="<?= htmlspecialchars(sf_term('btn_close_form', $uiLang) ?: 'Sulje lomake', ENT_QUOTES, 'UTF-8') ?>">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-          <line x1="4.5" y1="4.5" x2="13.5" y2="13.5"/>
-          <line x1="13.5" y1="4.5" x2="4.5" y2="13.5"/>
-      </svg>
-  </a>
   <?= sf_csrf_field() ?>
   <?php if ($editing): ?>
     <input type="hidden" name="id" value="<?= (int) $editId ?>">
@@ -429,6 +420,14 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
           </span>
         </button>
       </div>
+      <!-- Close (X) button -->
+      <button type="button" id="sfFormCloseBtn" class="sf-form-progress__close"
+              aria-label="<?= htmlspecialchars(sf_term('btn_close_form', $uiLang) ?: 'Sulje lomake', ENT_QUOTES, 'UTF-8') ?>">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="4.5" y1="4.5" x2="13.5" y2="13.5"/>
+              <line x1="13.5" y1="4.5" x2="4.5" y2="13.5"/>
+          </svg>
+      </button>
     </nav>
 
   <!-- VAIHE 1: tyyppivalinta ja kieli (TYPE FIRST) -->
@@ -1830,3 +1829,97 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
+
+<!-- Close-form confirmation modal -->
+<div id="sfCloseConfirmModal" class="sf-modal hidden sf-modal-small sf-modal-centered" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="sfCloseConfirmTitle">
+  <div class="sf-modal-content">
+    <div class="sf-modal-header">
+      <h3 id="sfCloseConfirmTitle">
+        <?= htmlspecialchars(sf_term('form_close_confirm_title', $uiLang) ?: 'Poistu lomakkeelta?', ENT_QUOTES, 'UTF-8') ?>
+      </h3>
+      <button type="button" class="sf-modal-close-btn" id="sfCloseConfirmDismiss" aria-label="<?= htmlspecialchars(sf_term('btn_close', $uiLang) ?: 'Sulje', ENT_QUOTES, 'UTF-8') ?>">×</button>
+    </div>
+    <div class="sf-modal-body">
+      <p><?= htmlspecialchars(sf_term('form_close_confirm_text', $uiLang) ?: 'Haluatko varmasti poistua? Tallentamattomat muutokset menetetään.', ENT_QUOTES, 'UTF-8') ?></p>
+    </div>
+    <div class="sf-modal-actions">
+      <button type="button" class="sf-btn sf-btn-secondary" id="sfCloseConfirmCancel">
+        <?= htmlspecialchars(sf_term('btn_cancel', $uiLang) ?: 'Peruuta', ENT_QUOTES, 'UTF-8') ?>
+      </button>
+      <button type="button" class="sf-btn sf-btn-danger" id="sfCloseConfirmLeave">
+        <?= htmlspecialchars(sf_term('form_close_confirm_leave', $uiLang) ?: 'Poistu', ENT_QUOTES, 'UTF-8') ?>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    var isFormDirty = <?= $editing ? 'true' : 'false' ?>;
+    var listUrl = <?= json_encode($base . '/index.php?page=list', JSON_UNESCAPED_SLASHES) ?>;
+
+    // Mark dirty on any input/change in the form
+    var sfForm = document.getElementById('sf-form');
+    if (sfForm) {
+        sfForm.addEventListener('change', function () { isFormDirty = true; }, { passive: true });
+        sfForm.addEventListener('input', function () { isFormDirty = true; }, { passive: true });
+    }
+
+    function openCloseModal() {
+        var modal = document.getElementById('sfCloseConfirmModal');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        var firstBtn = modal.querySelector('button');
+        if (firstBtn) firstBtn.focus();
+    }
+
+    function closeCloseModal() {
+        var modal = document.getElementById('sfCloseConfirmModal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function handleCloseBtn() {
+        if (!isFormDirty) {
+            window.location.href = listUrl;
+        } else {
+            openCloseModal();
+        }
+    }
+
+    // X button in progress bar
+    var closeBtn = document.getElementById('sfFormCloseBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', handleCloseBtn);
+    }
+
+    // Modal: "Peruuta" – close modal
+    var cancelBtn = document.getElementById('sfCloseConfirmCancel');
+    var dismissBtn = document.getElementById('sfCloseConfirmDismiss');
+    if (cancelBtn) cancelBtn.addEventListener('click', closeCloseModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeCloseModal);
+
+    // Modal: "Poistu" – navigate away
+    var leaveBtn = document.getElementById('sfCloseConfirmLeave');
+    if (leaveBtn) {
+        leaveBtn.addEventListener('click', function () {
+            window.location.href = listUrl;
+        });
+    }
+
+    // Close modal on backdrop click
+    var modal = document.getElementById('sfCloseConfirmModal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeCloseModal();
+        });
+    }
+
+    // Expose so external modules can mark dirty if needed
+    window.sfFormSetDirty = function () { isFormDirty = true; };
+})();
+</script>
