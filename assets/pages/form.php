@@ -1166,10 +1166,15 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
 
   <?php if ($isTranslationChild): ?>
     <!-- Translation child mode: save button only (preview is rendered above, supervisor selection not needed) -->
-    <div class="sf-preview-actions">
-      <button type="button" class="sf-btn sf-btn-primary" id="sf-save-translation-btn">
-        <?= htmlspecialchars(sf_term('btn_save_translation', $uiLang) ?? 'Tallenna kieliversio', ENT_QUOTES, 'UTF-8'); ?>
+    <div class="sf-step6-footer">
+      <button type="button" class="sf-btn sf-btn-secondary sf-prev-btn">
+        <?= htmlspecialchars(sf_term('btn_prev', $uiLang), ENT_QUOTES, 'UTF-8'); ?>
       </button>
+      <div class="sf-step6-footer-right">
+        <button type="button" class="sf-btn sf-btn-primary" id="sf-save-translation-btn">
+          <?= htmlspecialchars(sf_term('btn_save_translation', $uiLang) ?? 'Tallenna kieliversio', ENT_QUOTES, 'UTF-8'); ?>
+        </button>
+      </div>
     </div>
   <?php else: ?>
     <!-- Normal mode: Full workflow with supervisor selection and review/draft buttons -->
@@ -1230,60 +1235,59 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
     </div>
     <?php endif; ?>
 
-    <!-- Submit-painikkeet (lomakkeen sisällä) -->
-    <div class="sf-preview-actions">
-      <?php 
-      // Määritä näytettävä painike tilan mukaan
-      // - draft ja request_info: näytä "Tallenna luonnos" + "Lähetä tarkistettavaksi"
-      // - muut tilat (pending_supervisor, pending_review, reviewed, to_comms, published): näytä vain "Tallenna"
-      $showSendToReview = ! $editing 
-          || $state_val === 'draft' 
-          || $state_val === 'request_info'
-          || $state_val === '';
-      
-      // All updates now go through save_flash.php (uses FlashSaveService)
-      $actionUrl = $base . '/app/api/save_flash.php';
-      
-      if ($editing && ! $showSendToReview): ?>
-        <!-- Muokkaus tilassa joka EI ole draft/request_info - vain tallenna -->
-        <button
-          type="button"
-          id="sfSaveInline"
-          class="sf-btn sf-btn-primary"
-          data-action-url="<?= htmlspecialchars($actionUrl, ENT_QUOTES, 'UTF-8') ?>"
-          data-flash-id="<?= (int)$editId ?>"
-        >
-          <?= htmlspecialchars(sf_term('btn_save', $uiLang) ?? 'Tallenna', ENT_QUOTES, 'UTF-8') ?>
-        </button>
-      <?php else: ?>
-        <!-- Uusi tai draft/request_info - näytä molemmat painikkeet -->
-        <button
-          type="submit"
-          name="submission_type"
-          value="draft"
-          id="sfSaveDraft"
-          class="sf-btn sf-btn-secondary"
-        >
-          <?= htmlspecialchars(sf_term('btn_save_draft', $uiLang), ENT_QUOTES, 'UTF-8') ?>
-        </button>
-        <button
-          type="submit"
-          name="submission_type"
-          value="review"
-          id="sfSubmitReview"
-          class="sf-btn sf-btn-primary"
-        >
-          <?= htmlspecialchars(sf_term('btn_send_review', $uiLang), ENT_QUOTES, 'UTF-8') ?>
-        </button>
-      <?php endif; ?>
-    </div>
-  <?php endif; // $isTranslationChild ?>
-    <!-- Vaihe 6 napit -->
-    <div class="sf-step-actions sf-step-actions-bottom">
+    <!-- Vaihe 6 alatunniste: Edellinen vasemmalla, Tallenna/Lähetä oikealla -->
+    <div class="sf-step6-footer">
       <button type="button" class="sf-btn sf-btn-secondary sf-prev-btn">
         <?= htmlspecialchars(sf_term('btn_prev', $uiLang), ENT_QUOTES, 'UTF-8'); ?>
       </button>
+      <div class="sf-step6-footer-right">
+        <?php 
+        // Määritä näytettävä painike tilan mukaan
+        // - draft ja request_info: näytä "Tallenna luonnos" + "Lähetä tarkistettavaksi"
+        // - muut tilat (pending_supervisor, pending_review, reviewed, to_comms, published): näytä vain "Tallenna"
+        $showSendToReview = ! $editing 
+            || $state_val === 'draft' 
+            || $state_val === 'request_info'
+            || $state_val === '';
+        
+        // All updates now go through save_flash.php (uses FlashSaveService)
+        $actionUrl = $base . '/app/api/save_flash.php';
+        
+        if ($editing && ! $showSendToReview): ?>
+          <!-- Muokkaus tilassa joka EI ole draft/request_info - vain tallenna -->
+          <button
+            type="button"
+            id="sfSaveInline"
+            class="sf-btn sf-btn-primary"
+            data-action-url="<?= htmlspecialchars($actionUrl, ENT_QUOTES, 'UTF-8') ?>"
+            data-flash-id="<?= (int)$editId ?>"
+          >
+            <?= htmlspecialchars(sf_term('btn_save', $uiLang) ?? 'Tallenna', ENT_QUOTES, 'UTF-8') ?>
+          </button>
+        <?php else: ?>
+          <!-- Uusi tai draft/request_info - näytä molemmat painikkeet -->
+          <button
+            type="submit"
+            name="submission_type"
+            value="draft"
+            id="sfSaveDraft"
+            class="sf-btn sf-btn-secondary"
+          >
+            <?= htmlspecialchars(sf_term('btn_save_draft', $uiLang), ENT_QUOTES, 'UTF-8') ?>
+          </button>
+          <button
+            type="submit"
+            name="submission_type"
+            value="review"
+            id="sfSubmitReview"
+            class="sf-btn sf-btn-primary"
+          >
+            <?= htmlspecialchars(sf_term('btn_send_review', $uiLang), ENT_QUOTES, 'UTF-8') ?>
+          </button>
+        <?php endif; ?>
+      </div>
     </div>
+  <?php endif; // $isTranslationChild ?>
   </div>
   <!-- Lopullinen preview-kuva base64:na -->
   <input type="hidden" name="preview_image_data" id="sf-preview-image-data" value="">
