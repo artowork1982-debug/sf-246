@@ -129,6 +129,9 @@ foreach ($availableDisplays as $dtDisp) {
         <div class="sf-dt-selection-display<?= empty($preselectedIds) ? ' hidden' : '' ?>">
             <div class="sf-dt-selection-label"><?= htmlspecialchars(sf_term('comms_your_selection', $currentUiLang), ENT_QUOTES, 'UTF-8') ?></div>
             <div class="sf-dt-selection-tags"></div>
+            <button type="button" class="sf-dt-clear-all-btn">
+                <?= htmlspecialchars(sf_term('clear_all_selections', $currentUiLang) ?? 'Tyhjennä kaikki', ENT_QUOTES, 'UTF-8') ?>
+            </button>
         </div>
 
     <?php endif; ?>

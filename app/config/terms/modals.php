@@ -527,6 +527,13 @@ return [
     'it' => 'Cancella selezioni',
     'el' => 'Εκκαθάριση επιλογών',
 ],
+'clear_all_selections' => [
+    'fi' => 'Tyhjennä kaikki',
+    'sv' => 'Rensa alla',
+    'en' => 'Clear all',
+    'it' => 'Cancella tutto',
+    'el' => 'Εκκαθάριση όλων',
+],
 'modal_translation_confirm_title' => [
     'fi' => 'Luo kieliversio',
     'sv' => 'Skapa språkversion',
