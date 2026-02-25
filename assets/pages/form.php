@@ -1124,6 +1124,67 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
       'it' => 'Aggiornamento…',
       'el' => 'Ανανέωση…',
     ][$uiLang] ?? 'Refreshing…';
+
+    // Capture the supervisor section for the preview controls right column
+    ob_start();
+    if (!$isTranslationChild && (!$editing || $state_val === 'draft' || $state_val === 'request_info' || $state_val === '')):
+  ?>
+    <div class="sf-supervisor-section" id="sfSupervisorApprovalSection" style="display: none;">
+      <h3 class="sf-supervisor-title"><?= htmlspecialchars(sf_term('select_inspector_title', $uiLang) ?: 'Valitse tarkistaja', ENT_QUOTES, 'UTF-8') ?></h3>
+      
+      <!-- Worksite Supervisors Section -->
+      <div class="sf-supervisor-worksite">
+        <p class="sf-supervisor-worksite-label">
+          <?= htmlspecialchars(sf_term('worksite_supervisors_label_prefix', $uiLang) ?: 'Työmaan', ENT_QUOTES, 'UTF-8') ?>
+          "<span id="sfSelectedWorksiteName">-</span>" 
+          <?= htmlspecialchars(sf_term('worksite_supervisors_label_suffix', $uiLang) ?: 'vastuuhenkilöt:', ENT_QUOTES, 'UTF-8') ?>
+        </p>
+        
+        <div class="sf-supervisor-chips" id="sfWorksiteSupervisors">
+          <!-- JavaScript will populate this automatically -->
+          <div class="sf-supervisor-chips-loading">
+            <span class="sf-spinner-small"></span>
+            <?= htmlspecialchars(sf_term('loading_text', $uiLang) ?: 'Ladataan...', ENT_QUOTES, 'UTF-8') ?>
+          </div>
+        </div>
+        
+        <p class="sf-supervisor-empty" id="sfNoSupervisors" style="display: none;">
+          <?= htmlspecialchars(sf_term('no_supervisors_for_worksite', $uiLang) ?: 'Tälle työmaalle ei ole määritetty vastuuhenkilöitä.', ENT_QUOTES, 'UTF-8') ?>
+        </p>
+      </div>
+      
+      <!-- Search Section for Other Worksites -->
+      <div class="sf-supervisor-search">
+        <p class="sf-supervisor-search-label"><?= htmlspecialchars(sf_term('search_other_worksites_label', $uiLang) ?: 'Hae muilta työmailta:', ENT_QUOTES, 'UTF-8') ?></p>
+        <div class="sf-search-input-wrap">
+          <svg class="sf-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input type="text" 
+                 id="sfSupervisorSearch" 
+                 class="sf-search-input"
+                 placeholder="<?= htmlspecialchars(sf_term('search_name_or_worksite_placeholder', $uiLang) ?: 'Hae nimellä tai työmaalla...', ENT_QUOTES, 'UTF-8') ?>">
+          <button type="button" id="sfClearSearch" class="sf-clear-search" style="display: none;">×</button>
+        </div>
+        
+        <div class="sf-supervisor-search-results" id="sfSearchResults" style="display: none;">
+          <!-- Search results will be populated here -->
+        </div>
+      </div>
+      
+      <!-- Selected Counter -->
+      <div class="sf-supervisor-counter">
+        <span id="sfSelectedCount">0</span> <?= htmlspecialchars(sf_term('selected_label', $uiLang) ?: 'valittu', ENT_QUOTES, 'UTF-8') ?>
+      </div>
+      
+      <!-- Hidden input for selected IDs -->
+      <input type="hidden" name="approver_ids" id="approverIds" value="">
+      <input type="hidden" name="selected_approvers" id="selectedApprovers" value="">
+    </div>
+  <?php
+    endif;
+    $sfPreviewControlsSlot = ob_get_clean();
   ?>
 
   <?php require __DIR__ . '/../partials/preview_server.php'; ?>
@@ -1178,62 +1239,7 @@ window.SF_FLASH_ID = <?= (int)$editId ?>;
     </div>
   <?php else: ?>
     <!-- Normal mode: Full workflow with supervisor selection and review/draft buttons -->
-    <!-- SUPERVISOR SELECTION SECTION - Modern Chip-Style UI -->
-    <?php if (!$editing || $state_val === 'draft' || $state_val === 'request_info' || $state_val === ''): ?>
-    <div class="sf-supervisor-section" id="sfSupervisorApprovalSection" style="display: none;">
-      <h3 class="sf-supervisor-title"><?= htmlspecialchars(sf_term('select_inspector_title', $uiLang) ?: 'Valitse tarkistaja', ENT_QUOTES, 'UTF-8') ?></h3>
-      
-      <!-- Worksite Supervisors Section -->
-      <div class="sf-supervisor-worksite">
-        <p class="sf-supervisor-worksite-label">
-          <?= htmlspecialchars(sf_term('worksite_supervisors_label_prefix', $uiLang) ?: 'Työmaan', ENT_QUOTES, 'UTF-8') ?>
-          "<span id="sfSelectedWorksiteName">-</span>" 
-          <?= htmlspecialchars(sf_term('worksite_supervisors_label_suffix', $uiLang) ?: 'vastuuhenkilöt:', ENT_QUOTES, 'UTF-8') ?>
-        </p>
-        
-        <div class="sf-supervisor-chips" id="sfWorksiteSupervisors">
-          <!-- JavaScript will populate this automatically -->
-          <div class="sf-supervisor-chips-loading">
-            <span class="sf-spinner-small"></span>
-            <?= htmlspecialchars(sf_term('loading_text', $uiLang) ?: 'Ladataan...', ENT_QUOTES, 'UTF-8') ?>
-          </div>
-        </div>
-        
-        <p class="sf-supervisor-empty" id="sfNoSupervisors" style="display: none;">
-          <?= htmlspecialchars(sf_term('no_supervisors_for_worksite', $uiLang) ?: 'Tälle työmaalle ei ole määritetty vastuuhenkilöitä.', ENT_QUOTES, 'UTF-8') ?>
-        </p>
-      </div>
-      
-      <!-- Search Section for Other Worksites -->
-      <div class="sf-supervisor-search">
-        <p class="sf-supervisor-search-label"><?= htmlspecialchars(sf_term('search_other_worksites_label', $uiLang) ?: 'Hae muilta työmailta:', ENT_QUOTES, 'UTF-8') ?></p>
-        <div class="sf-search-input-wrap">
-          <svg class="sf-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <input type="text" 
-                 id="sfSupervisorSearch" 
-                 class="sf-search-input"
-                 placeholder="<?= htmlspecialchars(sf_term('search_name_or_worksite_placeholder', $uiLang) ?: 'Hae nimellä tai työmaalla...', ENT_QUOTES, 'UTF-8') ?>">
-          <button type="button" id="sfClearSearch" class="sf-clear-search" style="display: none;">×</button>
-        </div>
-        
-        <div class="sf-supervisor-search-results" id="sfSearchResults" style="display: none;">
-          <!-- Search results will be populated here -->
-        </div>
-      </div>
-      
-      <!-- Selected Counter -->
-      <div class="sf-supervisor-counter">
-        <span id="sfSelectedCount">0</span> <?= htmlspecialchars(sf_term('selected_label', $uiLang) ?: 'valittu', ENT_QUOTES, 'UTF-8') ?>
-      </div>
-      
-      <!-- Hidden input for selected IDs -->
-      <input type="hidden" name="approver_ids" id="approverIds" value="">
-      <input type="hidden" name="selected_approvers" id="selectedApprovers" value="">
-    </div>
-    <?php endif; ?>
+    <!-- Note: Supervisor section is rendered in the preview controls column (right column) -->
 
     <!-- Vaihe 6 alatunniste: Edellinen vasemmalla, Tallenna/Lähetä oikealla -->
     <div class="sf-step6-footer">
