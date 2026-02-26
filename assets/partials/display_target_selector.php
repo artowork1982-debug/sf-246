@@ -110,14 +110,14 @@ foreach ($availableDisplays as $dtDisp) {
             <button type="button"
                     class="sf-dt-special-chip<?= $dtAllChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
                     data-select="all">
-                🖥️ <?= htmlspecialchars(sf_term('comms_screens_all', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?>
+                <?= htmlspecialchars(sf_term('comms_screens_all', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?>
                 <span class="sf-dt-lang-count">(<?= count($dtAllIds) ?>)</span>
             </button>
             <?php if (!empty($dtTunnelIds)): ?>
             <button type="button"
                     class="sf-dt-special-chip<?= $dtTunnelChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
                     data-select="tunnel">
-                🚇 <?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaat', ENT_QUOTES, 'UTF-8') ?>
+                <?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaat', ENT_QUOTES, 'UTF-8') ?>
                 <span class="sf-dt-lang-count">(<?= count($dtTunnelIds) ?>)</span>
             </button>
             <?php endif; ?>
@@ -125,7 +125,7 @@ foreach ($availableDisplays as $dtDisp) {
             <button type="button"
                     class="sf-dt-special-chip<?= $dtOpencastChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
                     data-select="opencast">
-                ⛏️ <?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhokset', ENT_QUOTES, 'UTF-8') ?>
+                <?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhokset', ENT_QUOTES, 'UTF-8') ?>
                 <span class="sf-dt-lang-count">(<?= count($dtOpencastIds) ?>)</span>
             </button>
             <?php endif; ?>
@@ -133,7 +133,7 @@ foreach ($availableDisplays as $dtDisp) {
             <button type="button"
                     class="sf-dt-special-chip<?= $dtOtherChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
                     data-select="other">
-                🏢 <?= htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8') ?>
+                <?= htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8') ?>
                 <span class="sf-dt-lang-count">(<?= count($dtOtherIds) ?>)</span>
             </button>
             <?php endif; ?>
