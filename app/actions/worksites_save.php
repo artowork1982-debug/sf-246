@@ -63,12 +63,16 @@ if ($action === 'add') {
         exit;
     }
 
-    // Insert only columns that are guaranteed in your UI usage (name + is_active).
-    $stmt = $mysqli->prepare("INSERT INTO sf_worksites (name, is_active) VALUES (?, 1)");
+    $allowedSiteTypes = ['tunnel', 'opencast'];
+    $siteTypeRaw = trim((string)($_POST['site_type'] ?? ''));
+    $siteType = in_array($siteTypeRaw, $allowedSiteTypes, true) ? $siteTypeRaw : null;
+
+    // Insert name, is_active, and optional site_type.
+    $stmt = $mysqli->prepare("INSERT INTO sf_worksites (name, site_type, is_active) VALUES (?, ?, 1)");
     if (!$stmt) {
         throw new Exception('Prepare failed: ' .  $mysqli->error);
     }
-    $stmt->bind_param('s', $name);
+    $stmt->bind_param('ss', $name, $siteType);
     $ok = $stmt->execute();
     $newWorksiteId = $mysqli->insert_id;
     $stmt->close();
@@ -118,6 +122,7 @@ if ($action === 'add') {
             (int)$newWorksiteId,
             [
                 'name' => $name,
+                'site_type' => $siteType,
                 'is_active' => 1,
             ],
             $currentUser ?  (int)$currentUser['id'] : null

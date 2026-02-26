@@ -1895,20 +1895,9 @@ $descAllowed = strip_tags($descProcessed, '<strong><span>');
                 <label class="sf-label"><?= htmlspecialchars(sf_term('comms_step2_screens', $currentUiLang) ?? 'Xibo-näytöt', ENT_QUOTES, 'UTF-8') ?></label>
                 <p class="sf-help-text"><?= htmlspecialchars(sf_term('comms_step2_screens_help', $currentUiLang) ?? 'Valitse työmaanäytöt jossa SafetyFlash esitetään', ENT_QUOTES, 'UTF-8') ?></p>
 
-                <!-- Inline radio options -->
-                <div class="sf-radio-options-inline">
-                    <label class="sf-radio-pill">
-                        <input type="radio" name="screens_option" value="all" id="screensAll" checked>
-                        <span><?= htmlspecialchars(sf_term('comms_screens_all', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?></span>
-                    </label>
-                    <label class="sf-radio-pill">
-                        <input type="radio" name="screens_option" value="selected" id="screensSelected">
-                        <span><?= htmlspecialchars(sf_term('comms_screens_select', $currentUiLang) ?? 'Valitse', ENT_QUOTES, 'UTF-8') ?></span>
-                    </label>
-                </div>
-
-                <!-- Display target selector (shown when "Valitse" is chosen) -->
-                <div id="commsScreensSelection" class="hidden">
+                <!-- Display target selector -->
+                <input type="hidden" name="screens_option" value="selected">
+                <div id="commsScreensSelection">
                     <?php
                     $commsOriginalFlash = $flash;
                     $stmtCommsVersions = $pdo->prepare("

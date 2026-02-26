@@ -11,17 +11,17 @@ $fallbackImageUrl  = ($fallbackImagePath && $baseUrl)
 // Hae työmaat, niiden display API-avaimet ja aktiivisten flashien määrä
 $worksites = [];
 $worksitesRes = $mysqli->query(
-    'SELECT w.id, w.name, w.is_active, k.api_key AS display_api_key, k.id AS display_key_id,
+    'SELECT w.id, w.name, w.site_type, w.is_active, k.api_key AS display_api_key, k.id AS display_key_id,
             COUNT(t.id) AS active_flash_count
      FROM sf_worksites w
      LEFT JOIN sf_display_api_keys k ON k.worksite_id = w.id AND k.is_active = 1
      LEFT JOIN sf_flash_display_targets t ON t.display_key_id = k.id AND t.is_active = 1
-     GROUP BY w.id, w.name, w.is_active, k.api_key, k.id
+     GROUP BY w.id, w.name, w.site_type, w.is_active, k.api_key, k.id
      ORDER BY w.name ASC'
 );
 if (!$worksitesRes) {
-    // Fallback if worksite_id column not yet migrated
-    $worksitesRes = $mysqli->query('SELECT id, name, is_active, 0 AS active_flash_count FROM sf_worksites ORDER BY name ASC');
+    // Fallback if worksite_id or site_type column not yet migrated
+    $worksitesRes = $mysqli->query('SELECT id, name, NULL AS site_type, is_active, 0 AS active_flash_count FROM sf_worksites ORDER BY name ASC');
 }
 if ($worksitesRes) {
     while ($w = $worksitesRes->fetch_assoc()) {
@@ -170,6 +170,18 @@ action="app/actions/worksites_save.php"
         ) ?>
     </label>
     <input type="text" id="ws-name" name="name" required>
+    <label for="ws-site-type">
+        <?= htmlspecialchars(
+            sf_term('settings_worksites_site_type', $currentUiLang) ?? 'Työmaan tyyppi:',
+            ENT_QUOTES,
+            'UTF-8'
+        ) ?>
+    </label>
+    <select id="ws-site-type" name="site_type">
+        <option value=""><?= htmlspecialchars(sf_term('site_type_unspecified', $currentUiLang) ?? 'Määrittämätön', ENT_QUOTES, 'UTF-8') ?></option>
+        <option value="tunnel"><?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaa', ENT_QUOTES, 'UTF-8') ?></option>
+        <option value="opencast"><?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhos', ENT_QUOTES, 'UTF-8') ?></option>
+    </select>
     <button type="submit">
         <?= htmlspecialchars(
             sf_term('btn_add', $currentUiLang) ?? 'Lisää',
@@ -214,6 +226,13 @@ action="app/actions/worksites_save.php"
             <th>
                 <?= htmlspecialchars(
                     sf_term('settings_worksites_col_name', $currentUiLang) ?? 'Nimi',
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>
+            </th>
+            <th>
+                <?= htmlspecialchars(
+                    sf_term('settings_worksites_site_type', $currentUiLang) ?? 'Tyyppi',
                     ENT_QUOTES,
                     'UTF-8'
                 ) ?>
@@ -268,6 +287,18 @@ action="app/actions/worksites_save.php"
         <?php foreach ($worksites as $ws): ?>
             <tr class="<?= ((int)$ws['is_active'] === 1) ? '' : 'is-inactive' ?>">
                 <td><?= htmlspecialchars($ws['name'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td>
+                    <?php
+                    $siteTypeKey = $ws['site_type'] ?? null;
+                    if ($siteTypeKey === 'tunnel') {
+                        echo htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaa', ENT_QUOTES, 'UTF-8');
+                    } elseif ($siteTypeKey === 'opencast') {
+                        echo htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhos', ENT_QUOTES, 'UTF-8');
+                    } else {
+                        echo '—';
+                    }
+                    ?>
+                </td>
                 <td>
     <?= ((int)$ws['is_active'] === 1)
         ? htmlspecialchars(sf_term('common_yes', $currentUiLang) ?? 'Kyllä', ENT_QUOTES, 'UTF-8')
