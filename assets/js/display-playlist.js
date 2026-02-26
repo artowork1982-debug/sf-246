@@ -158,6 +158,19 @@
                 cbs.forEach(function(cb) { if (cb.checked) checkedCount++; });
                 chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
             });
+
+            // Update special chip active states
+            container.querySelectorAll('.sf-dt-special-chip').forEach(function(chip) {
+                var selectType = chip.getAttribute('data-select');
+                var cbs;
+                if (selectType === 'all') {
+                    cbs = Array.from(container.querySelectorAll('.dt-display-chip-cb'));
+                } else {
+                    cbs = Array.from(container.querySelectorAll('.dt-display-chip-cb[data-type="' + selectType + '"]'));
+                }
+                var checkedCount = cbs.filter(function(cb) { return cb.checked; }).length;
+                chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
+            });
         }
 
         // Alusta tilat
@@ -176,6 +189,35 @@
                 updateSelectionDisplay();
             });
         });
+
+        // Erikoischippien klikkaukset (Kaikki näytöt / Tunnelityömaat / Avolouhokset)
+        container.querySelectorAll('.sf-dt-special-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                var selectType = this.getAttribute('data-select');
+                var isActive = this.classList.contains('sf-dt-lang-chip-active');
+                var cbs;
+                if (selectType === 'all') {
+                    cbs = container.querySelectorAll('.dt-display-chip-cb');
+                } else {
+                    cbs = container.querySelectorAll('.dt-display-chip-cb[data-type="' + selectType + '"]');
+                }
+                cbs.forEach(function(cb) { cb.checked = !isActive; });
+                updateLangChipStates();
+                updateSelectionDisplay();
+            });
+        });
+
+        // Tyhjennä kaikki -nappi
+        var clearAllBtn = container.querySelector('.sf-dt-clear-all-btn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', function() {
+                container.querySelectorAll('.dt-display-chip-cb').forEach(function(cb) {
+                    cb.checked = false;
+                });
+                updateSelectionDisplay();
+                updateLangChipStates();
+            });
+        }
 
         // Hakukenttä
         if (searchInput && searchResults) {
@@ -200,6 +242,19 @@
 
                 if (!hasVisible) {
                     searchResults.classList.add('hidden');
+                }
+            });
+
+            // Tyhjennä hakukenttä kun valitaan tulos
+            searchResults.addEventListener('click', function(e) {
+                var resultItem = e.target.closest('.sf-dt-result-item');
+                if (resultItem) {
+                    searchInput.value = '';
+                    container.querySelectorAll('.sf-dt-result-item').forEach(function(item) {
+                        item.classList.add('hidden');
+                    });
+                    searchResults.classList.add('hidden');
+                    searchInput.focus();
                 }
             });
         }

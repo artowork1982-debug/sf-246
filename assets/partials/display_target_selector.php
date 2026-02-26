@@ -23,14 +23,16 @@
 // Flashin oma kieliversiokohtainen ID (EI translation_group_id)
 $flashId = (int)($flash['id'] ?? 0);
 
-// Hae KAIKKI aktiiviset näytöt
+// Hae KAIKKI aktiiviset näytöt (join worksites for site_type)
 $availableDisplays = [];
 try {
     $stmtDisplays = $pdo->prepare("
-        SELECT id, site, site_group, label, lang, sort_order
-        FROM sf_display_api_keys
-        WHERE is_active = 1
-        ORDER BY lang ASC, sort_order ASC, label ASC
+        SELECT k.id, k.site, k.site_group, k.label, k.lang, k.sort_order,
+               COALESCE(w.site_type, '') AS site_type
+        FROM sf_display_api_keys k
+        LEFT JOIN sf_worksites w ON w.id = k.worksite_id
+        WHERE k.is_active = 1
+        ORDER BY k.lang ASC, k.sort_order ASC, k.label ASC
     ");
     $stmtDisplays->execute();
     $availableDisplays = $stmtDisplays->fetchAll(PDO::FETCH_ASSOC);
@@ -94,6 +96,37 @@ foreach ($availableDisplays as $dtDisp) {
                     <span class="sf-dt-lang-count">(<?= count($dtLangDisplays) ?>)</span>
                 </button>
             <?php endforeach; ?>
+            <?php
+            // Special quick-select chips
+            $dtTunnelIds   = array_map('intval', array_column(array_filter($availableDisplays, fn($d) => ($d['site_type'] ?? '') === 'tunnel'),   'id'));
+            $dtOpencastIds = array_map('intval', array_column(array_filter($availableDisplays, fn($d) => ($d['site_type'] ?? '') === 'opencast'), 'id'));
+            $dtAllIds      = array_map('intval', array_column($availableDisplays, 'id'));
+            $dtAllChipActive      = !empty($dtAllIds)      && empty(array_diff($dtAllIds,      $preselectedIds));
+            $dtTunnelChipActive   = !empty($dtTunnelIds)   && empty(array_diff($dtTunnelIds,   $preselectedIds));
+            $dtOpencastChipActive = !empty($dtOpencastIds) && empty(array_diff($dtOpencastIds, $preselectedIds));
+            ?>
+            <button type="button"
+                    class="sf-dt-special-chip<?= $dtAllChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
+                    data-select="all">
+                🖥️ <?= htmlspecialchars(sf_term('comms_screens_all', $currentUiLang) ?? 'Kaikki näytöt', ENT_QUOTES, 'UTF-8') ?>
+                <span class="sf-dt-lang-count">(<?= count($dtAllIds) ?>)</span>
+            </button>
+            <?php if (!empty($dtTunnelIds)): ?>
+            <button type="button"
+                    class="sf-dt-special-chip<?= $dtTunnelChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
+                    data-select="tunnel">
+                🚇 <?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaat', ENT_QUOTES, 'UTF-8') ?>
+                <span class="sf-dt-lang-count">(<?= count($dtTunnelIds) ?>)</span>
+            </button>
+            <?php endif; ?>
+            <?php if (!empty($dtOpencastIds)): ?>
+            <button type="button"
+                    class="sf-dt-special-chip<?= $dtOpencastChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
+                    data-select="opencast">
+                ⛏️ <?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhokset', ENT_QUOTES, 'UTF-8') ?>
+                <span class="sf-dt-lang-count">(<?= count($dtOpencastIds) ?>)</span>
+            </button>
+            <?php endif; ?>
         </div>
         <?php endif; ?>
 
@@ -112,13 +145,15 @@ foreach ($availableDisplays as $dtDisp) {
                 <?php $dtIsChecked = in_array((int)$dtDisplay['id'], $preselectedIds, true); ?>
                 <label class="sf-dt-result-item hidden"
                        data-search="<?= htmlspecialchars(strtolower($dtDisplay['label'] ?? $dtDisplay['site']), ENT_QUOTES, 'UTF-8') ?>"
-                       data-lang="<?= htmlspecialchars($dtDisplay['lang'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                       data-lang="<?= htmlspecialchars($dtDisplay['lang'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                       data-type="<?= htmlspecialchars($dtDisplay['site_type'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     <input type="checkbox"
                            class="sf-display-chip-input dt-display-chip-cb"
                            name="display_targets[<?= $flashId ?>][]"
                            value="<?= (int)$dtDisplay['id'] ?>"
                            data-label="<?= htmlspecialchars($dtDisplay['label'] ?? $dtDisplay['site'], ENT_QUOTES, 'UTF-8') ?>"
                            data-lang="<?= htmlspecialchars($dtDisplay['lang'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                           data-type="<?= htmlspecialchars($dtDisplay['site_type'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                            <?= $dtIsChecked ? 'checked' : '' ?>>
                     <span class="sf-ws-name"><?= htmlspecialchars($dtDisplay['label'] ?? $dtDisplay['site'], ENT_QUOTES, 'UTF-8') ?></span>
                 </label>

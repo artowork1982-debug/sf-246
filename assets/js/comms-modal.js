@@ -39,11 +39,6 @@
         var btnStep4Back = document.getElementById('btnCommsStep4Back');
         var btnCommsSend = document.getElementById('btnCommsSend');
 
-        // Screens radio toggle
-        var screensAll = document.getElementById('screensAll');
-        var screensSelected = document.getElementById('screensSelected');
-        var screensSelection = document.getElementById('commsScreensSelection');
-
         // Language chips toggle behavior - FIXED
         qsa('.sf-chip-toggle').forEach(function (chip) {
             var checkbox = chip.querySelector('input[type="checkbox"]');
@@ -70,26 +65,6 @@
                 }
             });
         });
-
-        // Show/hide worksite selection based on radio choice
-        function updatePanelVisibility() {
-            if (!screensSelection) return;
-
-            if (screensAll && screensAll.checked) {
-                screensSelection.classList.add('hidden');
-            } else {
-                screensSelection.classList.remove('hidden');
-            }
-        }
-
-        // Initialize panel visibility on load
-        updatePanelVisibility();
-
-        if (screensAll && screensSelected && screensSelection) {
-            [screensAll, screensSelected].forEach(function (radio) {
-                radio.addEventListener('change', updatePanelVisibility);
-            });
-        }
 
         // Toggle wider distribution label
         var widerDistribution = document.getElementById('widerDistribution');
@@ -118,11 +93,6 @@
             }
             currentStep = step;
 
-            // Update panel visibility when showing step 2
-            if (step === 2) {
-                updatePanelVisibility();
-            }
-
             // Update summary when reaching step 4
             if (step === 4) {
                 updateSummary();
@@ -144,18 +114,17 @@
                 langsSummary.textContent = selectedLangs.length > 0 ? selectedLangs.join(', ') : getTerm('comms_summary_none', 'Ei valintoja');
             }
 
-            // Screens summary - show count of selected display targets
+            // Screens summary — count selected display targets
             var screensSummary = document.getElementById('commsSummaryScreens');
             if (screensSummary) {
-                if (screensAll && screensAll.checked) {
+                var checkedDisplays = qsa('#commsStep2 .dt-display-chip-cb:checked').length;
+                var totalDisplays = qsa('#commsStep2 .dt-display-chip-cb').length;
+                if (checkedDisplays === 0) {
+                    screensSummary.textContent = getTerm('comms_summary_none', 'Ei valintoja');
+                } else if (totalDisplays > 0 && checkedDisplays === totalDisplays) {
                     screensSummary.textContent = getTerm('comms_screens_all', 'Kaikki näytöt');
                 } else {
-                    var checkedDisplays = qsa('#commsStep2 .dt-display-chip-cb:checked').length;
-                    if (checkedDisplays > 0) {
-                        screensSummary.textContent = checkedDisplays + ' ' + getTerm('comms_summary_displays', 'näyttöä');
-                    } else {
-                        screensSummary.textContent = getTerm('comms_summary_none', 'Ei valintoja');
-                    }
+                    screensSummary.textContent = checkedDisplays + ' ' + getTerm('comms_summary_displays', 'näyttöä');
                 }
             }
 
@@ -223,11 +192,6 @@
 
                 // FormData now captures all fields from the form (all steps)
                 var formData = new FormData(form);
-
-                // Ensure screens_option=all is explicitly included when "All screens" is selected
-                if (screensAll && screensAll.checked) {
-                    formData.set('screens_option', 'all');
-                }
 
                 // Debug log
                 console.log('=== DEBUG: Form submission ===');

@@ -139,6 +139,19 @@
             cbs.forEach(function (cb) { if (cb.checked) checkedCount++; });
             chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
         });
+
+        // Update special chip active states
+        container.querySelectorAll('.sf-dt-special-chip').forEach(function (chip) {
+            var selectType = chip.getAttribute('data-select');
+            var cbs;
+            if (selectType === 'all') {
+                cbs = Array.from(container.querySelectorAll('.dt-display-chip-cb'));
+            } else {
+                cbs = Array.from(container.querySelectorAll('.dt-display-chip-cb[data-type="' + selectType + '"]'));
+            }
+            var checkedCount = cbs.filter(function (cb) { return cb.checked; }).length;
+            chip.classList.toggle('sf-dt-lang-chip-active', cbs.length > 0 && checkedCount === cbs.length);
+        });
     }
 
     // Language chip toggles
@@ -153,6 +166,23 @@
                 (buildCbByLang(container)[lang] || []).forEach(function (cb) {
                     cb.checked = !isActive;
                 });
+                updateLangChipStates(container);
+                updateSelectionDisplay(container);
+            });
+        });
+
+        // Erikoischippien klikkaukset (Kaikki näytöt / Tunnelityömaat / Avolouhokset)
+        container.querySelectorAll('.sf-dt-special-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var selectType = this.getAttribute('data-select');
+                var isActive = this.classList.contains('sf-dt-lang-chip-active');
+                var cbs;
+                if (selectType === 'all') {
+                    cbs = container.querySelectorAll('.dt-display-chip-cb');
+                } else {
+                    cbs = container.querySelectorAll('.dt-display-chip-cb[data-type="' + selectType + '"]');
+                }
+                cbs.forEach(function (cb) { cb.checked = !isActive; });
                 updateLangChipStates(container);
                 updateSelectionDisplay(container);
             });
