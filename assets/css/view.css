@@ -2402,15 +2402,17 @@ body.sf-modal-open .sf-download-buttons {
 
 .sf-event-description {
     font-size: 0.85rem;
-    color: #6b7280;
-    line-height: 1.4;
-    padding: 10px;
-    background-color: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    color: #475569;
+    line-height: 1.5;
+    padding: 12px 14px;
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-left: 4px solid #3b82f6;
     border-radius: 6px;
-    margin-top: 4px;
-    white-space: pre-wrap;
+    margin-top: 8px;
+    white-space: pre-line;
     word-break: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* ========================================
