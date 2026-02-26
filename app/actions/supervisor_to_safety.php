@@ -80,6 +80,22 @@ if (!empty($message)) {
 }
 sf_log_event($flashId, 'supervisor_approved', $desc);
 
+// Save message as system comment so it appears in Comments tab
+if (!empty($message)) {
+    $userId = $currentUser ? (int)$currentUser['id'] : null;
+    $safeMessage = mb_substr($message, 0, 2000);
+    $stmtSysComment = $pdo->prepare("
+        INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+        VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+    ");
+    $stmtSysComment->execute([
+        ':flash_id'    => $flashId,
+        ':user_id'     => $userId,
+        ':event_type'  => 'comment_added',
+        ':description' => "log_comment_label: TYÖMAAVASTAAVA: " . $safeMessage,
+    ]);
+}
+
 // Send email notification to safety team
 require_once __DIR__ . '/../../assets/services/email_services.php';
 sf_mail_to_safety_team($pdo, $flashId, 'pending_supervisor');

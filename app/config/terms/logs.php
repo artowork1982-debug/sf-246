@@ -521,4 +521,32 @@ return [
     'it' => 'Nessuna attività',
     'el' => 'Δεν υπάρχει δραστηριότητα',
 ],
+'display_targets_preselected' => [
+    'fi' => 'Infonäyttökohteet esivalittu',
+    'sv' => 'Informationsskärmsmål förvalda',
+    'en' => 'Display targets preselected',
+    'it' => 'Destinazioni display preselezionate',
+    'el' => 'Προεπιλεγμένοι στόχοι οθόνης',
+],
+'sent_to_supervisor' => [
+    'fi' => 'Lähetetty työmaavastaavalle',
+    'sv' => 'Skickat till platschef',
+    'en' => 'Sent to site manager',
+    'it' => 'Inviato al responsabile di cantiere',
+    'el' => 'Εστάλη στον υπεύθυνο εργοταξίου',
+],
+'submission_comment' => [
+    'fi' => 'Saateviesti',
+    'sv' => 'Följebrev',
+    'en' => 'Submission note',
+    'it' => 'Nota di invio',
+    'el' => 'Σημείωση υποβολής',
+],
+'updated' => [
+    'fi' => 'Päivitetty',
+    'sv' => 'Uppdaterad',
+    'en' => 'Updated',
+    'it' => 'Aggiornato',
+    'el' => 'Ενημερώθηκε',
+],
 ];

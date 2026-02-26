@@ -108,6 +108,19 @@ sf_log_event($flashId, 'sent_to_supervisor', 'log_sent_to_supervisor');
 if ($submissionComment !== '') {
     $submissionComment = mb_substr($submissionComment, 0, 1000);
     sf_log_event($flashId, 'submission_comment', $submissionComment);
+
+    // Also save as system comment so it appears in Comments tab
+    $userId = $currentUser ? (int)$currentUser['id'] : null;
+    $stmtSysComment = $pdo->prepare("
+        INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+        VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+    ");
+    $stmtSysComment->execute([
+        ':flash_id'    => $flashId,
+        ':user_id'     => $userId,
+        ':event_type'  => 'comment_added',
+        ':description' => "log_comment_label: LÄHETETTY TURVATIIMILLE: " . $submissionComment,
+    ]);
 }
 
 // Send email notifications to supervisors
