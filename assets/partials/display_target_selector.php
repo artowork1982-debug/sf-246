@@ -100,10 +100,12 @@ foreach ($availableDisplays as $dtDisp) {
             // Special quick-select chips
             $dtTunnelIds   = array_map('intval', array_column(array_filter($availableDisplays, fn($d) => ($d['site_type'] ?? '') === 'tunnel'),   'id'));
             $dtOpencastIds = array_map('intval', array_column(array_filter($availableDisplays, fn($d) => ($d['site_type'] ?? '') === 'opencast'), 'id'));
+            $dtOtherIds    = array_map('intval', array_column(array_filter($availableDisplays, fn($d) => ($d['site_type'] ?? '') === 'other'),    'id'));
             $dtAllIds      = array_map('intval', array_column($availableDisplays, 'id'));
             $dtAllChipActive      = !empty($dtAllIds)      && empty(array_diff($dtAllIds,      $preselectedIds));
             $dtTunnelChipActive   = !empty($dtTunnelIds)   && empty(array_diff($dtTunnelIds,   $preselectedIds));
             $dtOpencastChipActive = !empty($dtOpencastIds) && empty(array_diff($dtOpencastIds, $preselectedIds));
+            $dtOtherChipActive    = !empty($dtOtherIds)    && empty(array_diff($dtOtherIds,    $preselectedIds));
             ?>
             <button type="button"
                     class="sf-dt-special-chip<?= $dtAllChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
@@ -125,6 +127,14 @@ foreach ($availableDisplays as $dtDisp) {
                     data-select="opencast">
                 ⛏️ <?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhokset', ENT_QUOTES, 'UTF-8') ?>
                 <span class="sf-dt-lang-count">(<?= count($dtOpencastIds) ?>)</span>
+            </button>
+            <?php endif; ?>
+            <?php if (!empty($dtOtherIds)): ?>
+            <button type="button"
+                    class="sf-dt-special-chip<?= $dtOtherChipActive ? ' sf-dt-lang-chip-active' : '' ?>"
+                    data-select="other">
+                🏢 <?= htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8') ?>
+                <span class="sf-dt-lang-count">(<?= count($dtOtherIds) ?>)</span>
             </button>
             <?php endif; ?>
         </div>

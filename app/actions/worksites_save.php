@@ -63,7 +63,7 @@ if ($action === 'add') {
         exit;
     }
 
-    $allowedSiteTypes = ['tunnel', 'opencast'];
+    $allowedSiteTypes = ['tunnel', 'opencast', 'other'];
     $siteTypeRaw = trim((string)($_POST['site_type'] ?? ''));
     $siteType = in_array($siteTypeRaw, $allowedSiteTypes, true) ? $siteTypeRaw : null;
 
@@ -320,6 +320,62 @@ exit;
 
         if (sf_is_fetch()) sf_json(['ok' => (bool)$ok, 'notice' => 'deleted']);
         header("Location: {$base}/index.php?page=settings&tab=worksites&notice=deleted");
+        exit;
+    }
+
+    // ---------------------------------------------------------------------
+    // EDIT (used by settings tab: form_action=edit, fields: id, name, site_type)
+    // ---------------------------------------------------------------------
+    if ($action === 'edit') {
+        $id = (int)($_POST['id'] ?? 0);
+        $name = trim((string)($_POST['name'] ?? ''));
+        if ($id <= 0 || $name === '') {
+            if (sf_is_fetch()) sf_json(['ok' => false, 'error' => 'Missing fields'], 400);
+            header("Location: {$base}/index.php?page=settings&tab=worksites&notice=error");
+            exit;
+        }
+
+        $allowedSiteTypes = ['tunnel', 'opencast', 'other'];
+        $siteTypeRaw = trim((string)($_POST['site_type'] ?? ''));
+        $siteType = in_array($siteTypeRaw, $allowedSiteTypes, true) ? $siteTypeRaw : null;
+
+        $stmt = $mysqli->prepare("UPDATE sf_worksites SET name = ?, site_type = ? WHERE id = ?");
+        if (!$stmt) {
+            throw new Exception('Prepare failed: ' . $mysqli->error);
+        }
+        $stmt->bind_param('ssi', $name, $siteType, $id);
+        $ok = $stmt->execute();
+        $stmt->close();
+
+        if ($ok) {
+            sf_audit_log(
+                'worksite_updated',
+                'worksite',
+                $id,
+                [
+                    'name' => $name,
+                    'site_type' => $siteType,
+                    'action' => 'edit',
+                ],
+                $currentUser ? (int)$currentUser['id'] : null
+            );
+        }
+
+        $uiLang = $_SESSION['ui_lang'] ?? 'fi';
+        $msg = $ok
+            ? (sf_term('worksite_saved', $uiLang) ?: 'Työmaa tallennettu.')
+            : (sf_term('error', $uiLang) ?: 'Toiminto epäonnistui.');
+
+        if (sf_is_fetch()) {
+            sf_json([
+                'ok' => (bool)$ok,
+                'success' => (bool)$ok,
+                'notice' => $ok ? 'worksite_saved' : 'error',
+                'message' => $msg,
+            ], $ok ? 200 : 500);
+        }
+
+        header("Location: {$base}/index.php?page=settings&tab=worksites&notice=" . ($ok ? 'worksite_saved' : 'error'));
         exit;
     }
 

@@ -181,6 +181,7 @@ action="app/actions/worksites_save.php"
         <option value=""><?= htmlspecialchars(sf_term('site_type_unspecified', $currentUiLang) ?? 'Määrittämätön', ENT_QUOTES, 'UTF-8') ?></option>
         <option value="tunnel"><?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaa', ENT_QUOTES, 'UTF-8') ?></option>
         <option value="opencast"><?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhos', ENT_QUOTES, 'UTF-8') ?></option>
+        <option value="other"><?= htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8') ?></option>
     </select>
     <button type="submit">
         <?= htmlspecialchars(
@@ -294,6 +295,8 @@ action="app/actions/worksites_save.php"
                         echo htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaa', ENT_QUOTES, 'UTF-8');
                     } elseif ($siteTypeKey === 'opencast') {
                         echo htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhos', ENT_QUOTES, 'UTF-8');
+                    } elseif ($siteTypeKey === 'other') {
+                        echo htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8');
                     } else {
                         echo '—';
                     }
@@ -337,6 +340,13 @@ action="app/actions/worksites_save.php"
                             ?>
                         </button>
                     </form>
+                    <button type="button"
+                        class="sf-btn sf-btn-sm sf-btn-outline-secondary sf-ws-edit-btn"
+                        data-ws-id="<?= (int)$ws['id'] ?>"
+                        data-ws-name="<?= htmlspecialchars($ws['name'], ENT_QUOTES, 'UTF-8') ?>"
+                        data-ws-site-type="<?= htmlspecialchars($ws['site_type'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                        ✏️ <?= htmlspecialchars(sf_term('settings_worksites_action_edit', $currentUiLang) ?? 'Muokkaa', ENT_QUOTES, 'UTF-8') ?>
+                    </button>
                 </td>
                 <td>
                     <?php if (!empty($ws['display_api_key'])): ?>
@@ -642,3 +652,69 @@ foreach ($worksites as $ws):
 })();
 </script>
 <?php endif; ?>
+
+<!-- Edit Worksite Modal -->
+<div class="sf-modal hidden" id="modalEditWorksite" role="dialog" aria-modal="true" aria-labelledby="modalEditWorksiteTitle">
+    <div class="sf-modal-content">
+        <div class="sf-modal-header">
+            <h3 id="modalEditWorksiteTitle">
+                <?= htmlspecialchars(sf_term('settings_worksites_edit_title', $currentUiLang) ?? 'Muokkaa työmaata', ENT_QUOTES, 'UTF-8') ?>
+            </h3>
+            <button type="button" data-modal-close class="sf-modal-close" aria-label="<?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>">✕</button>
+        </div>
+        <form method="post" action="app/actions/worksites_save.php" data-sf-ajax="1" id="formEditWorksite">
+            <div class="sf-modal-body" style="padding:1.25rem;">
+                <input type="hidden" name="form_action" value="edit">
+                <?= sf_csrf_field() ?>
+                <input type="hidden" name="id" id="editWsId">
+                <div style="margin-bottom:1rem;">
+                    <label for="editWsName" style="display:block;margin-bottom:0.35rem;font-weight:500;">
+                        <?= htmlspecialchars(sf_term('settings_worksites_col_name', $currentUiLang) ?? 'Nimi', ENT_QUOTES, 'UTF-8') ?>
+                    </label>
+                    <input type="text" id="editWsName" name="name" required class="sf-input" style="width:100%;">
+                </div>
+                <div style="margin-bottom:0.5rem;">
+                    <label for="editWsSiteType" style="display:block;margin-bottom:0.35rem;font-weight:500;">
+                        <?= htmlspecialchars(sf_term('settings_worksites_site_type', $currentUiLang) ?? 'Työmaan tyyppi', ENT_QUOTES, 'UTF-8') ?>
+                    </label>
+                    <select id="editWsSiteType" name="site_type" class="sf-select" style="width:100%;">
+                        <option value=""><?= htmlspecialchars(sf_term('site_type_unspecified', $currentUiLang) ?? 'Määrittämätön', ENT_QUOTES, 'UTF-8') ?></option>
+                        <option value="tunnel"><?= htmlspecialchars(sf_term('site_type_tunnel', $currentUiLang) ?? 'Tunnelityömaa', ENT_QUOTES, 'UTF-8') ?></option>
+                        <option value="opencast"><?= htmlspecialchars(sf_term('site_type_opencast', $currentUiLang) ?? 'Avolouhos', ENT_QUOTES, 'UTF-8') ?></option>
+                        <option value="other"><?= htmlspecialchars(sf_term('site_type_other', $currentUiLang) ?? 'Muut toimipisteet', ENT_QUOTES, 'UTF-8') ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="sf-modal-footer" style="padding:1rem 1.25rem;display:flex;justify-content:flex-end;gap:0.5rem;">
+                <button type="button" data-modal-close class="sf-btn sf-btn-secondary">
+                    <?= htmlspecialchars(sf_term('btn_close', $currentUiLang) ?? 'Sulje', ENT_QUOTES, 'UTF-8') ?>
+                </button>
+                <button type="submit" class="sf-btn sf-btn-primary">
+                    <?= htmlspecialchars(sf_term('btn_save', $currentUiLang) ?? 'Tallenna', ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+    if (document.__sfWsEditListenerAttached) return;
+    document.__sfWsEditListenerAttached = true;
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.sf-ws-edit-btn');
+        if (!btn) return;
+        var modal = document.getElementById('modalEditWorksite');
+        if (!modal) return;
+        var idInput       = modal.querySelector('#editWsId');
+        var nameInput     = modal.querySelector('#editWsName');
+        var siteTypeInput = modal.querySelector('#editWsSiteType');
+        if (idInput)       idInput.value       = btn.getAttribute('data-ws-id') || '';
+        if (nameInput)     nameInput.value     = btn.getAttribute('data-ws-name') || '';
+        if (siteTypeInput) siteTypeInput.value = btn.getAttribute('data-ws-site-type') || '';
+        modal.classList.remove('hidden');
+        if (nameInput) nameInput.focus();
+    });
+})();
+</script>
