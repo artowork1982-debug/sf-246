@@ -375,6 +375,21 @@ $updatedCount = sf_update_state_all_languages($pdo, $id, $newState);
         $user ? (int) $user['id'] : null
     );
 
+    // Save message as system comment so it appears in Comments tab
+    if ($message !== '') {
+        $systemCommentDesc = "log_comment_label: LÄHETETTY VIESTINTÄÄN: " . $message;
+        $stmtSysComment = $pdo->prepare("
+            INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+            VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+        ");
+        $stmtSysComment->execute([
+            ':flash_id'    => $logFlashId,
+            ':user_id'     => $userId,
+            ':event_type'  => 'comment_added',
+            ':description' => $systemCommentDesc,
+        ]);
+    }
+
     // Return JSON for AJAX, else redirect
     $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';

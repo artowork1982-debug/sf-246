@@ -92,6 +92,22 @@ sf_audit_log(
     $user ? (int)$user['id'] : null
 );
 
+// Save message as system comment so it appears in Comments tab
+if ($message !== '') {
+    $userId = $user ? (int)$user['id'] : ($_SESSION['user_id'] ?? null);
+    $systemCommentDesc = "log_comment_label: PALAUTETTU KORJATTAVAKSI: " . mb_substr($message, 0, 2000);
+    $stmtSysComment = $pdo->prepare("
+        INSERT INTO safetyflash_logs (flash_id, user_id, event_type, description, created_at)
+        VALUES (:flash_id, :user_id, :event_type, :description, NOW())
+    ");
+    $stmtSysComment->execute([
+        ':flash_id'    => $logFlashId,
+        ':user_id'     => $userId,
+        ':event_type'  => 'comment_added',
+        ':description' => $systemCommentDesc,
+    ]);
+}
+
 // Lähetä sähköposti tekijälle
 if (function_exists('sf_mail_request_info')) {
     try {
